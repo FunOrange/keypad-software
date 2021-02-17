@@ -1,0 +1,52 @@
+﻿<Window x:Class="KeypadSoftware.Views.TopView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KeypadSoftware.Views"
+        mc:Ignorable="d"
+        Title="TopView" Height="500" Width="900"
+        WindowStyle="None"
+        ResizeMode="NoResize">
+    <Grid Background="#181735">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Background="#0F0F2D"
+              Grid.ColumnSpan="2"
+              MouseDown="Grid_MouseDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="FunOrange Keypad Software" Foreground="White" Grid.Column="0" Grid.ColumnSpan="2" Margin="14, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+            <TextBlock Text="Keybinds" Foreground="White" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock Text="Lighting" Foreground="White" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock Text="Counters" Foreground="White" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock Text="Debounce" Foreground="White" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <Grid Grid.Column="8" Grid.ColumnSpan="2" Width="92" HorizontalAlignment="Right">
+                <Button Width="46" HorizontalAlignment="Left" BorderThickness="0"
+                        Name="MinimizeButton" Click="MinimizeButton_Click"></Button>
+                <Button Width="46" HorizontalAlignment="Right" BorderThickness="0"
+                        Name="CloseButton" Click="CloseButton_Click"></Button>
+            </Grid>
+        </Grid>
+        
+    </Grid>
+</Window>
