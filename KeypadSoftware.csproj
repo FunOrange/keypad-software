@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NO_KEYPAD</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -71,11 +71,30 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="KeyCodeConverter.cs" />
+    <Compile Include="KeypadSerial.cs" />
+    <Compile Include="KeypadSerialProtocol.cs" />
     <Compile Include="Models\CountersModel.cs" />
-    <Compile Include="Models\DebounceConfigModel.cs" />
+    <Compile Include="Models\DebounceModel.cs" />
     <Compile Include="Models\KeybindsModel.cs" />
     <Compile Include="Models\LightingModel.cs" />
+    <Compile Include="ViewModels\CountersViewModel.cs" />
+    <Compile Include="ViewModels\DebounceViewModel.cs" />
+    <Compile Include="ViewModels\KeybindsViewModel.cs" />
+    <Compile Include="ViewModels\LightingViewModel.cs" />
     <Compile Include="ViewModels\TopViewModel.cs" />
+    <Compile Include="Views\CountersView.xaml.cs">
+      <DependentUpon>CountersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DebounceView.xaml.cs">
+      <DependentUpon>DebounceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\KeybindsView.xaml.cs">
+      <DependentUpon>KeybindsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LightingView.xaml.cs">
+      <DependentUpon>LightingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TopView.xaml.cs">
       <DependentUpon>TopView.xaml</DependentUpon>
     </Compile>
@@ -110,6 +129,22 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Views\CountersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DebounceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\KeybindsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LightingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TopView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KeypadSoftware.Models
 {
-    class DebounceConfigModel
+    class DebounceModel
     {
         public bool Initialized = false;
         public int LeftButtonPressDebounceTime;

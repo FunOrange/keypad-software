@@ -16,10 +16,11 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
+        <!-- Row 0 -->
         <Grid Background="#0F0F2D"
+              Grid.Row="0"
               Grid.ColumnSpan="2"
               MouseDown="Grid_MouseDown">
             <Grid.ColumnDefinitions>
@@ -36,17 +37,20 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="FunOrange Keypad Software" Foreground="White" Grid.Column="0" Grid.ColumnSpan="2" Margin="14, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-            <TextBlock Text="Keybinds" Foreground="White" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-            <TextBlock Text="Lighting" Foreground="White" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-            <TextBlock Text="Counters" Foreground="White" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-            <TextBlock Text="Debounce" Foreground="White" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <Button x:Name="KeybindsTabButton" Foreground="White" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center">Keybinds</Button>
+            <Button x:Name="LightingTabButton" Foreground="White" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center">Lighting</Button>
+            <Button x:Name="CountersTabButton" Foreground="White" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center">Counters</Button>
+            <Button x:Name="DebounceTabButton" Foreground="White" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center">Debounce</Button>
             <Grid Grid.Column="8" Grid.ColumnSpan="2" Width="92" HorizontalAlignment="Right">
                 <Button Width="46" HorizontalAlignment="Left" BorderThickness="0"
-                        Name="MinimizeButton" Click="MinimizeButton_Click"></Button>
+                        x:Name="MinimizeButton" Click="MinimizeButton_Click"></Button>
                 <Button Width="46" HorizontalAlignment="Right" BorderThickness="0"
-                        Name="CloseButton" Click="CloseButton_Click"></Button>
+                        x:Name="CloseButton" Click="CloseButton_Click"></Button>
             </Grid>
         </Grid>
+        
+        <!-- Row 1 -->
+        <ContentControl Grid.Row="1" Grid.Column="0" x:Name="ActiveItem"></ContentControl>
         
     </Grid>
 </Window>
