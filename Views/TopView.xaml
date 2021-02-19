@@ -4,10 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeypadSoftware.Views"
+        xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
         Title="TopView" Height="500" Width="900"
         WindowStyle="None"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        cal:Message.Attach="[Event Loaded] = [Action Window_Loaded($eventArgs)]">
     <Grid Background="#181735">
         <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
@@ -50,7 +52,42 @@
         </Grid>
         
         <!-- Row 1 -->
-        <ContentControl Grid.Row="1" Grid.Column="0" x:Name="ActiveItem"></ContentControl>
+        <ContentControl Grid.Row="1" Grid.Column="0" x:Name="ActiveItem"
+                        Visibility="Hidden"/>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="1">
+                <TextBlock x:Name="ConnectionStatus" Foreground="White" TextAlignment="Center" FontSize="20" Margin="0,0,0,13">Keypad disconnected</TextBlock>
+                <TextBlock Foreground="White" TextAlignment="Center" FontFamily="Consolas">Serial Ports</TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <ItemsControl x:Name="PortListColumn1">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Foreground="White" FontFamily="Consolas"
+                                           TextAlignment="Left" Margin="0, 0, 33, 0"
+                                           Text="{Binding}" xml:space="preserve"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <ItemsControl x:Name="PortListColumn2">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Foreground="White" TextAlignment="Center" FontFamily="Consolas"
+                                           Text="{Binding}" xml:space="preserve"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        
+        
         
     </Grid>
 </Window>

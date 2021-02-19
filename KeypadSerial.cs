@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using System.Threading;
 
 namespace KeypadSoftware
 {
@@ -17,38 +18,56 @@ namespace KeypadSoftware
     {
         // state variables
         private SerialPort keypadPort;
-        private bool connectionEstablished;
+        public bool IsConnected;
+        public enum PortStatus
+        {
+            Untested,
+            Failed,
+            Good
+        }
+        public static string StatusToString(PortStatus status)
+        {
+            switch (status)
+            {
+                case PortStatus.Untested:
+                    return "...";
+                case PortStatus.Failed:
+                    return "✖";
+                case PortStatus.Good:
+                    return "✔";
+                default:
+                    return "";
+            }
+        }
+        // int: priority
+        public Dictionary<string, (int, PortStatus)> PortList;
 
-        // simulated eeprom
         public KeypadSerial()
         {
-            connectionEstablished = false;
+            IsConnected = false;
+            PortList = new Dictionary<string, (int, PortStatus)>();
         }
-
-        // Tries to automatically connect to the keypad
-        public void ConnectKeypad()
+        public void UpdatePortList()
         {
-            // Get a list of serial port names.
-            string[] connectedPorts = SerialPort.GetPortNames();
+            List<string> connectedPorts = SerialPort.GetPortNames().ToList();
 
-            Console.WriteLine("The following serial ports were found:");
+            // Add new ports to list (eg. device connected)
+            foreach (string port in connectedPorts.Where((port) => !PortList.ContainsKey(port)))
+                PortList.Add(port, (0, PortStatus.Untested));
 
-            // Display each port name to the console.
-            foreach (string port in connectedPorts)
-            {
-                Console.WriteLine(port);
-            }
-
-            // Try to narrow down possible ports by matching USB PID/VID
-            Regex vidPidPattern = new Regex("^VID_03EB.PID_2042", RegexOptions.IgnoreCase);
+            // Remove ports from list (eg. device disconnected)
+            foreach (string disconnectedPort in PortList.Keys.Where((port) => !connectedPorts.Contains(port)))
+                PortList.Remove(disconnectedPort);
+ 
+            // Mark high priority ports
             List<string> candidatePorts = new List<string>();
-
+            #region Look in registry for devices with matching VID/PID
+            Regex vidPidPattern = new Regex("^VID_03EB.PID_2042", RegexOptions.IgnoreCase);
             RegistryKey USBRegistryKey = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Enum\USB");
             var possibleDeviceKeys =
                 USBRegistryKey.GetSubKeyNames().
                 Where((name) => vidPidPattern.IsMatch(name))
                 .Select((name) => USBRegistryKey.OpenSubKey(name));
-
             foreach (RegistryKey possibleKey in possibleDeviceKeys)
             {
                 foreach (RegistryKey subKey in possibleKey.GetSubKeyNames().Select((name) => possibleKey.OpenSubKey(name)))
@@ -58,49 +77,57 @@ namespace KeypadSoftware
                         RegistryKey deviceParams = subKey.OpenSubKey("Device Parameters");
                         object PortName = deviceParams.GetValue("PortName");
                         if (PortName != null)
-                        {
                             candidatePorts.Add(PortName.ToString());
-                        }
                     }
                 }
             }
+            #endregion
 
-            List<string> highPriorityPorts = connectedPorts.Intersect(candidatePorts).ToList();
-            List<string> lowPriorityPorts = connectedPorts.Except(highPriorityPorts).ToList();
-
-            Console.WriteLine("\nTrying ports... (high priority)");
-            foreach (string portName in highPriorityPorts)
+            foreach (string highPriorityPort in candidatePorts.Where((port) => PortList.ContainsKey(port)))
             {
-                Console.WriteLine($"Trying port {portName}... ");
-                SerialPort result = TryHandShake(portName);
-                if (result == null)
-                {
-                    Console.WriteLine("handshake failed.");
-                }
-                else
-                {
-                    Console.WriteLine("handshake succeeded!");
-                    keypadPort = result;
-                    return;
-                }
+                (int priority, PortStatus status) = PortList[highPriorityPort];
+                PortList[highPriorityPort] = (1, status);
             }
+        }
 
-            Console.WriteLine("\nTrying ports... (low priority)");
-            foreach (string portName in lowPriorityPorts)
+        public bool UntestedPortsAvailable()
+        {
+            return PortList.Count > 0;
+        }
+        public string NextPort()
+        {
+            // high priority ports
+            var p = PortList.FirstOrDefault(kvp => (kvp.Value.Item1 == 1 && kvp.Value.Item2 == PortStatus.Untested));
+            if (!p.Equals(default(KeyValuePair<string, (int, PortStatus)>)))
+                return p.Key;
+
+            // low priority ports
+            p = PortList.FirstOrDefault(kvp => (kvp.Value.Item1 == 0 && kvp.Value.Item2 == PortStatus.Untested));
+            if (!p.Equals(default(KeyValuePair<string, (int, PortStatus)>)))
+                return p.Key;
+
+            return "";
+        }
+        public async Task TryNextPortAsync()
+        {
+            string port = NextPort();
+            Console.WriteLine($"Trying port {port}... ");
+            SerialPort result = await Task.Run(() => TryHandShake(port));
+            if (result != null)
             {
-                Console.WriteLine($"Trying port {portName}... ");
-                SerialPort result = TryHandShake(portName);
-                if (result == null)
-                {
-                    Console.WriteLine("handshake failed.");
-                }
-                else
-                {
-                    Console.WriteLine("handshake succeeded!");
-                    keypadPort = result;
-                    return;
-                }
+                Console.WriteLine("handshake succeeded!");
+                keypadPort = result;
+                IsConnected = true;
+                // set port status to good
+                (int priority1, PortStatus status1) = PortList[port];
+                PortList[port] = (priority1, PortStatus.Good);
+                return;
             }
+            
+            // set port status to failed
+            (int priority2, PortStatus status2) = PortList[port];
+            PortList[port] = (priority2, PortStatus.Failed);
+            Console.WriteLine("handshake failed.");
         }
 
         // Tries to send a handshake packet to the COM Port. If the keypad responds, then return the SerialPort object.
@@ -110,10 +137,11 @@ namespace KeypadSoftware
             try
             {
                 SerialPort testPort = new SerialPort(portName, 9600);
-                testPort.ReadTimeout = 1000;
+                testPort.ReadTimeout = 500;
                 testPort.Open();
                 byte[] handShakePacket = KeypadSerialProtocol.CreateEmptyPacket(KeypadSerialProtocol.KEYPAD_PACKET_ID_HEARTBEAT);
-                testPort.Write(handShakePacket, 0, handShakePacket.Length);
+                //testPort.Write(handShakePacket, 0, handShakePacket.Length);
+                testPort.WriteLine("fun");
                 try
                 {
                     return (testPort.ReadLine() == "orange") ? testPort : null;
@@ -130,5 +158,6 @@ namespace KeypadSoftware
                 return null;
             }
         }
+
     }
 }
