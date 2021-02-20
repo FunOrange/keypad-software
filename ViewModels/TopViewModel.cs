@@ -19,7 +19,7 @@ namespace KeypadSoftware.Views
             set { _keypad = value; }
         }
 
-        // Connecting Screen Properties
+        #region Keypad Connection Properties
         public string ConnectionStatus
         {
             get {
@@ -27,24 +27,25 @@ namespace KeypadSoftware.Views
             }
         }
 
-        private BindableCollection<string> _portListColumn1;
-        public BindableCollection<string> PortListColumn1
+        private BindableCollection<Tuple<string, string>> _portListHighPriority;
+        public BindableCollection<Tuple<string, string>> PortListHighPriority
         {
-            get { return _portListColumn1; }
+            get { return _portListHighPriority; }
             set {
-                _portListColumn1 = value;
-                NotifyOfPropertyChange(() => PortListColumn1);
+                _portListHighPriority = value;
+                NotifyOfPropertyChange(() => PortListHighPriority);
             }
         }
-        private BindableCollection<string> _portListColumn2;
-        public BindableCollection<string> PortListColumn2
+        private BindableCollection<Tuple<string, string>> _portListLowPriority;
+        public BindableCollection<Tuple<string, string>> PortListLowPriority
         {
-            get { return _portListColumn2; }
+            get { return _portListLowPriority; }
             set {
-                _portListColumn2 = value;
-                NotifyOfPropertyChange(() => PortListColumn2);
+                _portListLowPriority = value;
+                NotifyOfPropertyChange(() => PortListLowPriority);
             }
         }
+        #endregion
 
         public TopViewModel()
         {
@@ -64,40 +65,37 @@ namespace KeypadSoftware.Views
             ActivateItem(new DebounceViewModel());
         }
 
-        public async void Window_Loaded(EventArgs e)
+        public void Window_Loaded(EventArgs e)
         {
-            // Loop until keypad found
-            while (!Keypad.IsConnected)
+            Task.Run(() => ConnectionLoop());
+        }
+
+        public void ConnectionLoop()
+        {
+            while (true)
             {
-                // Look for ports
-                Keypad.UpdatePortList();
-
-                // Try next port
-                if (Keypad.UntestedPortsAvailable())
+                if (!Keypad.IsConnected)
                 {
-                    string currentPort = Keypad.NextPort();
-                    var pl1 =
-                        Keypad.PortList
-                        .Select(kvp => $"{kvp.Key}");
-                    PortListColumn1 = new BindableCollection<string>(pl1);
-                    var pl2 =
-                        Keypad.PortList
-                        .Select(kvp => $"{(kvp.Key == currentPort ? "＊" : KeypadSerial.StatusToString(kvp.Value.Item2))}");
-                    PortListColumn2 = new BindableCollection<string>(pl2);
+                    // Look for ports
+                    Keypad.UpdatePortList();
+                    PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
+                    PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
 
-                    await Keypad.TryNextPortAsync();
+                    // Try next port
+                    Keypad.TryNextPort();
+                    NotifyOfPropertyChange(() => ConnectionStatus);
+                    PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
+                    PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
+                }
+                else
+                {
+                    Keypad.Heartbeat();
+                    NotifyOfPropertyChange(() => ConnectionStatus);
+                    PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
+                    PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
+                    Thread.Sleep(1000);
                 }
             }
-            NotifyOfPropertyChange(() => ConnectionStatus);
-            // Update ports display one more time
-            var pl3 =
-                Keypad.PortList
-                .Select(kvp => $"{kvp.Key}");
-            PortListColumn1 = new BindableCollection<string>(pl3);
-            var pl4 =
-                Keypad.PortList
-                .Select(kvp => $"{KeypadSerial.StatusToString(kvp.Value.Item2)}");
-            PortListColumn2 = new BindableCollection<string>(pl4);
         }
     }
 }

@@ -55,7 +55,7 @@
         <ContentControl Grid.Row="1" Grid.Column="0" x:Name="ActiveItem"
                         Visibility="Hidden"/>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Background="Black">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
@@ -64,26 +64,43 @@
 
             <StackPanel Grid.Row="1">
                 <TextBlock x:Name="ConnectionStatus" Foreground="White" TextAlignment="Center" FontSize="20" Margin="0,0,0,13">Keypad disconnected</TextBlock>
-                <TextBlock Foreground="White" TextAlignment="Center" FontFamily="Consolas">Serial Ports</TextBlock>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <ItemsControl x:Name="PortListColumn1">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
+                <TextBlock Foreground="White" FontFamily="Consolas" TextAlignment="Center" Margin="0,0,0,6">Serial Ports</TextBlock>
+                <ItemsControl x:Name="PortListHighPriority">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
                                 <TextBlock Foreground="White" FontFamily="Consolas"
-                                           TextAlignment="Left" Margin="0, 0, 33, 0"
-                                           Text="{Binding}" xml:space="preserve"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <ItemsControl x:Name="PortListColumn2">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Foreground="White" TextAlignment="Center" FontFamily="Consolas"
-                                           Text="{Binding}" xml:space="preserve"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
+                                           Grid.Column="0" TextAlignment="Left"
+                                           Text="{Binding Item1}"/>
+                                <TextBlock Foreground="White" FontFamily="Consolas"
+                                           Grid.Column="1" TextAlignment="Center"
+                                           Text="{Binding Item2}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <ItemsControl x:Name="PortListLowPriority">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Foreground="Gray" FontFamily="Consolas"
+                                           Grid.Column="0" TextAlignment="Left"
+                                           Text="{Binding Item1}"/>
+                                <TextBlock Foreground="Gray" FontFamily="Consolas"
+                                           Grid.Column="1" TextAlignment="Center"
+                                           Text="{Binding Item2}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </Grid>
         

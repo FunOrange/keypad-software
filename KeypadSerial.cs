@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using System.Threading;
+using Caliburn.Micro;
 
 namespace KeypadSoftware
 {
@@ -41,6 +42,17 @@ namespace KeypadSoftware
         }
         // int: priority
         public Dictionary<string, (int, PortStatus)> PortList;
+
+        public BindableCollection<Tuple<string, string>> GetPresentablePrioritylist(int priority)
+        {
+            string currentPort = NextPort();
+            var pl =
+                PortList
+                .Where(kvp => kvp.Value.Item1 == priority)
+                .Select(kvp => new Tuple<string, string>(kvp.Key, $"{(kvp.Key == currentPort ? "＊" : KeypadSerial.StatusToString(kvp.Value.Item2))}"));
+            return new BindableCollection<Tuple<string, string>>(pl);
+
+        }
 
         public KeypadSerial()
         {
@@ -96,26 +108,37 @@ namespace KeypadSoftware
         }
         public string NextPort()
         {
+            if (IsConnected)
+                return "";
+
             // high priority ports
             var p = PortList.FirstOrDefault(kvp => (kvp.Value.Item1 == 1 && kvp.Value.Item2 == PortStatus.Untested));
             if (!p.Equals(default(KeyValuePair<string, (int, PortStatus)>)))
                 return p.Key;
 
-            // low priority ports
-            p = PortList.FirstOrDefault(kvp => (kvp.Value.Item1 == 0 && kvp.Value.Item2 == PortStatus.Untested));
-            if (!p.Equals(default(KeyValuePair<string, (int, PortStatus)>)))
-                return p.Key;
+            // if all high priority ports have already been tried, mark them as untested so that they can be retried
+            var retryPorts = PortList.Where(kvp => kvp.Value.Item1 == 1 && kvp.Value.Item2 == PortStatus.Failed).Select(kvp => kvp.Key).ToList();
+            foreach (string port in retryPorts)
+                PortList[port] = (1, PortStatus.Untested);
 
+            // low priority ports
+            //p = PortList.FirstOrDefault(kvp => (kvp.Value.Item1 == 0 && kvp.Value.Item2 == PortStatus.Untested));
+            //if (!p.Equals(default(KeyValuePair<string, (int, PortStatus)>)))
+            //    return p.Key;
             return "";
         }
-        public async Task TryNextPortAsync()
+        // This function sets IsConnected to true on success
+        public void TryNextPort()
         {
             string port = NextPort();
-            Console.WriteLine($"Trying port {port}... ");
-            SerialPort result = await Task.Run(() => TryHandShake(port));
+            if (port == "")
+            {
+                return;
+            }
+            Console.Write($"Trying port {port}... ");
+            SerialPort result = TryHandShake(port);
             if (result != null)
             {
-                Console.WriteLine("handshake succeeded!");
                 keypadPort = result;
                 IsConnected = true;
                 // set port status to good
@@ -127,7 +150,6 @@ namespace KeypadSoftware
             // set port status to failed
             (int priority2, PortStatus status2) = PortList[port];
             PortList[port] = (priority2, PortStatus.Failed);
-            Console.WriteLine("handshake failed.");
         }
 
         // Tries to send a handshake packet to the COM Port. If the keypad responds, then return the SerialPort object.
@@ -139,23 +161,79 @@ namespace KeypadSoftware
                 SerialPort testPort = new SerialPort(portName, 9600);
                 testPort.ReadTimeout = 500;
                 testPort.Open();
-                byte[] handShakePacket = KeypadSerialProtocol.CreateEmptyPacket(KeypadSerialProtocol.KEYPAD_PACKET_ID_HEARTBEAT);
+                //byte[] handShakePacket = KeypadSerialProtocol.CreateEmptyPacket(KeypadSerialProtocol.KEYPAD_PACKET_ID_HEARTBEAT);
                 //testPort.Write(handShakePacket, 0, handShakePacket.Length);
                 testPort.WriteLine("fun");
                 try
                 {
-                    return (testPort.ReadLine() == "orange") ? testPort : null;
+                    if (testPort.ReadLine() == "orange")
+                    {
+                        Console.WriteLine("handshake success!");
+                        return testPort;
+                    }
+                    else
+                    {
+                        Console.WriteLine("received garbage");
+                        return null;
+                    }
                 }
                 catch (TimeoutException)
                 {
                     Console.WriteLine("Timed out while waiting for handshake");
+                    testPort.Close();
                     return null;
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                // eg. port does not exist
+                Thread.Sleep(2000);
+                Console.WriteLine(e.Message);
                 return null;
+            }
+        }
+
+        // This function sets IsConnected to false if no heartbeat is detected
+        public bool Heartbeat()
+        {
+            if (!IsConnected)
+                throw new Exception("heartbeat method called while keypad is not connected.");
+
+            void KeypadDisconnect()
+            {
+                IsConnected = false;
+                keypadPort.Close();
+                PortList.Remove(keypadPort.PortName);
+            }
+
+            if (!keypadPort.IsOpen)
+            {
+                Console.WriteLine("keypad disconnected (port was closed)");
+                KeypadDisconnect();
+                return false;
+            }
+
+            //byte[] handShakePacket = KeypadSerialProtocol.CreateEmptyPacket(KeypadSerialProtocol.KEYPAD_PACKET_ID_HEARTBEAT);
+            //testPort.Write(handShakePacket, 0, handShakePacket.Length);
+            keypadPort.WriteLine("fun");
+            try
+            {
+                if (keypadPort.ReadLine() == "orange")
+                {
+                    IsConnected = true;
+                    return true;
+                }
+                else
+                {
+                    KeypadDisconnect();
+                    return false;
+                }
+            }
+            catch (TimeoutException)
+            {
+                Console.WriteLine("keypad disconnected (heartbeat timed out)");
+                KeypadDisconnect();
+                return false;
             }
         }
 
