@@ -313,5 +313,70 @@ namespace KeypadSoftware
             return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_DEBOUNCE, 5);
         }
         #endregion
+
+        #region Write Data
+        public void WriteBaseColor(List<Color> c)
+        {
+            byte[] data = KeypadSerialPacket.SerializeRgbList(c);
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_BASE_COLOUR, data);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteHueDelta(List<UInt16> d)
+        {
+            byte[] data = KeypadSerialPacket.SerializeUint16List(d);
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_HUE_DELTA, data);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteHuePeriod(List<UInt32> p)
+        {
+            byte[] data = KeypadSerialPacket.SerializeUint32List(p);
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_HUE_PERIOD, data);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteValueDim(List<float> d)
+        {
+            byte[] data = KeypadSerialPacket.SerializeFloatList(d);
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_VALUE_DIM, data);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteValuePeriod(List<UInt32> p)
+        {
+            byte[] data = KeypadSerialPacket.SerializeUint32List(p);
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_VALUE_PERIOD, data);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteFlashLeftColour(List<Color> c)
+        {
+            byte[] data = KeypadSerialPacket.SerializeRgbList(c);
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_FLASH_LEFT_COLOUR, data);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteFlashRightColour(List<Color> c)
+        {
+            byte[] data = KeypadSerialPacket.SerializeRgbList(c);
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_FLASH_RIGHT_COLOUR, data);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteFlashDecayRate(List<float> r)
+        {
+            byte[] data = KeypadSerialPacket.SerializeFloatList(r);
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_FLASH_DECAY_RATE, data);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteDelayMultiplier(byte dm)
+        {
+            byte[] data = new byte[1];
+            data[0] = dm;
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_DELAY_MULTIPLIER, data);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteLineDelay(byte[] d)
+        {
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_LINE_DELAY, d);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+
+
+        #endregion
     }
 }
