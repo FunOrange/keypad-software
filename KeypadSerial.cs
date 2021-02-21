@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using System.Threading;
 using Caliburn.Micro;
+using System.Windows.Media;
 
 namespace KeypadSoftware
 {
@@ -19,6 +20,8 @@ namespace KeypadSoftware
     {
         // state variables
         private SerialPort keypadPort;
+
+        private const int NUM_LEDS = 12;
 
         private bool _isConnected;
         public bool IsConnected
@@ -244,5 +247,71 @@ namespace KeypadSoftware
             }
         }
 
+        #region Read Data
+        public byte[] RequestDataGeneric(byte requestPacketId, int expectedBytes)
+        {
+            if (!IsConnected)
+                throw new Exception("Can't read data when keypad is not connected");
+            // Send packet to request keybinds
+            byte[] packet = KeypadSerialPacket.CreateEmptyPacket(requestPacketId);
+            keypadPort.Write(packet, 0, packet.Length);
+
+            // Receive data
+            byte[] receivedData = new byte[expectedBytes];
+            keypadPort.Read(receivedData, 0, expectedBytes);
+            return receivedData;
+        }
+
+        public List<Color> ReadBaseColour()
+        {
+            byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_BASE_COLOUR, 3 * NUM_LEDS);
+            return KeypadSerialPacket.DeserializeRgbList(rawData);
+        }
+        public List<UInt16> ReadHueDelta(byte[] data) {
+            byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_HUE_DELTA, 2 * NUM_LEDS);
+            return KeypadSerialPacket.DeserializeUint16List(rawData);
+        }
+        public List<UInt32> ReadHuePeriod(byte[] data) {
+            byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_HUE_PERIOD, 4 * NUM_LEDS);
+            return KeypadSerialPacket.DeserializeUint32List(rawData);
+        }
+        public List<float> ReadValueDim(byte[] data) {
+            byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_VALUE_DIM, 4 * NUM_LEDS);
+            return KeypadSerialPacket.DeserializeFloatList(rawData);
+        }
+        public List<UInt32> ReadValuePeriod(byte[] data) {
+            byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_VALUE_PERIOD, 4 * NUM_LEDS);
+            return KeypadSerialPacket.DeserializeUint32List(rawData);
+        }
+        public List<Color> ReadFlashLeftColour(byte[] data) {
+            byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_FLASH_LEFT_COLOUR, 3 * NUM_LEDS);
+            return KeypadSerialPacket.DeserializeRgbList(rawData);
+        }
+        public List<Color> ReadFlashRightColour(byte[] data) {
+            byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_FLASH_RIGHT_COLOUR, 3 * NUM_LEDS);
+            return KeypadSerialPacket.DeserializeRgbList(rawData);
+        }
+        //public List<byte> ReadFlashBlendingMethod(byte[] data) {}
+        //public List<byte> ReadFlashHoldMethod(byte[] data) {}
+        public List<float> ReadFlashDecayRate(byte[] data) {
+            byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_FLASH_DECAY_RATE, 4 * NUM_LEDS);
+            return KeypadSerialPacket.DeserializeFloatList(rawData);
+        }
+        public byte ReadDelayMultiplier(byte[] data) {
+            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_DELAY_MULTIPLIER, 1)[0];
+        }
+        public byte[] ReadLineDelay(byte[] data) {
+            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_LINE_DELAY, NUM_LEDS);
+        }
+
+        public byte[] ReadKeybinds()
+        {
+            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_KEYBINDS, 3);
+        }
+        public byte[] ReadDebounce()
+        {
+            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_DEBOUNCE, 5);
+        }
+        #endregion
     }
 }

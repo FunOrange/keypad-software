@@ -73,7 +73,7 @@
     </Compile>
     <Compile Include="KeyCodeConverter.cs" />
     <Compile Include="KeypadSerial.cs" />
-    <Compile Include="KeypadSerialProtocol.cs" />
+    <Compile Include="KeypadSerialPacket.cs" />
     <Compile Include="Models\CountersModel.cs" />
     <Compile Include="Models\DebounceModel.cs" />
     <Compile Include="Models\KeybindsModel.cs" />

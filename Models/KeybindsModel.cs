@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace KeypadSoftware.Models
 {
-    class KeybindsModel
+    public class KeybindsModel
     {
         private KeypadSerial keypad = null;
         public bool Initialized = false;
@@ -35,6 +35,10 @@ namespace KeypadSoftware.Models
             return;
 #endif
             // Request keybinds from keypad
+            var keybindsRawData = keypad.ReadKeybinds();
+            LeftButtonKeyCode = keybindsRawData[0];
+            RightButtonKeyCode = keybindsRawData[1];
+            SideButtonKeyCode = keybindsRawData[2];
         }
 
         // Writes values from this object into keypad

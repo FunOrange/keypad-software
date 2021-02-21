@@ -11,17 +11,30 @@ namespace KeypadSoftware.ViewModels
 {
     public class KeybindsViewModel : Screen
     {
+        private KeybindsModel _keybinds;
+
+        public KeybindsModel Keybinds
+        {
+            get { return _keybinds; }
+            set {
+                _keybinds = value;
+                NotifyOfPropertyChange(() => Keybinds);
+            }
+        }
+
+
         private KeypadSerial keypad;
-        private KeybindsModel model;
         private static KeybindsViewModel singleInstance;
         private KeybindsViewModel(KeypadSerial _keypad)
         {
             keypad = _keypad;
-            model = new KeybindsModel(_keypad);
+            Keybinds = new KeybindsModel(_keypad);
         }
 
         public void PullAllValues()
         {
+            Keybinds.PullAllValues();
+            NotifyOfPropertyChange(() => Keybinds);
         }
 
 
