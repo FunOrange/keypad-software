@@ -19,12 +19,35 @@ namespace KeypadSoftware.Views
             set { _keypad = value; }
         }
 
+        public enum Page
+        {
+            Keybinds,
+            Lighting,
+            Counters,
+            Debounce
+        }
+        private Page _currentPage;
+
+        public Page CurrentPage
+        {
+            get { return _currentPage; }
+            set
+            {
+                _currentPage = value;
+                NotifyOfPropertyChange(() => CurrentPage);
+            }
+        }
+
         #region Keypad Connection Properties
-        public string ConnectionStatus
+        public string ConnectionStatusString
         {
             get {
                 return Keypad.IsConnected ? "Keypad found!" : "Keypad disconnected";
             }
+        }
+        public bool IsConnected
+        {
+            get { return Keypad.IsConnected; }
         }
 
         private BindableCollection<Tuple<string, string>> _portListHighPriority;
@@ -50,19 +73,42 @@ namespace KeypadSoftware.Views
         public TopViewModel()
         {
             Keypad = new KeypadSerial();
+            CurrentPage = Page.Keybinds;
+        }
+
+        private void LoadPage(Page page)
+        {
+            CurrentPage = page;
+            switch (page)
+            {
+                case Page.Keybinds:
+                    ActivateItem(KeybindsViewModel.GetInstance(Keypad));
+                    break;
+                case Page.Lighting:
+                    ActivateItem(new LightingViewModel());
+                    break;
+                case Page.Counters:
+                    ActivateItem(new CountersViewModel());
+                    break;
+                case Page.Debounce:
+                    ActivateItem(new DebounceViewModel());
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void KeybindsTabButton (object sender, RoutedEventArgs e) {
-            ActivateItem(new KeybindsViewModel());
+            LoadPage(Page.Keybinds);
         }
         public void LightingTabButton (object sender, RoutedEventArgs e) {
-            ActivateItem(new LightingViewModel());
+            LoadPage(Page.Lighting);
         }
         public void CountersTabButton (object sender, RoutedEventArgs e) {
-            ActivateItem(new CountersViewModel());
+            LoadPage(Page.Counters);
         }
         public void DebounceTabButton (object sender, RoutedEventArgs e) {
-            ActivateItem(new DebounceViewModel());
+            LoadPage(Page.Debounce);
         }
 
         public void Window_Loaded(EventArgs e)
@@ -83,14 +129,22 @@ namespace KeypadSoftware.Views
 
                     // Try next port
                     Keypad.TryNextPort();
-                    NotifyOfPropertyChange(() => ConnectionStatus);
+                    NotifyOfPropertyChange(() => ConnectionStatusString);
+                    NotifyOfPropertyChange(() => IsConnected);
                     PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
                     PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
+
+                    if (Keypad.IsConnected)
+                    {
+                        // Reload last viewed page
+                        LoadPage(CurrentPage);
+                    }
                 }
                 else
                 {
                     Keypad.Heartbeat();
-                    NotifyOfPropertyChange(() => ConnectionStatus);
+                    NotifyOfPropertyChange(() => ConnectionStatusString);
+                    NotifyOfPropertyChange(() => IsConnected);
                     PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
                     PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
                     Thread.Sleep(1000);

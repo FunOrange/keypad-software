@@ -7,7 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock>Keybinds</TextBlock>
-            
+        <TextBlock Foreground="White" FontSize="26" Margin="20, 20">Keybinds</TextBlock>
     </Grid>
 </UserControl>

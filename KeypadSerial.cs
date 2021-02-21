@@ -19,7 +19,14 @@ namespace KeypadSoftware
     {
         // state variables
         private SerialPort keypadPort;
-        public bool IsConnected;
+
+        private bool _isConnected;
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+            set { _isConnected = value; }
+        }
+
         public enum PortStatus
         {
             Untested,

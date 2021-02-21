@@ -9,14 +9,16 @@ namespace KeypadSoftware.Models
 {
     class KeybindsModel
     {
+        private KeypadSerial keypad = null;
         public bool Initialized = false;
         byte LeftButtonKeyCode;
         byte RightButtonKeyCode;
         byte SideButtonKeyCode;
 
-        public KeybindsModel()
+        public KeybindsModel(KeypadSerial _keypad)
         {
-            PullValues();
+            keypad = _keypad;
+            PullAllValues();
 #if NO_KEYPAD
             Console.WriteLine("No keypad; Initializing with default values");
             LeftButtonKeyCode = KeyCodeConverter.ToScanCode(Key.Z);
@@ -26,13 +28,13 @@ namespace KeypadSoftware.Models
         }
 
         // Reads current values from keypad
-        public void PullValues()
+        public void PullAllValues()
         {
 #if NO_KEYPAD
             Console.WriteLine("No keypad; assume values in keypad already match");
             return;
 #endif
-
+            // Request keybinds from keypad
         }
 
         // Writes values from this object into keypad
