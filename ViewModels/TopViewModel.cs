@@ -18,6 +18,7 @@ namespace KeypadSoftware.Views
             get { return _keypad; }
             set { _keypad = value; }
         }
+        const int HEARTBEAT_LISTEN_INTERVAL = 1000;
 
         public enum Page
         {
@@ -45,10 +46,7 @@ namespace KeypadSoftware.Views
                 return Keypad.IsConnected ? "Keypad found!" : "Keypad disconnected";
             }
         }
-        public bool IsConnected
-        {
-            get { return Keypad.IsConnected; }
-        }
+        public bool IsConnected => Keypad.IsConnected;
 
         private BindableCollection<Tuple<string, string>> _portListHighPriority;
         public BindableCollection<Tuple<string, string>> PortListHighPriority
@@ -79,6 +77,10 @@ namespace KeypadSoftware.Views
         private void LoadPage(Page page)
         {
             CurrentPage = page;
+            NotifyOfPropertyChange(() => CanSwitchToKeybindsTab);
+            NotifyOfPropertyChange(() => CanSwitchToLightingTab);
+            NotifyOfPropertyChange(() => CanSwitchToCountersTab);
+            NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
             switch (page)
             {
                 case Page.Keybinds:
@@ -98,18 +100,14 @@ namespace KeypadSoftware.Views
             }
         }
 
-        public void KeybindsTabButton (object sender, RoutedEventArgs e) {
-            LoadPage(Page.Keybinds);
-        }
-        public void LightingTabButton (object sender, RoutedEventArgs e) {
-            LoadPage(Page.Lighting);
-        }
-        public void CountersTabButton (object sender, RoutedEventArgs e) {
-            LoadPage(Page.Counters);
-        }
-        public void DebounceTabButton (object sender, RoutedEventArgs e) {
-            LoadPage(Page.Debounce);
-        }
+        public void SwitchToKeybindsTab (object sender, RoutedEventArgs e) => LoadPage(Page.Keybinds);
+        public void SwitchToLightingTab (object sender, RoutedEventArgs e) => LoadPage(Page.Lighting);
+        public void SwitchToCountersTab (object sender, RoutedEventArgs e) => LoadPage(Page.Counters);
+        public void SwitchToDebounceTab (object sender, RoutedEventArgs e) => LoadPage(Page.Debounce);
+        public bool CanSwitchToKeybindsTab => IsConnected && CurrentPage != Page.Keybinds;
+        public bool CanSwitchToLightingTab => IsConnected && CurrentPage != Page.Lighting;
+        public bool CanSwitchToCountersTab => IsConnected && CurrentPage != Page.Counters;
+        public bool CanSwitchToDebounceTab => IsConnected && CurrentPage != Page.Debounce;
 
         public void Window_Loaded(EventArgs e)
         {
@@ -131,6 +129,10 @@ namespace KeypadSoftware.Views
                     Keypad.TryNextPort();
                     NotifyOfPropertyChange(() => ConnectionStatusString);
                     NotifyOfPropertyChange(() => IsConnected);
+                    NotifyOfPropertyChange(() => CanSwitchToKeybindsTab);
+                    NotifyOfPropertyChange(() => CanSwitchToLightingTab);
+                    NotifyOfPropertyChange(() => CanSwitchToCountersTab);
+                    NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
                     PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
                     PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
 
@@ -145,9 +147,13 @@ namespace KeypadSoftware.Views
                     Keypad.Heartbeat();
                     NotifyOfPropertyChange(() => ConnectionStatusString);
                     NotifyOfPropertyChange(() => IsConnected);
+                    NotifyOfPropertyChange(() => CanSwitchToKeybindsTab);
+                    NotifyOfPropertyChange(() => CanSwitchToLightingTab);
+                    NotifyOfPropertyChange(() => CanSwitchToCountersTab);
+                    NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
                     PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
                     PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(HEARTBEAT_LISTEN_INTERVAL);
                 }
             }
         }

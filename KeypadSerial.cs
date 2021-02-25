@@ -375,8 +375,6 @@ namespace KeypadSoftware
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_LINE_DELAY, d);
             keypadPort.Write(packet, 0, packet.Length);
         }
-
-
         #endregion
     }
 }
