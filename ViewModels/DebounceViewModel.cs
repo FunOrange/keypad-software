@@ -7,7 +7,20 @@ using System.Threading.Tasks;
 
 namespace KeypadSoftware.ViewModels
 {
-    public class DebounceViewModel : Screen
+    public class DebounceViewModel : Screen, IKeypadViewModel
     {
+        private KeypadSerial keypad;
+        public DebounceViewModel(KeypadSerial _keypad)
+        {
+            keypad = _keypad;
+        }
+
+        public void PullAllValues()
+        {
+        }
+
+        public void PushAllValues()
+        {
+        }
     }
 }

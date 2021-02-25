@@ -7,7 +7,20 @@ using System.Threading.Tasks;
 
 namespace KeypadSoftware.ViewModels
 {
-    public class LightingViewModel : Screen
+    public class LightingViewModel : Screen, IKeypadViewModel
     {
+        private KeypadSerial keypad;
+        public LightingViewModel(KeypadSerial _keypad)
+        {
+            keypad = _keypad;
+        }
+
+        public void PullAllValues()
+        {
+        }
+
+        public void PushAllValues()
+        {
+        }
     }
 }

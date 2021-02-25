@@ -9,10 +9,9 @@ using System.Threading.Tasks;
 
 namespace KeypadSoftware.ViewModels
 {
-    public class KeybindsViewModel : Screen
+    public class KeybindsViewModel : Screen, IKeypadViewModel
     {
         private KeybindsModel _keybinds;
-
         public KeybindsModel Keybinds
         {
             get { return _keybinds; }
@@ -22,32 +21,48 @@ namespace KeypadSoftware.ViewModels
             }
         }
 
+        #region View Properties
+        public string LeftKeybind => KeyCodeConverter.ToKeyCode(Keybinds.LeftButtonKeyCode).ToString();
+        public string RightKeybind => KeyCodeConverter.ToKeyCode(Keybinds.RightButtonKeyCode).ToString();
+        public string SideKeybind => KeyCodeConverter.ToKeyCode(Keybinds.SideButtonKeyCode).ToString();
+        public void NotifyAllProperties()
+        {
+            NotifyOfPropertyChange(() => LeftKeybind);
+            NotifyOfPropertyChange(() => RightKeybind);
+            NotifyOfPropertyChange(() => SideKeybind);
+        }
+        #endregion
 
         private KeypadSerial keypad;
-        private static KeybindsViewModel singleInstance;
-        private KeybindsViewModel(KeypadSerial _keypad)
+        public KeybindsViewModel(KeypadSerial _keypad)
         {
             keypad = _keypad;
             Keybinds = new KeybindsModel(_keypad);
+            NotifyAllProperties();
+        }
+
+        public void EditLeftKeybind() {
+            Console.WriteLine("edit left button");
+        }
+        public void EditRightKeybind()
+        {
+            Console.WriteLine("edit right button");
+        }
+        public void EditSideKeybind()
+        {
+            Console.WriteLine("edit right button");
         }
 
         public void PullAllValues()
         {
+            Console.WriteLine("Pulling all keybind values from keypad...");
             Keybinds.PullAllValues();
             NotifyOfPropertyChange(() => Keybinds);
+            NotifyAllProperties();
         }
 
-
-        public static KeybindsViewModel GetInstance(KeypadSerial _keypad)
+        public void PushAllValues()
         {
-            if (singleInstance == null)
-                singleInstance = new KeybindsViewModel(_keypad);
-            return singleInstance;
-        }
-        public static KeybindsViewModel GetNewInstance(KeypadSerial _keypad)
-        {
-            singleInstance = new KeybindsViewModel(_keypad);
-            return singleInstance;
         }
     }
 }

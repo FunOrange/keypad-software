@@ -20,6 +20,14 @@ namespace KeypadSoftware.Views
         }
         const int HEARTBEAT_LISTEN_INTERVAL = 1000;
 
+        #region ViewModels
+        KeybindsViewModel keybindsVm;
+        CountersViewModel countersVm;
+        DebounceViewModel debounceVm;
+        LightingViewModel lightingVm;
+        #endregion
+
+        #region Page
         public enum Page
         {
             Keybinds,
@@ -28,7 +36,6 @@ namespace KeypadSoftware.Views
             Debounce
         }
         private Page _currentPage;
-
         public Page CurrentPage
         {
             get { return _currentPage; }
@@ -38,6 +45,7 @@ namespace KeypadSoftware.Views
                 NotifyOfPropertyChange(() => CurrentPage);
             }
         }
+        #endregion
 
         #region Keypad Connection Properties
         public string ConnectionStatusString
@@ -68,10 +76,15 @@ namespace KeypadSoftware.Views
         }
         #endregion
 
+
         public TopViewModel()
         {
             Keypad = new KeypadSerial();
             CurrentPage = Page.Keybinds;
+            keybindsVm = new KeybindsViewModel(Keypad);
+            countersVm = new CountersViewModel(Keypad);
+            debounceVm = new DebounceViewModel(Keypad);
+            lightingVm = new LightingViewModel(Keypad);
         }
 
         private void LoadPage(Page page)
@@ -84,16 +97,20 @@ namespace KeypadSoftware.Views
             switch (page)
             {
                 case Page.Keybinds:
-                    ActivateItem(KeybindsViewModel.GetInstance(Keypad));
+                    ActivateItem(keybindsVm);
+                    keybindsVm.PullAllValues();
                     break;
                 case Page.Lighting:
-                    ActivateItem(new LightingViewModel());
+                    ActivateItem(lightingVm);
+                    lightingVm.PullAllValues();
                     break;
                 case Page.Counters:
-                    ActivateItem(new CountersViewModel());
+                    ActivateItem(countersVm);
+                    countersVm.PullAllValues();
                     break;
                 case Page.Debounce:
-                    ActivateItem(new DebounceViewModel());
+                    ActivateItem(debounceVm);
+                    debounceVm.PullAllValues();
                     break;
                 default:
                     break;

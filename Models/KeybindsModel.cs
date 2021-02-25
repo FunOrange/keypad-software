@@ -10,21 +10,17 @@ namespace KeypadSoftware.Models
     public class KeybindsModel
     {
         private KeypadSerial keypad = null;
-        public bool Initialized = false;
-        byte LeftButtonKeyCode;
-        byte RightButtonKeyCode;
-        byte SideButtonKeyCode;
+        public byte LeftButtonKeyCode;
+        public byte RightButtonKeyCode;
+        public byte SideButtonKeyCode;
 
         public KeybindsModel(KeypadSerial _keypad)
         {
             keypad = _keypad;
-            PullAllValues();
-#if NO_KEYPAD
-            Console.WriteLine("No keypad; Initializing with default values");
+            Console.WriteLine("Initializing KeybindsModel with default values");
             LeftButtonKeyCode = KeyCodeConverter.ToScanCode(Key.Z);
             RightButtonKeyCode = KeyCodeConverter.ToScanCode(Key.X);
             SideButtonKeyCode = KeyCodeConverter.ToScanCode(Key.Escape);
-#endif
         }
 
         // Reads current values from keypad

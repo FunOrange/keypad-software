@@ -7,7 +7,20 @@ using System.Threading.Tasks;
 
 namespace KeypadSoftware.ViewModels
 {
-    public class CountersViewModel : Screen
+    public class CountersViewModel : Screen, IKeypadViewModel
     {
+        private KeypadSerial keypad;
+        public CountersViewModel(KeypadSerial _keypad)
+        {
+            keypad = _keypad;
+        }
+
+        public void PullAllValues()
+        {
+        }
+
+        public void PushAllValues()
+        {
+        }
     }
 }

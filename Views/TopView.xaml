@@ -51,16 +51,16 @@
 
         <!-- Row 1 -->
         <!-- Connection screen -->
-        <Grid Name="ConnectionScreen" Grid.Row="1" Background="Black" Panel.ZIndex="1">
+        <Grid x:Name="ConnectionScreen" Grid.Row="1" Background="Black" Panel.ZIndex="1" IsHitTestVisible="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="308*"/>
                 <ColumnDefinition Width="593*"/>
             </Grid.ColumnDefinitions>
-            <!-- Fade out animation -->
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                            <!-- Fade out animation -->
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
@@ -129,7 +129,7 @@
         </Grid>
 
         <!-- Main Content -->
-        <ContentControl Grid.Row="1" Grid.Column="0" x:Name="ActiveItem"/>
+        <ContentControl x:Name="ActiveItem" Grid.Row="1" Grid.Column="0"/>
 
 
 
