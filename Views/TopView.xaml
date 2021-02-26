@@ -9,7 +9,7 @@
         Title="TopView" Height="500" Width="900"
         WindowStyle="None"
         ResizeMode="NoResize"
-        cal:Message.Attach="[Event Loaded] = [Action Window_Loaded($eventArgs)]">
+        cal:Message.Attach="[Event Loaded] = [Action Window_Loaded($eventArgs)];[Event PreviewMouseDown] = [Action ClickAnywhere()]">
     <Grid Background="#181735">
         <Grid.RowDefinitions>
             <RowDefinition Height="32"/>

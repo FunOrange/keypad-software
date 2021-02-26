@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace KeypadSoftware.ViewModels
 {
@@ -30,7 +31,16 @@ namespace KeypadSoftware.ViewModels
             NotifyOfPropertyChange(() => LeftKeybind);
             NotifyOfPropertyChange(() => RightKeybind);
             NotifyOfPropertyChange(() => SideKeybind);
+            NotifyOfPropertyChange(() => EditLeftKeybindCoverVisible);
+            NotifyOfPropertyChange(() => EditRightKeybindCoverVisible);
+            NotifyOfPropertyChange(() => EditSideKeybindCoverVisible);
         }
+        private bool editingLeftKeybind = false;
+        private bool editingRightKeybind = false;
+        private bool editingSideKeybind = false;
+        public Visibility EditLeftKeybindCoverVisible => editingLeftKeybind ? Visibility.Visible : Visibility.Hidden;
+        public Visibility EditRightKeybindCoverVisible => editingRightKeybind ? Visibility.Visible : Visibility.Hidden;
+        public Visibility EditSideKeybindCoverVisible => editingSideKeybind ? Visibility.Visible : Visibility.Hidden;
         #endregion
 
         private KeypadSerial keypad;
@@ -40,17 +50,39 @@ namespace KeypadSoftware.ViewModels
             Keybinds = new KeybindsModel(_keypad);
             NotifyAllProperties();
         }
+        public void GridClick()
+        {
+            Console.WriteLine("grid click");
+        }
+
+        public void ClickAnywhere()
+        {
+            Console.WriteLine("click anywhere (keybinds vm)");
+            editingLeftKeybind = false;
+            editingRightKeybind = false;
+            editingSideKeybind = false;
+            NotifyAllProperties();
+        }
 
         public void EditLeftKeybind() {
-            Console.WriteLine("edit left button");
+            editingLeftKeybind = true;
+            editingRightKeybind = false;
+            editingSideKeybind = false;
+            NotifyAllProperties();
         }
         public void EditRightKeybind()
         {
-            Console.WriteLine("edit right button");
+            editingLeftKeybind = false;
+            editingRightKeybind = true;
+            editingSideKeybind = false;
+            NotifyAllProperties();
         }
         public void EditSideKeybind()
         {
-            Console.WriteLine("edit right button");
+            editingLeftKeybind = false;
+            editingRightKeybind = false;
+            editingSideKeybind = true;
+            NotifyAllProperties();
         }
 
         public void PullAllValues()

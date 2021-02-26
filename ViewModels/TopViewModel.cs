@@ -76,6 +76,11 @@ namespace KeypadSoftware.Views
         }
         #endregion
 
+        public void ClickAnywhere()
+        {
+            Console.WriteLine("click anywhere (top view)");
+            keybindsVm?.ClickAnywhere();
+        }
 
         public TopViewModel()
         {
