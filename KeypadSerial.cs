@@ -370,9 +370,14 @@ namespace KeypadSoftware
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_DELAY_MULTIPLIER, data);
             keypadPort.Write(packet, 0, packet.Length);
         }
-        public void WriteLineDelay(byte[] d)
+        public void WriteLineDelay(byte[] data)
         {
-            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_LINE_DELAY, d);
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_LINE_DELAY, data);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteKeybinds(byte[] scanCodes)
+        {
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_KEYBINDS, scanCodes);
             keypadPort.Write(packet, 0, packet.Length);
         }
         #endregion

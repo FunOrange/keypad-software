@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace KeypadSoftware.Views
 {
@@ -78,8 +79,11 @@ namespace KeypadSoftware.Views
 
         public void ClickAnywhere()
         {
-            Console.WriteLine("click anywhere (top view)");
             keybindsVm?.ClickAnywhere();
+        }
+        public void KeyDownAnywhere(object sender, KeyEventArgs e)
+        {
+            keybindsVm?.KeyDownAnywhere(sender, e);
         }
 
         public TopViewModel()

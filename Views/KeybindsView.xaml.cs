@@ -24,5 +24,6 @@ namespace KeypadSoftware.Views
         {
             InitializeComponent();
         }
+
     }
 }

@@ -143,19 +143,17 @@ namespace KeypadSoftware
         {
             var result = keyLookupTable.Find(e => e.KeyCode == keyCode);
             if (result != null)
-            {
                 return result.ScanCode;
-            }
-            throw new Exception($"Could not find HID scan code for key code: {keyCode}");
+            else
+                return 0x00;
         }
         // to .NET Framework key code
         public static Key ToKeyCode(byte scanCode)
         {
+            Console.WriteLine($"Scan code: {scanCode}");
             var result = keyLookupTable.Find(e => e.ScanCode == scanCode);
             if (result != null)
-            {
                 return result.KeyCode;
-            }
             throw new Exception($"Could not find key code for HID scan code: {scanCode}");
         }
     }

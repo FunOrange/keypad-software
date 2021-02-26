@@ -7,11 +7,19 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace KeypadSoftware.ViewModels
 {
     public class KeybindsViewModel : Screen, IKeypadViewModel
     {
+        enum KeypadButton
+        {
+            None,
+            Left,
+            Right,
+            Side
+        }
         private KeybindsModel _keybinds;
         public KeybindsModel Keybinds
         {
@@ -23,9 +31,9 @@ namespace KeypadSoftware.ViewModels
         }
 
         #region View Properties
-        public string LeftKeybind => KeyCodeConverter.ToKeyCode(Keybinds.LeftButtonKeyCode).ToString();
-        public string RightKeybind => KeyCodeConverter.ToKeyCode(Keybinds.RightButtonKeyCode).ToString();
-        public string SideKeybind => KeyCodeConverter.ToKeyCode(Keybinds.SideButtonKeyCode).ToString();
+        public string LeftKeybind => KeyCodeConverter.ToKeyCode(Keybinds.LeftButtonScanCode).ToString();
+        public string RightKeybind => KeyCodeConverter.ToKeyCode(Keybinds.RightButtonScanCode).ToString();
+        public string SideKeybind => KeyCodeConverter.ToKeyCode(Keybinds.SideButtonScanCode).ToString();
         public void NotifyAllProperties()
         {
             NotifyOfPropertyChange(() => LeftKeybind);
@@ -35,12 +43,10 @@ namespace KeypadSoftware.ViewModels
             NotifyOfPropertyChange(() => EditRightKeybindCoverVisible);
             NotifyOfPropertyChange(() => EditSideKeybindCoverVisible);
         }
-        private bool editingLeftKeybind = false;
-        private bool editingRightKeybind = false;
-        private bool editingSideKeybind = false;
-        public Visibility EditLeftKeybindCoverVisible => editingLeftKeybind ? Visibility.Visible : Visibility.Hidden;
-        public Visibility EditRightKeybindCoverVisible => editingRightKeybind ? Visibility.Visible : Visibility.Hidden;
-        public Visibility EditSideKeybindCoverVisible => editingSideKeybind ? Visibility.Visible : Visibility.Hidden;
+        private KeypadButton buttonBeingEdited = KeypadButton.None;
+        public Visibility EditLeftKeybindCoverVisible => buttonBeingEdited == KeypadButton.Left ? Visibility.Visible : Visibility.Hidden;
+        public Visibility EditRightKeybindCoverVisible => buttonBeingEdited == KeypadButton.Right ? Visibility.Visible : Visibility.Hidden;
+        public Visibility EditSideKeybindCoverVisible => buttonBeingEdited == KeypadButton.Side ? Visibility.Visible : Visibility.Hidden;
         #endregion
 
         private KeypadSerial keypad;
@@ -50,38 +56,38 @@ namespace KeypadSoftware.ViewModels
             Keybinds = new KeybindsModel(_keypad);
             NotifyAllProperties();
         }
-        public void GridClick()
-        {
-            Console.WriteLine("grid click");
+        public void KeyDownAnywhere(object sender, KeyEventArgs e) {
+            switch (buttonBeingEdited)
+            {
+                case KeypadButton.None:
+                    return;
+                case KeypadButton.Left:  Keybinds.LeftButtonScanCode  = KeyCodeConverter.ToScanCode(e.Key); break;
+                case KeypadButton.Right: Keybinds.RightButtonScanCode = KeyCodeConverter.ToScanCode(e.Key); break;
+                case KeypadButton.Side:  Keybinds.SideButtonScanCode  = KeyCodeConverter.ToScanCode(e.Key); break;
+            }
+            Keybinds.PushAllValues();
+            buttonBeingEdited = KeypadButton.None;
+            NotifyAllProperties();
         }
 
         public void ClickAnywhere()
         {
-            Console.WriteLine("click anywhere (keybinds vm)");
-            editingLeftKeybind = false;
-            editingRightKeybind = false;
-            editingSideKeybind = false;
+            buttonBeingEdited = KeypadButton.None;
             NotifyAllProperties();
         }
 
-        public void EditLeftKeybind() {
-            editingLeftKeybind = true;
-            editingRightKeybind = false;
-            editingSideKeybind = false;
+        public void BeginEditLeftKeybind() {
+            buttonBeingEdited = KeypadButton.Left;
             NotifyAllProperties();
         }
-        public void EditRightKeybind()
+        public void BeginEditRightKeybind()
         {
-            editingLeftKeybind = false;
-            editingRightKeybind = true;
-            editingSideKeybind = false;
+            buttonBeingEdited = KeypadButton.Right;
             NotifyAllProperties();
         }
-        public void EditSideKeybind()
+        public void BeginEditSideKeybind()
         {
-            editingLeftKeybind = false;
-            editingRightKeybind = false;
-            editingSideKeybind = true;
+            buttonBeingEdited = KeypadButton.Side;
             NotifyAllProperties();
         }
 
