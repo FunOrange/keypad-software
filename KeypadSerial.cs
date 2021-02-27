@@ -36,6 +36,8 @@ namespace KeypadSoftware
             Failed,
             Good
         }
+
+
         public static string StatusToString(PortStatus status)
         {
             switch (status)
@@ -248,6 +250,8 @@ namespace KeypadSoftware
         }
 
         #region Read Data
+        // 1. Send an empty packet with a request packet id
+        // 2. Read back a certain number of bytes
         public byte[] RequestDataGeneric(byte requestPacketId, int expectedBytes)
         {
             if (!IsConnected)
@@ -311,6 +315,11 @@ namespace KeypadSoftware
         public byte[] ReadDebounce()
         {
             return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_DEBOUNCE, 5);
+        }
+        public List<uint> ReadCounters()
+        {
+            byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_COUNTERS, 4 * 3);
+            return KeypadSerialPacket.DeserializeUint32List(rawData);
         }
         #endregion
 

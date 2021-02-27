@@ -7,6 +7,52 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Foreground="White" FontSize="26" Margin="20, 20">Counters</TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!-- row 0 -->
+        <TextBlock Grid.Row="0" Foreground="White" FontSize="26" Margin="20, 20">Counters</TextBlock>
+
+        <!-- row 1 -->
+        <StackPanel Grid.Row="1">
+            <TextBlock Foreground="White" FontSize="16" Margin="20, 5">These keep track of how many times each button has been pressed during the keypad's entire lifetime. Cannot be reset.</TextBlock>
+        </StackPanel>
+
+        <!-- Row 2 -->
+        <Grid Grid.Row="2" HorizontalAlignment="Left" Width="auto" Margin="20, 0, 0, 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto" MinWidth="83"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <!-- Left Button -->
+            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontSize="16" Margin="0,0,10,0">Left Button</TextBlock>
+            <TextBlock x:Name="LeftButtonClickCount"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16"
+                    Grid.Row="0" Grid.Column="2" Margin="5"/>
+
+            <!-- Right Button -->
+            <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontSize="16" Margin="0,0,10,0">Right Button</TextBlock>
+            <TextBlock x:Name="RightButtonClickCount"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16"
+                    Grid.Row="1" Grid.Column="2" Margin="5"/>
+
+            <!-- Side Button -->
+            <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontSize="16" Margin="0,0,10,0">Side Button</TextBlock>
+            <TextBlock x:Name="SideButtonClickCount"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16"
+                    Grid.Row="2" Grid.Column="2" Margin="5"/>
+
+        </Grid>
+
     </Grid>
 </UserControl>

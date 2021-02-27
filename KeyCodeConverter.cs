@@ -150,7 +150,6 @@ namespace KeypadSoftware
         // to .NET Framework key code
         public static Key ToKeyCode(byte scanCode)
         {
-            Console.WriteLine($"Scan code: {scanCode}");
             var result = keyLookupTable.Find(e => e.ScanCode == scanCode);
             if (result != null)
                 return result.KeyCode;

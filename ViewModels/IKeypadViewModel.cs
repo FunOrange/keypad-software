@@ -9,8 +9,7 @@ namespace KeypadSoftware.ViewModels
     interface IKeypadViewModel
     {
         // Read values from keypad, so that model values match keypad values
+        // The top view calls this function to initialize the data on the page
         void PullAllValues();
-        // Write values to keypad, so that keypad values match model values
-        void PushAllValues();
     }
 }

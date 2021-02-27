@@ -76,6 +76,7 @@
     <Compile Include="KeypadSerialPacket.cs" />
     <Compile Include="Models\CountersModel.cs" />
     <Compile Include="Models\DebounceModel.cs" />
+    <Compile Include="Models\IKeypadModel.cs" />
     <Compile Include="Models\KeybindsModel.cs" />
     <Compile Include="Models\LightingModel.cs" />
     <Compile Include="ViewModels\CountersViewModel.cs" />

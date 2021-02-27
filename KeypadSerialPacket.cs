@@ -47,6 +47,7 @@ namespace KeypadSoftware
         public static byte KEYPAD_PACKET_ID_GET_KEYBINDS = 31;
         public static byte KEYPAD_PACKET_ID_SET_DEBOUNCE = 32;
         public static byte KEYPAD_PACKET_ID_GET_DEBOUNCE = 33;
+        public static byte KEYPAD_PACKET_ID_GET_COUNTERS = 34;
 
         public static byte[] CreateEmptyPacket(byte packetId)
         {

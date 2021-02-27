@@ -27,7 +27,7 @@ namespace KeypadSoftware.Models
         public void PullAllValues()
         {
 #if NO_KEYPAD
-            Console.WriteLine("PullAllValues: no keypad; assume values in keypad already match");
+            Console.WriteLine("KeybindsModel.PullAllValues: no keypad; assume values in keypad already match");
             return;
 #endif
             // Request keybinds from keypad
@@ -41,7 +41,7 @@ namespace KeypadSoftware.Models
         public bool PushAllValues()
         {
 #if NO_KEYPAD
-            Console.WriteLine("PushAllValues: no keypad; do nothing");
+            Console.WriteLine("KeybindsModel.PushAllValues: no keypad; do nothing");
             return true;
 #endif
             // Write keybinds to keypad

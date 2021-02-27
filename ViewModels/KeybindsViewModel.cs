@@ -20,17 +20,14 @@ namespace KeypadSoftware.ViewModels
             Right,
             Side
         }
-        private KeybindsModel _keybinds;
-        public KeybindsModel Keybinds
-        {
-            get { return _keybinds; }
-            set {
-                _keybinds = value;
-                NotifyOfPropertyChange(() => Keybinds);
-            }
-        }
+
 
         #region View Properties
+
+        // MODEL ////////////////////////////////
+        public KeybindsModel Keybinds { get; set; }
+        /////////////////////////////////////////
+
         public string LeftKeybind => KeyCodeConverter.ToKeyCode(Keybinds.LeftButtonScanCode).ToString();
         public string RightKeybind => KeyCodeConverter.ToKeyCode(Keybinds.RightButtonScanCode).ToString();
         public string SideKeybind => KeyCodeConverter.ToKeyCode(Keybinds.SideButtonScanCode).ToString();
@@ -49,12 +46,9 @@ namespace KeypadSoftware.ViewModels
         public Visibility EditSideKeybindCoverVisible => buttonBeingEdited == KeypadButton.Side ? Visibility.Visible : Visibility.Hidden;
         #endregion
 
-        private KeypadSerial keypad;
         public KeybindsViewModel(KeypadSerial _keypad)
         {
-            keypad = _keypad;
             Keybinds = new KeybindsModel(_keypad);
-            NotifyAllProperties();
         }
         public void KeyDownAnywhere(object sender, KeyEventArgs e) {
             switch (buttonBeingEdited)
@@ -97,10 +91,6 @@ namespace KeypadSoftware.ViewModels
             Keybinds.PullAllValues();
             NotifyOfPropertyChange(() => Keybinds);
             NotifyAllProperties();
-        }
-
-        public void PushAllValues()
-        {
         }
     }
 }
