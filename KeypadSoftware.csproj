@@ -79,6 +79,7 @@
     <Compile Include="Models\IKeypadModel.cs" />
     <Compile Include="Models\KeybindsModel.cs" />
     <Compile Include="Models\LightingModel.cs" />
+    <Compile Include="SelectTextOnFocus.cs" />
     <Compile Include="ViewModels\CountersViewModel.cs" />
     <Compile Include="ViewModels\DebounceViewModel.cs" />
     <Compile Include="ViewModels\IKeypadViewModel.cs" />
