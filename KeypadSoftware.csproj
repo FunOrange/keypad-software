@@ -71,6 +71,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Clamp.cs" />
     <Compile Include="KeyCodeConverter.cs" />
     <Compile Include="KeypadSerial.cs" />
     <Compile Include="KeypadSerialPacket.cs" />

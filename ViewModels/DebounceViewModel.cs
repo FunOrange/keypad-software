@@ -46,7 +46,7 @@ namespace KeypadSoftware.ViewModels
         {
             get { return Debounce.LeftButtonPressDebounceTime; }
             set {
-                Debounce.LeftButtonPressDebounceTime = value;
+                Debounce.LeftButtonPressDebounceTime = value.Clamp(0, 255);
                 NotifyOfPropertyChange(() => LeftButtonPressDebounceTimeString);
                 RestartWriteTimer();
             }
@@ -58,7 +58,7 @@ namespace KeypadSoftware.ViewModels
                 int parsedValue;
                 if (int.TryParse(value, out parsedValue))
                 {
-                    Debounce.LeftButtonPressDebounceTime = parsedValue;
+                    Debounce.LeftButtonPressDebounceTime = parsedValue.Clamp(0, 255);
                     NotifyOfPropertyChange(() => LeftButtonPressDebounceTime);
                     RestartWriteTimer();
                 }
@@ -69,7 +69,7 @@ namespace KeypadSoftware.ViewModels
         {
             get { return Debounce.LeftButtonReleaseDebounceTime; }
             set {
-                Debounce.LeftButtonReleaseDebounceTime = value;
+                Debounce.LeftButtonReleaseDebounceTime = value.Clamp(0, 255);
                 NotifyOfPropertyChange(() => LeftButtonReleaseDebounceTimeString);
                 RestartWriteTimer();
             }
@@ -81,7 +81,7 @@ namespace KeypadSoftware.ViewModels
                 int parsedValue;
                 if (int.TryParse(value, out parsedValue))
                 {
-                    Debounce.LeftButtonReleaseDebounceTime = parsedValue;
+                    Debounce.LeftButtonReleaseDebounceTime = parsedValue.Clamp(0, 255);
                     NotifyOfPropertyChange(() => LeftButtonReleaseDebounceTime);
                     RestartWriteTimer();
                 }
@@ -92,7 +92,7 @@ namespace KeypadSoftware.ViewModels
         {
             get { return Debounce.RightButtonPressDebounceTime; }
             set {
-                Debounce.RightButtonPressDebounceTime = value;
+                Debounce.RightButtonPressDebounceTime = value.Clamp(0, 255);
                 NotifyOfPropertyChange(() => RightButtonPressDebounceTimeString);
                 RestartWriteTimer();
             }
@@ -104,7 +104,7 @@ namespace KeypadSoftware.ViewModels
                 int parsedValue;
                 if (int.TryParse(value, out parsedValue))
                 {
-                    Debounce.RightButtonPressDebounceTime = parsedValue;
+                    Debounce.RightButtonPressDebounceTime = parsedValue.Clamp(0, 255);
                     NotifyOfPropertyChange(() => RightButtonPressDebounceTime);
                     RestartWriteTimer();
                 }
@@ -115,7 +115,7 @@ namespace KeypadSoftware.ViewModels
         {
             get { return Debounce.RightButtonReleaseDebounceTime; }
             set {
-                Debounce.RightButtonReleaseDebounceTime = value;
+                Debounce.RightButtonReleaseDebounceTime = value.Clamp(0, 255);
                 NotifyOfPropertyChange(() => RightButtonReleaseDebounceTimeString);
                 RestartWriteTimer();
             }
@@ -127,7 +127,7 @@ namespace KeypadSoftware.ViewModels
                 int parsedValue;
                 if (int.TryParse(value, out parsedValue))
                 {
-                    Debounce.RightButtonReleaseDebounceTime = parsedValue;
+                    Debounce.RightButtonReleaseDebounceTime = parsedValue.Clamp(0, 255);
                     NotifyOfPropertyChange(() => RightButtonReleaseDebounceTime);
                     RestartWriteTimer();
                 }
@@ -138,7 +138,7 @@ namespace KeypadSoftware.ViewModels
         {
             get { return Debounce.SideButtonDebounceTime; }
             set {
-                Debounce.SideButtonDebounceTime = value;
+                Debounce.SideButtonDebounceTime = value.Clamp(0, 255);
                 NotifyOfPropertyChange(() => SideButtonDebounceTimeString);
                 RestartWriteTimer();
             }
@@ -150,7 +150,7 @@ namespace KeypadSoftware.ViewModels
                 int parsedValue;
                 if (int.TryParse(value, out parsedValue))
                 {
-                    Debounce.SideButtonDebounceTime = parsedValue;
+                    Debounce.SideButtonDebounceTime = parsedValue.Clamp(0, 255);
                     NotifyOfPropertyChange(() => SideButtonDebounceTime);
                     RestartWriteTimer();
                 }

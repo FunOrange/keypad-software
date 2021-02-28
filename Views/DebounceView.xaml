@@ -25,7 +25,8 @@
                 <Slider Value="{Binding Path=LeftButtonPressDebounceTime}"
                         VerticalAlignment="Center"
                         Grid.Column="0"
-                        Maximum="100" />
+                        Margin="0, 0, 5, 0"
+                        Maximum="255" />
                 <TextBox Text="{Binding Path=LeftButtonPressDebounceTimeString, UpdateSourceTrigger=PropertyChanged}"
                          ks:SelectTextOnFocus.Active="True" 
                          Grid.Column="1"
@@ -43,7 +44,8 @@
                 <Slider Value="{Binding Path=LeftButtonReleaseDebounceTime}"
                         VerticalAlignment="Center"
                         Grid.Column="0"
-                        Maximum="100" />
+                        Margin="0, 0, 5, 0"
+                        Maximum="255" />
                 <TextBox Text="{Binding Path=LeftButtonReleaseDebounceTimeString, UpdateSourceTrigger=PropertyChanged}"
                          ks:SelectTextOnFocus.Active="True" 
                          Grid.Column="1"
@@ -62,7 +64,8 @@
                 <Slider Value="{Binding Path=RightButtonPressDebounceTime}"
                         VerticalAlignment="Center"
                         Grid.Column="0"
-                        Maximum="100" />
+                        Margin="0, 0, 5, 0"
+                        Maximum="255" />
                 <TextBox Text="{Binding Path=RightButtonPressDebounceTimeString, UpdateSourceTrigger=PropertyChanged}"
                          ks:SelectTextOnFocus.Active="True" 
                          Grid.Column="1"
@@ -80,7 +83,8 @@
                 <Slider Value="{Binding Path=RightButtonReleaseDebounceTime}"
                         VerticalAlignment="Center"
                         Grid.Column="0"
-                        Maximum="100" />
+                        Margin="0, 0, 5, 0"
+                        Maximum="255" />
                 <TextBox Text="{Binding Path=RightButtonReleaseDebounceTimeString, UpdateSourceTrigger=PropertyChanged}"
                          ks:SelectTextOnFocus.Active="True" 
                          Grid.Column="1"
@@ -99,7 +103,8 @@
                 <Slider Value="{Binding Path=SideButtonDebounceTime}"
                         VerticalAlignment="Center"
                         Grid.Column="0"
-                        Maximum="100" />
+                        Margin="0, 0, 5, 0"
+                        Maximum="255" />
                 <TextBox Text="{Binding Path=SideButtonDebounceTimeString, UpdateSourceTrigger=PropertyChanged}"
                          ks:SelectTextOnFocus.Active="True" 
                          Grid.Column="1"

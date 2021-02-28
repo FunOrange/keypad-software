@@ -37,7 +37,6 @@ namespace KeypadSoftware
             Good
         }
 
-
         public static string StatusToString(PortStatus status)
         {
             switch (status)
@@ -387,6 +386,11 @@ namespace KeypadSoftware
         public void WriteKeybinds(byte[] scanCodes)
         {
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_KEYBINDS, scanCodes);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteDebounce(byte[] debounceValues)
+        {
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_DEBOUNCE, debounceValues);
             keypadPort.Write(packet, 0, packet.Length);
         }
         #endregion

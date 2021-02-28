@@ -23,18 +23,34 @@ namespace KeypadSoftware.Models
             LeftButtonPressDebounceTime = 5;
             LeftButtonReleaseDebounceTime = 20;
             RightButtonPressDebounceTime = 5;
-            RightButtonReleaseDebounceTime= 20;
+            RightButtonReleaseDebounceTime = 20;
             SideButtonDebounceTime = 50;
         }
 
         public void PullAllValues()
         {
-            throw new NotImplementedException();
+#if NO_KEYPAD
+            Console.WriteLine("DebounceModel.PullAllValues: no keypad; keeping values in model the same");
+#endif
+            byte[] debounceValues = keypad.ReadDebounce();
+            LeftButtonPressDebounceTime = debounceValues[0];
+            LeftButtonReleaseDebounceTime = debounceValues[1];
+            RightButtonPressDebounceTime = debounceValues[2];
+            RightButtonReleaseDebounceTime = debounceValues[3];
+            SideButtonDebounceTime = debounceValues[4];
         }
 
         public void PushAllValues()
         {
-            throw new NotImplementedException();
+#if NO_KEYPAD
+            Console.WriteLine("DebounceModel.PushAllValues: no keypad; doing nothing");
+#endif
+            byte[] debounceValues = new byte[5];
+            debounceValues[0] = (byte)LeftButtonPressDebounceTime;
+            debounceValues[1] = (byte)LeftButtonReleaseDebounceTime;
+            debounceValues[2] = (byte)RightButtonPressDebounceTime;
+            debounceValues[3] = (byte)RightButtonReleaseDebounceTime;
+            debounceValues[4] = (byte)SideButtonDebounceTime;
         }
     }
 }
