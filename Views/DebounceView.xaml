@@ -7,6 +7,88 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Foreground="White" FontSize="26" Margin="20, 20">Debounce</TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <TextBlock Foreground="White" FontSize="22" Margin="15, 13, 15, 0">Debounce Values</TextBlock>
+
+            <TextBlock Foreground="White" FontSize="14" Margin="15, 16, 20, 5">Left Press</TextBlock>
+            <Grid Margin="15, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="24"/>
+                </Grid.ColumnDefinitions>
+                <Slider Grid.Column="0" Maximum="100" />
+                <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="White" FontSize="16" Text="5"/>
+            </Grid>
+            <TextBlock Foreground="White" FontSize="14" Margin="15, 10, 20, 5">Left Release</TextBlock>
+            <Grid Margin="15, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="24"/>
+                </Grid.ColumnDefinitions>
+                <Slider Grid.Column="0" Maximum="100" />
+                <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="White" FontSize="16" Text="20"/>
+            </Grid>
+
+            <TextBlock Foreground="White" FontSize="14" Margin="15, 20, 20, 5">Right Press</TextBlock>
+            <Grid Margin="15, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="24"/>
+                </Grid.ColumnDefinitions>
+                <Slider Grid.Column="0" Maximum="100" />
+                <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="White" FontSize="16" Text="5"/>
+            </Grid>
+            <TextBlock Foreground="White" FontSize="14" Margin="15, 10, 20, 5">Right Release</TextBlock>
+            <Grid Margin="15, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="24"/>
+                </Grid.ColumnDefinitions>
+                <Slider Grid.Column="0" Maximum="100" />
+                <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="White" FontSize="16" Text="20"/>
+            </Grid>
+            
+            <TextBlock Foreground="White" FontSize="14" Margin="15, 20, 20, 5">Side Press &amp; Release</TextBlock>
+            <Grid Margin="15, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="24"/>
+                </Grid.ColumnDefinitions>
+                <Slider Grid.Column="0" Maximum="100" />
+                <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="White" FontSize="16" Text="5"/>
+            </Grid>
+            
+        </StackPanel>
+
+        <Grid Grid.Column="1">
+            <Grid.Background>
+                <SolidColorBrush Opacity="0.2" Color="Black"/>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Foreground="White" FontSize="22" Margin="20, 13, 20, 6">Signal Analyzer</TextBlock>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="20,0">
+                <TextBlock Grid.Row="0" Margin="0, 0, 5, 0" VerticalAlignment="Center" Foreground="White" FontSize="17" >Select Input</TextBlock>
+                <Button Width="136" Height="40" Margin="5, 10" FontSize="16">Live View</Button>
+                <Button Width="136" Height="40" Margin="5, 10" FontSize="16">Trigger</Button>
+                <Button Width="136" Height="40" Margin="5, 10" FontSize="16">Simulate</Button>
+            </StackPanel>
+            
+
+        </Grid>
     </Grid>
 </UserControl>
