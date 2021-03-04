@@ -136,59 +136,6 @@
                 <Button x:Name="SelectSimulate" Width="136" Height="40" Margin="5, 10" FontSize="16">Simulate</Button>
             </StackPanel>
 
-            <!-- Left Button Chart -->
-            <lvc:CartesianChart
-                Grid.Row="2"
-                Margin="20, 5"
-                ScrollMode="X">
-                <lvc:CartesianChart.Series>
-                    <lvc:StepLineSeries Values="{Binding LeftButtonStateValues}" 
-                                        StrokeThickness="1" 
-                                        Fill="Red" 
-                                        PointGeometry="{x:Null}"/>
-                </lvc:CartesianChart.Series>
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis>
-                        <lvc:Axis.Separator>
-                            <lvc:Separator IsEnabled="False" Step="0"/>
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                </lvc:CartesianChart.AxisX>
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis MinValue="0" MaxValue="1">
-                        <lvc:Axis.Separator>
-                            <lvc:Separator IsEnabled="False" Step="1"/>
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                </lvc:CartesianChart.AxisY>
-            </lvc:CartesianChart>
-
-            <!-- Right Button Chart -->
-            <lvc:CartesianChart
-                Grid.Row="3"
-                Margin="20, 5"
-                ScrollMode="X">
-                <lvc:CartesianChart.Series>
-                    <lvc:StepLineSeries 
-                                        StrokeThickness="1" 
-                                        Fill="Red" 
-                                        PointGeometry="{x:Null}"/>
-                </lvc:CartesianChart.Series>
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis>
-                        <lvc:Axis.Separator>
-                            <lvc:Separator IsEnabled="False" Step="10"/>
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                </lvc:CartesianChart.AxisX>
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis MinValue="0" MaxValue="1">
-                        <lvc:Axis.Separator>
-                            <lvc:Separator IsEnabled="False" Step="1"/>
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                </lvc:CartesianChart.AxisY>
-            </lvc:CartesianChart>
         </Grid>
     </Grid>
 </UserControl>
