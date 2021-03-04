@@ -79,7 +79,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Clamp.cs" />
-    <Compile Include="EmulatedSerialPort.cs" />
+    <Compile Include="VirtualSerialPort.cs" />
     <Compile Include="KeyCodeConverter.cs" />
     <Compile Include="KeypadSerial.cs" />
     <Compile Include="KeypadSerialPacket.cs" />

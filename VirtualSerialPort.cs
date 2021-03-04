@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace KeypadSoftware
 {
-    public class EmulatedSerialPort
+    public class VirtualSerialPort
     {
         public static readonly string HostToDevice = Path.Combine(Environment.GetEnvironmentVariable("userprofile"), "host_to_device");
         public static readonly string DeviceToHost = Path.Combine(Environment.GetEnvironmentVariable("userprofile"), "device_to_host");
 
         SerialPort port;
-        public EmulatedSerialPort(SerialPort p)
+        public VirtualSerialPort(SerialPort p)
         {
             port = p;
         }
