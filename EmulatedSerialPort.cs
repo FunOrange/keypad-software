@@ -1,40 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace KeypadSoftware
 {
     public class EmulatedSerialPort
     {
+        public static readonly string HostToDevice = Path.Combine(Environment.GetEnvironmentVariable("userprofile"), "host_to_device");
+        public static readonly string DeviceToHost = Path.Combine(Environment.GetEnvironmentVariable("userprofile"), "device_to_host");
+
         SerialPort port;
         public EmulatedSerialPort(SerialPort p)
         {
             port = p;
         }
 
-        // All write methods append to file C:\host_to_device
+        // Write bytes to virtual serial tx buffer
         public void Write(byte[] buffer, int offset, int count)
         {
-            throw new NotImplementedException();
+            using (var fileStream = new FileStream(HostToDevice, FileMode.Append, FileAccess.Write, FileShare.None))
+            using (var bw = new BinaryWriter(fileStream))
+            {
+                bw.Write(buffer);
+            }
         }
+
         public void WriteLine(string line)
         {
             throw new NotImplementedException();
         }
-        // All read methods read from file C:\device_to_host
-        // Contents that are read are removed from the file
+
+        // Reads a UTF8 string line from virtual serial rx buffer
+        // Blocks until a line is available to be read
         public string ReadLine()
         {
-            // Blocks until a new line is available
-            throw new NotImplementedException();
+            // Block until a new line is available
+            byte[] data;
+            do
+            {
+                data = File.ReadAllBytes(DeviceToHost);
+            } while (data.Contains((byte)'\n'));
+
+            // Write back the data minus the part that's being read
+            int count = Array.IndexOf(data, (byte)'\n') + 1;
+            using (var fileStream = new FileStream(DeviceToHost, FileMode.Open, FileAccess.Write, FileShare.None))
+            using (var bw = new BinaryWriter(fileStream))
+            {
+                bw.Write(data, count, data.Length - count);
+            }
+
+            // Return the data being read
+            return Encoding.UTF8.GetString(data).TrimEnd();
         }
-        public void Read(byte[] buffer, int offset, int count)
+
+        // Read <count> bytes from virtual serial rx buffer
+        // Blocks until all bytes are available
+        public void Read(out byte[] buffer, int offset, int count)
         {
-            // open file for reading
-            throw new NotImplementedException();
+            // Block until <count> bytes are available
+            byte[] data;
+            do
+            {
+                data = File.ReadAllBytes(DeviceToHost);
+            } while (data.Length < count);
+
+            using (var fileStream = new FileStream(DeviceToHost, FileMode.Open, FileAccess.Write, FileShare.None))
+            using (var bw = new BinaryWriter(fileStream))
+            {
+                // write back the data minus the part that's being read
+                bw.Write(data, count, data.Length - count);
+            }
+            // Return the data being read
+            buffer = new byte[count];
+            Buffer.BlockCopy(data, 0, buffer, 0, count);
         }
 
         public void Close() => port.Close();

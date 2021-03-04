@@ -40,15 +40,12 @@ namespace KeypadSoftware.Models
         // Writes values from this object into keypad
         public bool PushAllValues()
         {
-#if NO_KEYPAD
-            Console.WriteLine("KeybindsModel.PushAllValues: no keypad; do nothing");
-            return true;
-#endif
-            // Write keybinds to keypad
+            Console.WriteLine("KeybindsModel.PushAllValues: writing all values...");
             var scanCodes = new byte[] { LeftButtonScanCode, RightButtonScanCode, SideButtonScanCode };
             keypad.WriteKeybinds(scanCodes);
             // Readback
             var readback = keypad.ReadKeybinds();
+            Console.WriteLine($"KeybindsModel.PushAllValues: Readback: {BitConverter.ToString(readback)}");
             return readback == scanCodes;
         }
     }

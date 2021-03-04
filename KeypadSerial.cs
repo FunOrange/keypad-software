@@ -277,7 +277,7 @@ namespace KeypadSoftware
 
             // Receive data
             byte[] receivedData = new byte[expectedBytes];
-            keypadPort.Read(receivedData, 0, expectedBytes);
+            keypadPort.Read(out receivedData, 0, expectedBytes);
             return receivedData;
         }
 
