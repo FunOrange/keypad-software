@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using LiveCharts;
+using LiveCharts.Wpf;
+using LiveCharts.Defaults;
 
 namespace KeypadSoftware.ViewModels
 {
@@ -160,6 +163,148 @@ namespace KeypadSoftware.ViewModels
 
         #endregion
 
+        #region Chart Properties
+        public ChartValues<ObservableValue> LeftButtonStateValues { get; set; } = new ChartValues<ObservableValue>
+        {
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+        };
+        public ChartValues<ObservableValue> RightButtonStateValues { get; set; } = new ChartValues<ObservableValue>
+        {
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(1),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+            new ObservableValue(0),
+        };
+        #endregion
         public DebounceViewModel(KeypadSerial keypad)
         {
             Debounce = new DebounceModel(keypad);
@@ -167,6 +312,12 @@ namespace KeypadSoftware.ViewModels
             writeValuesTimer.Elapsed += WriteValuesTimerElapsed;
             writeValuesTimer.AutoReset = false;
             writeValuesTimer.Enabled = false;
+
+            // generate data points
+            var r = new Random();
+            List<ObservableValue> datapoints = new int[1000].Select((_) => new ObservableValue(r.Next(0, 1))).ToList();
+            LeftButtonStateValues = new ChartValues<ObservableValue>(datapoints);
+            NotifyOfPropertyChange(() => LeftButtonStateValues);
         }
 
         public void SelectLiveView()

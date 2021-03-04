@@ -1,0 +1,3 @@
+[submodule "submodules/RealTimeGraphX"]
+	path = submodules/RealTimeGraphX
+	url = https://github.com/royben/RealTimeGraphX.git
