@@ -44,8 +44,10 @@ namespace KeypadSoftware.Models
             var scanCodes = new byte[] { LeftButtonScanCode, RightButtonScanCode, SideButtonScanCode };
             keypad.WriteKeybinds(scanCodes);
             // Readback
+            Console.WriteLine($"KeybindsModel.PushAllValues: reading back values...");
             var readback = keypad.ReadKeybinds();
-            Console.WriteLine($"KeybindsModel.PushAllValues: Readback: {BitConverter.ToString(readback)}");
+            string v = string.Join(" ", readback.Select(b => $"0x{b:x}"));
+            Console.WriteLine($"KeybindsModel.PushAllValues: Readback: {v}");
             return readback == scanCodes;
         }
     }

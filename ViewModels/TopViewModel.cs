@@ -137,50 +137,59 @@ namespace KeypadSoftware.Views
 
         public void Window_Loaded(EventArgs e)
         {
-            Task.Run(() => ConnectionLoop());
+            // MAKE SURE THIS THREAD DOESN'T DIE!!!!!
+            var t = Task.Run(() => ConnectionLoop());
         }
 
         public void ConnectionLoop()
         {
-            while (true)
+            try
             {
-                if (!Keypad.IsConnected)
+                while (true)
                 {
-                    // Look for ports
-                    Keypad.UpdatePortList();
-                    PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
-                    PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
-
-                    // Try next port
-                    Keypad.TryNextPort();
-                    NotifyOfPropertyChange(() => ConnectionStatusString);
-                    NotifyOfPropertyChange(() => IsConnected);
-                    NotifyOfPropertyChange(() => CanSwitchToKeybindsTab);
-                    NotifyOfPropertyChange(() => CanSwitchToLightingTab);
-                    NotifyOfPropertyChange(() => CanSwitchToCountersTab);
-                    NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
-                    PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
-                    PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
-
-                    if (Keypad.IsConnected)
+                    if (!Keypad.IsConnected)
                     {
-                        // Reload last viewed page
-                        LoadPage(CurrentPage);
+                        // Look for ports
+                        Keypad.UpdatePortList();
+                        PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
+                        PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
+
+                        // Try next port
+                        Keypad.TryNextPort();
+                        NotifyOfPropertyChange(() => ConnectionStatusString);
+                        NotifyOfPropertyChange(() => IsConnected);
+                        NotifyOfPropertyChange(() => CanSwitchToKeybindsTab);
+                        NotifyOfPropertyChange(() => CanSwitchToLightingTab);
+                        NotifyOfPropertyChange(() => CanSwitchToCountersTab);
+                        NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
+                        PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
+                        PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
+
+                        if (Keypad.IsConnected)
+                        {
+                            // Reload last viewed page
+                            LoadPage(CurrentPage);
+                        }
+                    }
+                    else
+                    {
+                        Keypad.Heartbeat();
+                        NotifyOfPropertyChange(() => ConnectionStatusString);
+                        NotifyOfPropertyChange(() => IsConnected);
+                        NotifyOfPropertyChange(() => CanSwitchToKeybindsTab);
+                        NotifyOfPropertyChange(() => CanSwitchToLightingTab);
+                        NotifyOfPropertyChange(() => CanSwitchToCountersTab);
+                        NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
+                        PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
+                        PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
+                        Thread.Sleep(HEARTBEAT_LISTEN_INTERVAL);
                     }
                 }
-                else
-                {
-                    Keypad.Heartbeat();
-                    NotifyOfPropertyChange(() => ConnectionStatusString);
-                    NotifyOfPropertyChange(() => IsConnected);
-                    NotifyOfPropertyChange(() => CanSwitchToKeybindsTab);
-                    NotifyOfPropertyChange(() => CanSwitchToLightingTab);
-                    NotifyOfPropertyChange(() => CanSwitchToCountersTab);
-                    NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
-                    PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
-                    PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
-                    Thread.Sleep(HEARTBEAT_LISTEN_INTERVAL);
-                }
+
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

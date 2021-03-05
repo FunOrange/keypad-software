@@ -245,7 +245,11 @@ namespace KeypadSoftware
             keypadPort.WriteLine("fun");
             try
             {
+#if NO_KEYPAD
+                if (keypadPort.ActualReadLine() == "orange")
+#else
                 if (keypadPort.ReadLine() == "orange")
+#endif
                 {
                     IsConnected = true;
                     return true;
@@ -264,9 +268,10 @@ namespace KeypadSoftware
             }
         }
 
-        #region Read Data
+#region Read Data
         // 1. Send an empty packet with a request packet id
         // 2. Read back a certain number of bytes
+        // TODO: Try to request again if timeout
         public byte[] RequestDataGeneric(byte requestPacketId, int expectedBytes)
         {
             if (!IsConnected)
@@ -336,9 +341,9 @@ namespace KeypadSoftware
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_COUNTERS, 4 * 3);
             return KeypadSerialPacket.DeserializeUint32List(rawData);
         }
-        #endregion
+#endregion
 
-        #region Write Data
+#region Write Data
         public void WriteBaseColor(List<Color> c)
         {
             byte[] data = KeypadSerialPacket.SerializeRgbList(c);
@@ -409,6 +414,6 @@ namespace KeypadSoftware
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_DEBOUNCE, debounceValues);
             keypadPort.Write(packet, 0, packet.Length);
         }
-        #endregion
+#endregion
     }
 }
