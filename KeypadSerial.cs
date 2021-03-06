@@ -276,14 +276,27 @@ namespace KeypadSoftware
         {
             if (!IsConnected)
                 throw new Exception("Can't read data when keypad is not connected");
-            // Send packet to request keybinds
-            byte[] packet = KeypadSerialPacket.CreateEmptyPacket(requestPacketId);
-            keypadPort.Write(packet, 0, packet.Length);
 
-            // Receive data
-            byte[] receivedData = new byte[expectedBytes];
-            keypadPort.Read(out receivedData, 0, expectedBytes);
-            return receivedData;
+            for (int retry = 0; retry < 5; retry++)
+            {
+                // Send packet to request keybinds
+                byte[] packet = KeypadSerialPacket.CreateEmptyPacket(requestPacketId);
+                keypadPort.Write(packet, 0, packet.Length);
+
+                // Receive data
+                byte[] receivedData = new byte[expectedBytes];
+                try
+                {
+                    keypadPort.Read(out receivedData, 0, expectedBytes);
+                }
+                catch (TimeoutException)
+                {
+                    Console.WriteLine($"KeypadSerial::RequestDataGeneric: Read timed out. Retrying... ({retry})");
+                    continue;
+                }
+                return receivedData;
+            }
+            throw new Exception($"KeypadSerial::RequestDataGeneric: Read failed after {5} retries.");
         }
 
         public List<Color> ReadBaseColour()

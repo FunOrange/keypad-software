@@ -78,6 +78,8 @@ namespace KeypadSoftware
         // Blocks until all bytes are available
         public void Read(out byte[] buffer, int offset, int count)
         {
+            var start = DateTime.Now;
+            buffer = new byte[0];
             while (true)
             {
                 try
@@ -87,7 +89,9 @@ namespace KeypadSoftware
                     do
                     {
                         data = File.ReadAllBytes(DeviceToHost);
-                    } while (data.Length < count);
+                    } while (data.Length < count && DateTime.Now - start < TimeSpan.FromMilliseconds(port.ReadTimeout));
+                    if (DateTime.Now - start > TimeSpan.FromMilliseconds(port.ReadTimeout))
+                        break;
 
                     // write back the data minus the part that's being read
                     byte[] writeback = new byte[data.Length - count];
@@ -103,6 +107,8 @@ namespace KeypadSoftware
                     Thread.Sleep(2);
                 }
             }
+            if (DateTime.Now - start > TimeSpan.FromMilliseconds(port.ReadTimeout))
+                throw new TimeoutException();
         }
 
         public void Close() => port.Close();
