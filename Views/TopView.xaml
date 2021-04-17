@@ -44,6 +44,7 @@
             <Button x:Name="SwitchToLightingTab" Foreground="Black" Grid.Column="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Lighting</Button>
             <Button x:Name="SwitchToCountersTab" Foreground="Black" Grid.Column="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Counters</Button>
             <Button x:Name="SwitchToDebounceTab" Foreground="Black" Grid.Column="6" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Debounce</Button>
+            <Button x:Name="SwitchToDebugTab" Foreground="Black" Grid.Column="7" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Debug</Button>
             <Grid Grid.Column="8" Grid.ColumnSpan="2" Width="92" HorizontalAlignment="Right">
                 <Button x:Name="MinimizeButton" Width="46" HorizontalAlignment="Left"  BorderThickness="0" Click="MinimizeButton_Click">＿</Button>
                 <Button x:Name="CloseButton"    Width="46" HorizontalAlignment="Right" BorderThickness="0" Click="CloseButton_Click">✖</Button>

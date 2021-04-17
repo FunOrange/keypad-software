@@ -26,6 +26,7 @@ namespace KeypadSoftware.Views
         CountersViewModel countersVm;
         DebounceViewModel debounceVm;
         LightingViewModel lightingVm;
+        DebugViewModel debugVm;
         #endregion
 
         #region Page
@@ -34,7 +35,8 @@ namespace KeypadSoftware.Views
             Keybinds,
             Lighting,
             Counters,
-            Debounce
+            Debounce,
+            Debug
         }
         private Page _currentPage;
         public Page CurrentPage
@@ -94,6 +96,7 @@ namespace KeypadSoftware.Views
             countersVm = new CountersViewModel(Keypad);
             debounceVm = new DebounceViewModel(Keypad);
             lightingVm = new LightingViewModel(Keypad);
+            debugVm = new DebugViewModel(Keypad);
         }
 
         private void LoadPage(Page page)
@@ -103,6 +106,7 @@ namespace KeypadSoftware.Views
             NotifyOfPropertyChange(() => CanSwitchToLightingTab);
             NotifyOfPropertyChange(() => CanSwitchToCountersTab);
             NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
+            NotifyOfPropertyChange(() => CanSwitchToDebugTab);
             switch (page)
             {
                 case Page.Keybinds:
@@ -121,6 +125,9 @@ namespace KeypadSoftware.Views
                     ActivateItem(debounceVm);
                     debounceVm.PullAllValues();
                     break;
+                case Page.Debug:
+                    ActivateItem(debugVm);
+                    break;
                 default:
                     break;
             }
@@ -130,10 +137,12 @@ namespace KeypadSoftware.Views
         public void SwitchToLightingTab (object sender, RoutedEventArgs e) => LoadPage(Page.Lighting);
         public void SwitchToCountersTab (object sender, RoutedEventArgs e) => LoadPage(Page.Counters);
         public void SwitchToDebounceTab (object sender, RoutedEventArgs e) => LoadPage(Page.Debounce);
+        public void SwitchToDebugTab (object sender, RoutedEventArgs e) => LoadPage(Page.Debug);
         public bool CanSwitchToKeybindsTab => IsConnected && CurrentPage != Page.Keybinds;
         public bool CanSwitchToLightingTab => IsConnected && CurrentPage != Page.Lighting;
         public bool CanSwitchToCountersTab => IsConnected && CurrentPage != Page.Counters;
         public bool CanSwitchToDebounceTab => IsConnected && CurrentPage != Page.Debounce;
+        public bool CanSwitchToDebugTab => IsConnected && CurrentPage != Page.Debug;
 
         public void Window_Loaded(EventArgs e)
         {
@@ -162,6 +171,7 @@ namespace KeypadSoftware.Views
                         NotifyOfPropertyChange(() => CanSwitchToLightingTab);
                         NotifyOfPropertyChange(() => CanSwitchToCountersTab);
                         NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
+                        NotifyOfPropertyChange(() => CanSwitchToDebugTab);
                         PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
                         PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
 
@@ -180,6 +190,7 @@ namespace KeypadSoftware.Views
                         NotifyOfPropertyChange(() => CanSwitchToLightingTab);
                         NotifyOfPropertyChange(() => CanSwitchToCountersTab);
                         NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
+                        NotifyOfPropertyChange(() => CanSwitchToDebugTab);
                         PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
                         PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
                         Thread.Sleep(HEARTBEAT_LISTEN_INTERVAL);
