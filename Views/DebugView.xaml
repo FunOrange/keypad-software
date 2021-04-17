@@ -4,37 +4,69 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KeypadSoftware.Views"
-            xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+             >
+    <Grid Margin="14">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Orientation="Vertical">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!-- Row 0 -->
+        <StackPanel>
+            <Label>Write Interval (ms)</Label>
+            <xctk:IntegerUpDown Value="{Binding WriteInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+
+        <!-- Row 1 -->
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
             <GroupBox Header="Component Enable Mask" Height="auto">
             </GroupBox>
-            <GroupBox Header="Base Colour" Height="auto">
-                <StackPanel>
-                    <Label>All LEDs:</Label>
-                    <xctk:ColorPicker Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged"></xctk:ColorPicker>
-                </StackPanel>
+            <GroupBox Header="Base Colour" Height="auto" FocusManager.IsFocusScope="False">
+                <Grid FocusManager.IsFocusScope="False">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.ColumnSpan="2" Focusable="True" FocusManager.IsFocusScope="False">All LEDs:</Label>
+                    <TextBox x:Name="BaseColourAllTextBox" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
+                             cal:Message.Attach="[Event KeyUp] = [Action BaseColourAllTextBoxKeyUp($eventArgs)]"/>
+
+                    <xctk:ColorPicker x:Name="BaseColourAllCp" Grid.Row="1" Grid.Column="1"
+                                      ColorMode="ColorCanvas"
+                                      ShowAvailableColors="False"
+                                      ShowStandardColors="False"
+                                      StandardTabHeader="Recent Colors"
+                                      AdvancedTabHeader="Color Picker"
+                                      UsingAlphaChannel="False"
+                                      SelectedColor="{Binding BaseColourAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
             </GroupBox>
             <GroupBox Header="Hue Shift" Height="auto">
             </GroupBox>
             <GroupBox Header="Fade" Height="auto">
             </GroupBox>
         </StackPanel>
-        <StackPanel Grid.Column="1" Orientation="Vertical">
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
             <GroupBox Header="Flash" Height="auto">
             </GroupBox>
         </StackPanel>
-        <StackPanel Grid.Column="2" Orientation="Vertical">
+        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical">
             <GroupBox Header="Line Delay" Height="auto">
             </GroupBox>
         </StackPanel>
-        <RadioButton x:Name="radioButton" Content="RadioButton" Grid.Column="2" HorizontalAlignment="Left" Margin="387,292,-220,0" VerticalAlignment="Top" Width="100"/>
     </Grid>
 </UserControl>

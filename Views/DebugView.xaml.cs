@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,25 @@ namespace KeypadSoftware.Views
     /// </summary>
     public partial class DebugView : UserControl
     {
+        public static DebugView Instance;
+        Stopwatch sw;
         public DebugView()
         {
             InitializeComponent();
+            Instance = this;
+            sw = new Stopwatch();
+            sw.Start();
+        }
+
+        public void ForceSelectedColor(Color c) {
+            if (sw.IsRunning && sw.ElapsedMilliseconds < 10) // prevent infinite recursion
+                return;
+
+            sw.Restart();
+            sw.Start();
+
+            BaseColourAllCp.SelectedColor = c;
+
         }
     }
 }
