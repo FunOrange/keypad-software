@@ -28,9 +28,9 @@ namespace KeypadSoftware.ViewModels
         public KeybindsModel Keybinds { get; set; }
         /////////////////////////////////////////
 
-        public string LeftKeybind => KeyCodeConverter.ToKeyCode(Keybinds.LeftButtonScanCode).ToString();
-        public string RightKeybind => KeyCodeConverter.ToKeyCode(Keybinds.RightButtonScanCode).ToString();
-        public string SideKeybind => KeyCodeConverter.ToKeyCode(Keybinds.SideButtonScanCode).ToString();
+        public string LeftKeybind => KeyCodeConverter.FromKeyCode(Keybinds.LeftButtonScanCode).DisplayName;
+        public string RightKeybind => KeyCodeConverter.FromKeyCode(Keybinds.RightButtonScanCode).DisplayName;
+        public string SideKeybind => KeyCodeConverter.FromKeyCode(Keybinds.SideButtonScanCode).DisplayName;
         public void NotifyAllProperties()
         {
             NotifyOfPropertyChange(() => LeftKeybind);
@@ -55,11 +55,17 @@ namespace KeypadSoftware.ViewModels
             {
                 case KeypadButton.None:
                     return;
-                case KeypadButton.Left:  Keybinds.LeftButtonScanCode  = KeyCodeConverter.ToScanCode(e.Key); break;
-                case KeypadButton.Right: Keybinds.RightButtonScanCode = KeyCodeConverter.ToScanCode(e.Key); break;
-                case KeypadButton.Side:  Keybinds.SideButtonScanCode  = KeyCodeConverter.ToScanCode(e.Key); break;
+                case KeypadButton.Left:  Keybinds.LeftButtonScanCode  = KeyCodeConverter.FromScanCode(e.Key).ScanCode; break;
+                case KeypadButton.Right: Keybinds.RightButtonScanCode = KeyCodeConverter.FromScanCode(e.Key).ScanCode; break;
+                case KeypadButton.Side:  Keybinds.SideButtonScanCode  = KeyCodeConverter.FromScanCode(e.Key).ScanCode; break;
             }
-            Keybinds.PushAllValues();
+            bool success = false;
+            while (!success)
+            {
+                success = Keybinds.PushAllValues();
+                if (!success)
+                    Console.WriteLine("Readback failed");
+            }
             buttonBeingEdited = KeypadButton.None;
             NotifyAllProperties();
         }
@@ -87,7 +93,6 @@ namespace KeypadSoftware.ViewModels
 
         public void PullAllValues()
         {
-            Console.WriteLine("Pulling all keybind values from keypad...");
             Keybinds.PullAllValues();
             NotifyOfPropertyChange(() => Keybinds);
             NotifyAllProperties();

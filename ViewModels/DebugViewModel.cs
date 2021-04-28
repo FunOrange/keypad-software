@@ -2,6 +2,7 @@
 using KeypadSoftware.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -20,8 +21,19 @@ namespace KeypadSoftware.ViewModels
         #region Properties
         public int WriteInterval { get; set; }
 
+        private int _baseColourNumLEDs = 4;
+        public int BaseColourNumLEDs {
+            get {
+                return _baseColourNumLEDs;
+            }
+            set {
+                writeTimer.Change(WriteInterval, Timeout.Infinite);
+                _baseColourNumLEDs = value;
+            }
+        }
 
-        private Color _baseColourAll = Color.FromRgb(0, 0, 255);
+
+        private Color _baseColourAll = Color.FromRgb(0, 64, 64);
         public Color BaseColourAll
         {
             get
@@ -40,19 +52,77 @@ namespace KeypadSoftware.ViewModels
 
         public string BaseColourAllTextBox { get; set; } = "#0000FF";
 
+
+        // Selected LEDs
+        public ObservableCollection<SelectableItem> Leds { get; set; }
+
+        public class EepromByte
+        {
+            public int Address { get; set; }
+            public byte Data { get; set; }
+            public EepromByte(int a, byte d)
+            {
+                Address = a;
+                Data = d;
+            }
+        }
+        private ObservableCollection<EepromByte> _eepromContents;
+        public ObservableCollection<EepromByte> EepromContents
+        {
+            get { return _eepromContents; }
+            set {
+                _eepromContents = value;
+                NotifyOfPropertyChange(() => EepromContents);
+            }
+        }
+
+
+
         #endregion
 
 
+        KeypadSerial keypad;
 
-        public DebugViewModel(KeypadSerial keypad)
+        public DebugViewModel(KeypadSerial _keypad)
         {
-            writeTimer = new Timer(WriteValues);
-            WriteInterval = 100;
+            writeTimer = new Timer(WriteBaseColourAll);
+            WriteInterval = 1;
+            keypad = _keypad;
+
+            Leds = new ObservableCollection<SelectableItem>()
+            {
+                new SelectableItem("LED 0"),
+                new SelectableItem("LED 1"),
+                new SelectableItem("LED 2"),
+                new SelectableItem("LED 3"),
+                new SelectableItem("LED 4"),
+                new SelectableItem("LED 5"),
+                new SelectableItem("LED 6"),
+                new SelectableItem("LED 7"),
+                new SelectableItem("LED 8"),
+                new SelectableItem("LED 9"),
+                new SelectableItem("LED 10"),
+                new SelectableItem("LED 11")
+            };
+            EepromContents = new ObservableCollection<EepromByte>();
         }
 
-        private void WriteValues(object state)
+        private void WriteBaseColourAll(object state)
         {
             Console.WriteLine("--- Write Values ---");
+            var baseColours = new List<Color>();
+            for (int i = 0; i < KeypadSerial.NUM_LEDS; i++) {
+                if (Leds[i].IsSelected)
+                    baseColours.Add(BaseColourAll);
+                else
+                    baseColours.Add(Color.FromRgb(0, 0, 0));
+            }
+            keypad.WriteBaseColor(baseColours);
+        }
+
+        public void SelectedLedsChanged()
+        {
+            writeTimer.Change(WriteInterval, Timeout.Infinite);
         }
 
 
@@ -75,5 +145,43 @@ namespace KeypadSoftware.ViewModels
             }
         }
         #endregion
+
+        public void ClickButton()
+        {
+            Console.WriteLine("Hello");
+        }
+
+        public void ResetEeprom()
+        {
+            keypad.ResetEeprom();
+        }
+        public void ReadEeprom()
+        {
+            byte[] eeprom = keypad.ReadEeprom();
+
+            var eepromTupleList = new List<EepromByte>();
+            for (int i = 0; i < eeprom.Length; i++)
+            {
+                eepromTupleList.Add(new EepromByte(i, eeprom[i]));
+            }
+
+            EepromContents = new ObservableCollection<EepromByte>(eepromTupleList);
+        }
+        public void ByteAlignmentTest()
+        {
+            var crap = keypad.SerialCommCalibrationTest();
+            var correct = new byte[512];
+            for (int i = 0; i < 256; i++)
+                correct[i] = (byte)i;
+            for (int i = 0; i < 256; i++)
+                correct[i+256] = (byte)(255 - i);
+            bool success = true;
+            for (int i = 0; i < crap.Length; i++)
+            {
+                if (crap[i] != correct[i])
+                    success = false;
+            }
+            Console.WriteLine(success ? "GOOD!" : "BAD!");
+        }
     }
 }

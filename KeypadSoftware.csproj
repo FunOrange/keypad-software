@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NO_KEYPAD</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;USING_KEYPAD_SERIAL_PACKET_PROTOCOL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -94,6 +94,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Clamp.cs" />
+    <Compile Include="KeypadSerialPacketReader.cs" />
+    <Compile Include="SelectableItem.cs" />
     <Compile Include="ViewModels\DebugViewModel.cs" />
     <Compile Include="Views\DebugView.xaml.cs">
       <DependentUpon>DebugView.xaml</DependentUpon>

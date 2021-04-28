@@ -6,9 +6,8 @@
              xmlns:local="clr-namespace:KeypadSoftware.Views"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:cal="http://www.caliburnproject.org"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+             mc:Ignorable="d" d:DesignWidth="800"
+             Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Height="500"
              >
     <Grid Margin="14">
         <Grid.ColumnDefinitions>
@@ -20,19 +19,144 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <!-- Row 0 -->
-        <StackPanel>
-            <Label>Write Interval (ms)</Label>
-            <xctk:IntegerUpDown Value="{Binding WriteInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
+
+        <!-- Top row -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0">Write Interval (ms)</Label>
+            <xctk:IntegerUpDown Value="{Binding WriteInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Grid.Column="1"
+                                Width="auto"/>
+        </Grid>
 
 
-        <!-- Row 1 -->
+        <!-- Main Section -->
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
             <GroupBox Header="Component Enable Mask" Height="auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="85"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <!-- Hue Sweep Component Enable Mask -->
+                    <Label Grid.Row="0" Grid.Column="0">Hue Sweep</Label>
+                    <Label Grid.Row="0" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Right" Width="23">0b</Label>
+                    <TextBox Grid.Row="0"
+                             Grid.Column="2"
+                             FontFamily="Consolas"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             Text="111111111111"/>
+                    <!-- Value Sweep Component Enable Mask -->
+                    <Label Grid.Row="1" Grid.Column="0">Value Sweep</Label>
+                    <Label Grid.Row="1" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Right" Width="23">0b</Label>
+                    <TextBox Grid.Row="1"
+                             Grid.Column="2"
+                             FontFamily="Consolas"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             Text="111111111111"/>
+                    <!-- Flash Component Enable Mask -->
+                    <Label Grid.Row="2" Grid.Column="0">Flash</Label>
+                    <Label Grid.Row="2" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Right" Width="23">0b</Label>
+                    <TextBox Grid.Row="2"
+                             Grid.Column="2"
+                             FontFamily="Consolas"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             Text="111111111111"/>
+                    <!-- Read/Write Buttons -->
+                    <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Width="120">
+                        <Button x:Name="ComponentEnableMaskRead" Width="50" Margin="5">Read</Button>
+                        <Button x:Name="ComponentEnableMaskWrite" Width="50" Margin="5">Write</Button>
+                    </StackPanel>
+                </Grid>
             </GroupBox>
-            <GroupBox Header="Base Colour" Height="auto" FocusManager.IsFocusScope="False">
-                <Grid FocusManager.IsFocusScope="False">
+            <GroupBox Header="Hue Shift" Height="auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.Column="1" Padding="0" HorizontalAlignment="Center">All LEDs:</Label>
+
+                    <Label Grid.Row="1" Grid.Column="0">Sweep Amount</Label>
+                    <xctk:IntegerUpDown x:Name="HueDeltaAll"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Minimum="0"
+                                        Maximum="65535"/>
+
+                    <Label Grid.Row="2" Grid.Column="0">Sweep Period</Label>
+                    <xctk:IntegerUpDown x:Name="HuePeriodAll"
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Minimum="0"/>
+                    <!-- Read/Write Buttons -->
+                    <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Width="120">
+                        <Button x:Name="HueSweepRead" Width="50" Margin="5">Read</Button>
+                        <Button x:Name="HueSweepWrite" Width="50" Margin="5">Write</Button>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Fade" Height="auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.Column="1" Padding="0" HorizontalAlignment="Center">All LEDs:</Label>
+
+                    <Label Grid.Row="1" Grid.Column="0">Sweep Amount</Label>
+                    <xctk:IntegerUpDown x:Name="ValueDeltaAll"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Minimum="0"
+                                        Maximum="65535"/>
+
+                    <Label Grid.Row="2" Grid.Column="0">Sweep Period</Label>
+                    <xctk:IntegerUpDown x:Name="ValuePeriodAll"
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Minimum="0"/>
+                    <!-- Read/Write Buttons -->
+                    <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Width="120">
+                        <Button x:Name="ValueSweepRead" Width="50" Margin="5">Read</Button>
+                        <Button x:Name="ValueSweepWrite" Width="50" Margin="5">Write</Button>
+                    </StackPanel>
+                </Grid>
+
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+            <GroupBox Header="Base Colour" Height="auto">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="80"/>
                         <ColumnDefinition Width="*"/>
@@ -41,31 +165,69 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.ColumnSpan="2" Focusable="True" FocusManager.IsFocusScope="False">All LEDs:</Label>
-                    <TextBox x:Name="BaseColourAllTextBox" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
+                    <TextBox x:Name="BaseColourAllTextBox" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
                              cal:Message.Attach="[Event KeyUp] = [Action BaseColourAllTextBoxKeyUp($eventArgs)]"/>
 
-                    <xctk:ColorPicker x:Name="BaseColourAllCp" Grid.Row="1" Grid.Column="1"
+                    <xctk:ColorPicker x:Name="BaseColourAllCp" Grid.Row="0" Grid.Column="1"
                                       ColorMode="ColorCanvas"
                                       ShowAvailableColors="False"
                                       ShowStandardColors="False"
+                                      ShowRecentColors="True"
                                       StandardTabHeader="Recent Colors"
                                       AdvancedTabHeader="Color Picker"
                                       UsingAlphaChannel="False"
                                       SelectedColor="{Binding BaseColourAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <!--  
+                    <xctk:IntegerUpDown Value="{Binding BaseColourNumLEDs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Minimum="0"
+                                        Maximum="12"
+                                        Width="auto"/>
+                    -->
+                    <ListBox x:Name="Leds" Grid.Row="1" Grid.ColumnSpan="2"
+                             SelectionMode="Extended"
+                             cal:Message.Attach="[Event SelectionChanged] = [Action SelectedLedsChanged]">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Hue Shift" Height="auto">
-            </GroupBox>
-            <GroupBox Header="Fade" Height="auto">
-            </GroupBox>
-        </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
             <GroupBox Header="Flash" Height="auto">
             </GroupBox>
+            <Button x:Name="ClickButton" Content="Button"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical">
-            <GroupBox Header="Line Delay" Height="auto">
+            <GroupBox Header="EEPROM Contents">
+                <StackPanel>
+                    <Button x:Name="ByteAlignmentTest">Serial byte alignment shit</Button>
+                    <Button x:Name="ResetEeprom">Reset EEPROM</Button>
+                    <Button x:Name="ReadEeprom">Read EEPROM</Button>
+                    <ScrollViewer Height="380">
+                        <ListBox x:Name="EepromContents">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Address}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Data}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </StackPanel>
             </GroupBox>
         </StackPanel>
     </Grid>

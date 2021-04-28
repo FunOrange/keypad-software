@@ -28,21 +28,21 @@
             </Grid.RowDefinitions>
 
             <!-- Left Button -->
-            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontSize="16" Margin="0,0,10,0">Left Button</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Margin="0,0,10,0">Left Button</TextBlock>
             <Button x:Name="BeginEditLeftKeybind" Content="{Binding LeftKeybind}"
                     Grid.Row="0" Grid.Column="2" Margin="5"/>
             <Button x:Name="EditLeftKeybindCover" Content="..." IsEnabled="False" Visibility="{Binding EditLeftKeybindCoverVisible}"
                     Grid.Row="0" Grid.Column="2" Margin="5" Panel.ZIndex="1"/>
 
             <!-- Right Button -->
-            <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontSize="16" Margin="0,0,10,0">Right Button</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Margin="0,0,10,0">Right Button</TextBlock>
             <Button x:Name="BeginEditRightKeybind" Content="{Binding RightKeybind}"
                     Grid.Row="1" Grid.Column="2" Margin="5"/>
             <Button x:Name="EditRightKeybindCover" Content="..." IsEnabled="False" Visibility="{Binding EditRightKeybindCoverVisible}"
                     Grid.Row="1" Grid.Column="2" Margin="5" Panel.ZIndex="1"/>
 
             <!-- Side Button -->
-            <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontSize="16" Margin="0,0,10,0">Side Button</TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Margin="0,0,10,0">Side Button</TextBlock>
             <Button x:Name="BeginEditSideKeybind" Content="{Binding SideKeybind}"
                     Grid.Row="2" Grid.Column="2" Margin="5"/>
             <Button x:Name="EditSideKeybindCover" Content="..." IsEnabled="False" Visibility="{Binding EditSideKeybindCoverVisible}"

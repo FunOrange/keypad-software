@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -18,9 +19,9 @@ namespace KeypadSoftware.Models
         {
             keypad = _keypad;
             Console.WriteLine("KeybindsModel constructor: initializing KeybindsModel with default values");
-            LeftButtonScanCode = KeyCodeConverter.ToScanCode(Key.Z);
-            RightButtonScanCode = KeyCodeConverter.ToScanCode(Key.X);
-            SideButtonScanCode = KeyCodeConverter.ToScanCode(Key.Escape);
+            LeftButtonScanCode = KeyCodeConverter.FromScanCode(Key.Z).ScanCode;
+            RightButtonScanCode = KeyCodeConverter.FromScanCode(Key.X).ScanCode;
+            SideButtonScanCode = KeyCodeConverter.FromScanCode(Key.Escape).ScanCode;
         }
 
         // Reads current values from keypad
@@ -38,17 +39,17 @@ namespace KeypadSoftware.Models
         }
 
         // Writes values from this object into keypad
+        [DllImport("msvcrt.dll", CallingConvention=CallingConvention.Cdecl)]
+        static extern int memcmp(byte[] b1, byte[] b2, long count);
         public bool PushAllValues()
         {
-            Console.WriteLine("KeybindsModel.PushAllValues: writing all values...");
-            var scanCodes = new byte[] { LeftButtonScanCode, RightButtonScanCode, SideButtonScanCode };
+            var scanCodes = new byte[] { LeftButtonScanCode, RightButtonScanCode, SideButtonScanCode, LeftButtonScanCode, RightButtonScanCode, SideButtonScanCode };
+            Console.WriteLine($"KeybindsModel.PushAllValues: Write: {string.Join(" ", scanCodes.Select(b => $"0x{b:x}"))}");
             keypad.WriteKeybinds(scanCodes);
             // Readback
-            Console.WriteLine($"KeybindsModel.PushAllValues: reading back values...");
             var readback = keypad.ReadKeybinds();
-            string v = string.Join(" ", readback.Select(b => $"0x{b:x}"));
-            Console.WriteLine($"KeybindsModel.PushAllValues: Readback: {v}");
-            return readback == scanCodes;
+            Console.WriteLine($"KeybindsModel.PushAllValues: Readback: {string.Join(" ", readback.Select(b => $"0x{b:x}"))}");
+            return readback.Length == scanCodes.Length && memcmp(readback, scanCodes, readback.Length) == 0;
         }
     }
 }

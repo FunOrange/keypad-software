@@ -9,8 +9,19 @@ namespace KeypadSoftware
 {
     // This class contains functions for creating the packets to be sent to the keypad
     // Also contains functions for deserializing data received from the keypad
-    static class KeypadSerialPacket
+    public class KeypadSerialPacket
     {
+        public byte id;
+        public uint length;
+        public byte[] data = new byte[128];
+
+        public KeypadSerialPacket()
+        {
+        }
+
+
+
+        #region STATIC SHIT
         static int NUM_LEDS = 12;
         // Packet IDs
         public static byte KEYPAD_PACKET_ID_HEARTBEAT = 0;
@@ -48,6 +59,8 @@ namespace KeypadSoftware
         public static byte KEYPAD_PACKET_ID_SET_DEBOUNCE = 32;
         public static byte KEYPAD_PACKET_ID_GET_DEBOUNCE = 33;
         public static byte KEYPAD_PACKET_ID_GET_COUNTERS = 34;
+        public static byte KEYPAD_PACKET_ID_READ_EEPROM = 38;
+        public static byte KEYPAD_PACKET_ID_CALIBRATE_SERIAL_COMM = 39;
 
         public static byte[] CreateEmptyPacket(byte packetId)
         {
@@ -192,5 +205,6 @@ namespace KeypadSoftware
             return ret;
         }
 
+        #endregion
     }
 }

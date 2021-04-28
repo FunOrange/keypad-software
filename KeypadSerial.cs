@@ -25,7 +25,9 @@ namespace KeypadSoftware
         private SerialPort keypadPort;
 #endif
 
-        private const int NUM_LEDS = 12;
+        KeypadSerialPacketReader PacketReader = new KeypadSerialPacketReader();
+
+        public static int NUM_LEDS = 12;
 
         private bool _isConnected;
         public bool IsConnected
@@ -184,12 +186,16 @@ namespace KeypadSoftware
                 SerialPort testPort = new SerialPort(portName, 9600);
                 testPort.ReadTimeout = 500;
                 testPort.Open();
-                //byte[] handShakePacket = KeypadSerialProtocol.CreateEmptyPacket(KeypadSerialProtocol.KEYPAD_PACKET_ID_HEARTBEAT);
-                //testPort.Write(handShakePacket, 0, handShakePacket.Length);
+#if USING_KEYPAD_SERIAL_PACKET_PROTOCOL
+                byte[] handShakePacket = KeypadSerialPacket.CreateEmptyPacket(KeypadSerialPacket.KEYPAD_PACKET_ID_HEARTBEAT);
+                testPort.Write(handShakePacket, 0, handShakePacket.Length);
+#else
                 testPort.WriteLine("fun");
+#endif
                 try
                 {
-                    if (testPort.ReadLine() == "orange")
+                    string response = testPort.ReadLine();
+                    if (response == "orange")
                     {
                         Console.WriteLine("handshake success!");
 #if NO_KEYPAD
@@ -210,12 +216,19 @@ namespace KeypadSoftware
                     testPort.Close();
                     return null;
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    if (testPort.IsOpen)
+                        testPort.Close();
+                    return null;
+                }
             }
             catch (Exception e)
             {
                 // eg. port does not exist
                 Thread.Sleep(2000);
-                Console.WriteLine(e.Message);
+                Console.WriteLine(e);
                 return null;
             }
         }
@@ -240,16 +253,17 @@ namespace KeypadSoftware
                 return false;
             }
 
-            //byte[] handShakePacket = KeypadSerialProtocol.CreateEmptyPacket(KeypadSerialProtocol.KEYPAD_PACKET_ID_HEARTBEAT);
-            //testPort.Write(handShakePacket, 0, handShakePacket.Length);
+#if USING_KEYPAD_SERIAL_PACKET_PROTOCOL
+            byte[] handShakePacket = KeypadSerialPacket.CreateEmptyPacket(KeypadSerialPacket.KEYPAD_PACKET_ID_HEARTBEAT);
+            keypadPort.Write(handShakePacket, 0, handShakePacket.Length);
+#else
             keypadPort.WriteLine("fun");
+#endif
             try
             {
-#if NO_KEYPAD
-                if (keypadPort.ActualReadLine() == "orange")
-#else
-                if (keypadPort.ReadLine() == "orange")
-#endif
+                keypadPort.DiscardInBuffer();
+                string response = keypadPort.ReadLine();
+                if (response == "orange")
                 {
                     IsConnected = true;
                     return true;
@@ -269,34 +283,49 @@ namespace KeypadSoftware
         }
 
 #region Read Data
-        // 1. Send an empty packet with a request packet id
-        // 2. Read back a certain number of bytes
-        // TODO: Try to request again if timeout
+        // 0. Retry up to 5 times:
+            // 1. Send an empty packet with a request packet id
+            // 2. Try to read back a packet with a matching packet id 
+            // 3. Unpack data, otherwise go to 0 on timeout
         public byte[] RequestDataGeneric(byte requestPacketId, int expectedBytes)
         {
             if (!IsConnected)
                 throw new Exception("Can't read data when keypad is not connected");
 
-            for (int retry = 0; retry < 5; retry++)
+            int retry;
+            for (retry = 0; retry < 5; retry++)
             {
                 // Send packet to request keybinds
-                byte[] packet = KeypadSerialPacket.CreateEmptyPacket(requestPacketId);
-                keypadPort.Write(packet, 0, packet.Length);
+                byte[] tx_packet = KeypadSerialPacket.CreateEmptyPacket(requestPacketId);
+                keypadPort.Write(tx_packet, 0, tx_packet.Length);
 
-                // Receive data
-                byte[] receivedData = new byte[expectedBytes];
-                try
+                KeypadSerialPacket rx_packet;
+                do
                 {
-                    keypadPort.Read(out receivedData, 0, expectedBytes);
-                }
-                catch (TimeoutException)
+                    // Try to receive the next byte
+                    try
+                    {
+                        int rcv_int = keypadPort.ReadByte();
+                        if (rcv_int == -1)
+                        {
+                            Console.WriteLine("ReadByte returned -1");
+                            continue;
+                        }
+                        byte rcv = (byte)rcv_int;
+                        // Feed next byte to serial packet reader
+                        PacketReader.protocol_read_byte(rcv);
+                    }
+                    catch (TimeoutException) { continue; }
+                } while (!PacketReader.protocol_packet_ready(out rx_packet));
+
+                Console.WriteLine("Data received:");
+                for (int i = 0; i < rx_packet.length; i++)
                 {
-                    Console.WriteLine($"KeypadSerial::RequestDataGeneric: Read timed out. Retrying... ({retry})");
-                    continue;
+                    Console.WriteLine($"{i}: 0x{rx_packet.data[i]:x}");
                 }
-                return receivedData;
+                return rx_packet.data;
             }
-            throw new Exception($"KeypadSerial::RequestDataGeneric: Read failed after {5} retries.");
+            throw new Exception($"KeypadSerial::RequestDataGeneric: Read failed after {retry} retries.");
         }
 
         public List<Color> ReadBaseColour()
@@ -343,7 +372,7 @@ namespace KeypadSoftware
 
         public byte[] ReadKeybinds()
         {
-            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_KEYBINDS, 3);
+            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_KEYBINDS, 6);
         }
         public byte[] ReadDebounce()
         {
@@ -353,6 +382,14 @@ namespace KeypadSoftware
         {
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_COUNTERS, 4 * 3);
             return KeypadSerialPacket.DeserializeUint32List(rawData);
+        }
+        public byte[] ReadEeprom()
+        {
+            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_READ_EEPROM, 1024);
+        }
+        public byte[] SerialCommCalibrationTest()
+        {
+            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_CALIBRATE_SERIAL_COMM, 512);
         }
 #endregion
 
@@ -405,18 +442,6 @@ namespace KeypadSoftware
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_FLASH_DECAY_RATE, data);
             keypadPort.Write(packet, 0, packet.Length);
         }
-        public void WriteDelayMultiplier(byte dm)
-        {
-            byte[] data = new byte[1];
-            data[0] = dm;
-            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_DELAY_MULTIPLIER, data);
-            keypadPort.Write(packet, 0, packet.Length);
-        }
-        public void WriteLineDelay(byte[] data)
-        {
-            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_LINE_DELAY, data);
-            keypadPort.Write(packet, 0, packet.Length);
-        }
         public void WriteKeybinds(byte[] scanCodes)
         {
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_KEYBINDS, scanCodes);
@@ -425,6 +450,11 @@ namespace KeypadSoftware
         public void WriteDebounce(byte[] debounceValues)
         {
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_DEBOUNCE, debounceValues);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void ResetEeprom()
+        {
+            byte[] packet = KeypadSerialPacket.CreateEmptyPacket(KeypadSerialPacket.KEYPAD_PACKET_ID_RESET_EEPROM);
             keypadPort.Write(packet, 0, packet.Length);
         }
 #endregion

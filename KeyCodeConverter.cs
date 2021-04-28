@@ -9,7 +9,7 @@ namespace KeypadSoftware
 {
     static class KeyCodeConverter
     {
-        private class KeyEntry
+        public class KeyEntry
         {
             public string DisplayName;
             public string ScanCodeName;
@@ -123,6 +123,7 @@ namespace KeypadSoftware
             keyLookupTable.Add(new KeyEntry("Num 9", "HID_KEYBOARD_SC_KEYPAD_9_AND_PAGE_UP", 0x61, Key.NumPad9));
             keyLookupTable.Add(new KeyEntry("Num 0", "HID_KEYBOARD_SC_KEYPAD_0_AND_INSERT", 0x62, Key.NumPad0));
             keyLookupTable.Add(new KeyEntry("Num .", "HID_KEYBOARD_SC_KEYPAD_DOT_AND_DELETE", 0x63, Key.Decimal));
+            keyLookupTable.Add(new KeyEntry("Toggle Macro Layer", "HID_KEYBOARD_SC_KEYPAD_DOT_AND_DELETE", 0xFF, Key.None));
 
             // TODO: look these ones up
             //keyLookupTable.Add(new KeyEntry("Kp Enter", "HID_KEYBOARD_SC_KEYPAD_ENTER", 0x58, Key.)); 
@@ -139,21 +140,22 @@ namespace KeypadSoftware
         }
 
         // to USB HID key code
-        public static byte ToScanCode(Key keyCode)
+        public static KeyEntry FromScanCode(Key keyCode)
         {
             var result = keyLookupTable.Find(e => e.KeyCode == keyCode);
             if (result != null)
-                return result.ScanCode;
-            else
-                return 0x00;
+                return result;
+            Console.WriteLine($"Could not find entry for System.Windows.Input.Key: {keyCode}");
+            return new KeyEntry("", "", 0, Key.None);
         }
         // to .NET Framework key code
-        public static Key ToKeyCode(byte scanCode)
+        public static KeyEntry FromKeyCode(byte scanCode)
         {
             var result = keyLookupTable.Find(e => e.ScanCode == scanCode);
             if (result != null)
-                return result.KeyCode;
-            throw new Exception($"Could not find key code for HID scan code: {scanCode}");
+                return result;
+            Console.WriteLine($"Could not find entry for HID scan code: {scanCode}");
+            return new KeyEntry("", "", 0, Key.None);
         }
     }
 }

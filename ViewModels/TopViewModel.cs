@@ -19,7 +19,7 @@ namespace KeypadSoftware.Views
             get { return _keypad; }
             set { _keypad = value; }
         }
-        const int HEARTBEAT_LISTEN_INTERVAL = 1000;
+        const int HEARTBEAT_LISTEN_INTERVAL = 2000;
 
         #region ViewModels
         KeybindsViewModel keybindsVm;
@@ -180,10 +180,11 @@ namespace KeypadSoftware.Views
                             // Reload last viewed page
                             LoadPage(CurrentPage);
                         }
+                        Thread.Sleep(HEARTBEAT_LISTEN_INTERVAL);
                     }
                     else
                     {
-                        Keypad.Heartbeat();
+                        // Keypad.Heartbeat();
                         NotifyOfPropertyChange(() => ConnectionStatusString);
                         NotifyOfPropertyChange(() => IsConnected);
                         NotifyOfPropertyChange(() => CanSwitchToKeybindsTab);

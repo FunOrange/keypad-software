@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:KeypadSoftware.Views"
         xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
-        Title="TopView" Height="500" Width="900"
+        Title="TopView" Height="600" Width="900"
         WindowStyle="None"
         ResizeMode="NoResize"
         cal:Message.Attach="[Event Loaded] = [Action Window_Loaded($eventArgs)];[Event PreviewMouseDown] = [Action ClickAnywhere()];[Event PreviewKeyDown] = [Action KeyDownAnywhere($this,$eventArgs)]">
     <Border BorderBrush="Black" BorderThickness="1">
-    <Grid Background="#181735">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
             <RowDefinition/>
@@ -21,11 +21,11 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <!-- Row 0 -->
-        <Grid Background="#0F0F2D"
-              Grid.Row="0"
+        <!-- Title Bar Row -->
+        <Grid Grid.Row="0"
               Grid.ColumnSpan="2"
-              MouseDown="Grid_MouseDown">
+              MouseDown="Grid_MouseDown"
+              Background="#FFF1F1F1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -39,7 +39,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="FunOrange Keypad Software" Foreground="White" Grid.Column="0" Grid.ColumnSpan="2" Margin="14, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+            <TextBlock Text="FunOrange Keypad Software" Grid.Column="0" Grid.ColumnSpan="2" Margin="14, 0, 0, 0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
             <Button x:Name="SwitchToKeybindsTab" Foreground="Black" Grid.Column="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Keybinds</Button>
             <Button x:Name="SwitchToLightingTab" Foreground="Black" Grid.Column="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Lighting</Button>
             <Button x:Name="SwitchToCountersTab" Foreground="Black" Grid.Column="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Counters</Button>
