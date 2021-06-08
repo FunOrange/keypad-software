@@ -4,123 +4,127 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeypadSoftware.Views"
-        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:cal="http://www.caliburnproject.org" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="FunOrange Keypad Software" Width="1280" Height="720"
         cal:Message.Attach="[Event Loaded] = [Action Window_Loaded($eventArgs)];[Event PreviewMouseDown] = [Action ClickAnywhere()];[Event PreviewKeyDown] = [Action KeyDownAnywhere($this,$eventArgs)]">
     <Border BorderBrush="Black" BorderThickness="1">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="55"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-
-        <!-- Title Bar Row -->
-        <Grid Grid.Row="0"
-              Grid.ColumnSpan="2"
-              Background="#FFF1F1F1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="40"/>
-                <ColumnDefinition/> <!-- 1 -->
-                <ColumnDefinition/> <!-- 2 -->
-                <ColumnDefinition/> <!-- 3 -->
-                <ColumnDefinition/> <!-- 4 -->
-                <ColumnDefinition/> <!-- 5 -->
-                <ColumnDefinition Width="40"/>
-            </Grid.ColumnDefinitions>
-
-            <Button x:Name="SwitchToKeybindsTab" Margin="6, 0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Keybinds</Button>
-            <Button x:Name="SwitchToLightingTab" Margin="6, 0" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Lighting</Button>
-            <Button x:Name="SwitchToCountersTab" Margin="6, 0" Grid.Column="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Counters</Button>
-            <Button x:Name="SwitchToDebounceTab" Margin="6, 0" Grid.Column="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Debounce</Button>
-            <Button x:Name="SwitchToDebugTab"    Margin="6, 0" Grid.Column="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">Debug</Button>
-        </Grid>
-
-        <!-- Row 1 -->
-        <!-- Connection screen -->
-        <Grid x:Name="ConnectionScreen" Grid.Row="1" Background="Black" Panel.ZIndex="1" IsHitTestVisible="False">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="308*"/>
-                <ColumnDefinition Width="593*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.Style>
-                <Style TargetType="{x:Type Grid}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                            <!-- Fade out animation -->
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" BeginTime="0:0:1" Duration="0:0:0.5" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.1" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
-                <TextBlock x:Name="ConnectionStatusString" Foreground="White" TextAlignment="Center" FontSize="20" Margin="0,0,0,13">Keypad disconnected</TextBlock>
-                <TextBlock Foreground="White" FontFamily="Consolas" TextAlignment="Center" Margin="0,0,0,6">Serial Ports</TextBlock>
-                <ItemsControl x:Name="PortListHighPriority">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid HorizontalAlignment="Center">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Foreground="White" FontFamily="Consolas"
-                                           Grid.Column="0" TextAlignment="Left"
-                                           Text="{Binding Item1}"/>
-                                <TextBlock Foreground="White" FontFamily="Consolas"
-                                           Grid.Column="1" TextAlignment="Center"
-                                           Text="{Binding Item2}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <ItemsControl x:Name="PortListLowPriority">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid HorizontalAlignment="Center">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Foreground="Gray" FontFamily="Consolas"
-                                           Grid.Column="0" TextAlignment="Left"
-                                           Text="{Binding Item1}"/>
-                                <TextBlock Foreground="Gray" FontFamily="Consolas"
-                                           Grid.Column="1" TextAlignment="Center"
-                                           Text="{Binding Item2}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
-        </Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-        <!-- Main Content -->
-        <ContentControl x:Name="ActiveItem" Grid.Row="1" Grid.Column="0"/>
-    </Grid>
+            <!-- Title Bar Row -->
+            <materialDesign:ColorZone Mode="PrimaryMid" Grid.Row="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="33"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <RadioButton x:Name="SwitchToKeybindsTab" Padding="0" Grid.Column="1" IsChecked="True" Content="Keybinds" Style="{StaticResource MaterialDesignTabRadioButton}" FontSize="17"/>
+                    <RadioButton x:Name="SwitchToLightingTab" Padding="0" Grid.Column="2" Content="Lighting" Style="{StaticResource MaterialDesignTabRadioButton}" FontSize="17"/>
+                    <RadioButton x:Name="SwitchToCountersTab" Padding="0" Grid.Column="3" Content="Counters" Style="{StaticResource MaterialDesignTabRadioButton}" FontSize="17"/>
+                    <RadioButton x:Name="SwitchToDebounceTab" Padding="0" Grid.Column="4" Content="Debounce" Style="{StaticResource MaterialDesignTabRadioButton}" FontSize="17"/>
+                    <RadioButton x:Name="SwitchToDebugTab"    Padding="0" Grid.Column="5" Content="Debug"    Style="{StaticResource MaterialDesignTabRadioButton}" FontSize="17"/>
+                </Grid>
+            </materialDesign:ColorZone>
+
+            <!-- Row 1 -->
+            <!-- Connection screen -->
+            <Grid x:Name="ConnectionScreen" Grid.Row="1" Background="Black" Panel.ZIndex="1" IsHitTestVisible="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="217*"/>
+                    <ColumnDefinition Width="221*"/>
+                    <ColumnDefinition Width="197*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                <!-- Fade out animation -->
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" BeginTime="0:0:1" Duration="0:0:0.5" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="3">
+                    <TextBlock x:Name="ConnectionStatusString" Foreground="White" TextAlignment="Center" FontSize="20" Margin="0,0,0,13">Keypad disconnected</TextBlock>
+                    <TextBlock Foreground="White" FontFamily="Consolas" TextAlignment="Center" Margin="0,0,0,6">Serial Ports</TextBlock>
+                    <ItemsControl x:Name="PortListHighPriority">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="White" FontFamily="Consolas"
+                                           Grid.Column="0" TextAlignment="Left"
+                                           Text="{Binding Item1}"/>
+                                    <TextBlock Foreground="White" FontFamily="Consolas"
+                                           Grid.Column="1" TextAlignment="Center"
+                                           Text="{Binding Item2}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <ItemsControl x:Name="PortListLowPriority">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="Gray" FontFamily="Consolas"
+                                           Grid.Column="0" TextAlignment="Left"
+                                           Text="{Binding Item1}"/>
+                                    <TextBlock Foreground="Gray" FontFamily="Consolas"
+                                           Grid.Column="1" TextAlignment="Center"
+                                           Text="{Binding Item2}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+
+            <!-- Main Content -->
+            <ContentControl x:Name="ActiveItem" Grid.Row="1" Grid.Column="0"/>
+        </Grid>
     </Border>
 </Window>

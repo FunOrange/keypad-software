@@ -102,11 +102,6 @@ namespace KeypadSoftware.Views
         private void LoadPage(Page page)
         {
             CurrentPage = page;
-            NotifyOfPropertyChange(() => CanSwitchToKeybindsTab);
-            NotifyOfPropertyChange(() => CanSwitchToLightingTab);
-            NotifyOfPropertyChange(() => CanSwitchToCountersTab);
-            NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
-            NotifyOfPropertyChange(() => CanSwitchToDebugTab);
             switch (page)
             {
                 case Page.Keybinds:
@@ -138,12 +133,6 @@ namespace KeypadSoftware.Views
         public void SwitchToCountersTab (object sender, RoutedEventArgs e) => LoadPage(Page.Counters);
         public void SwitchToDebounceTab (object sender, RoutedEventArgs e) => LoadPage(Page.Debounce);
         public void SwitchToDebugTab (object sender, RoutedEventArgs e) => LoadPage(Page.Debug);
-        public bool CanSwitchToKeybindsTab => IsConnected && CurrentPage != Page.Keybinds;
-        public bool CanSwitchToLightingTab => IsConnected && CurrentPage != Page.Lighting;
-        public bool CanSwitchToCountersTab => IsConnected && CurrentPage != Page.Counters;
-        public bool CanSwitchToDebounceTab => IsConnected && CurrentPage != Page.Debounce;
-        public bool CanSwitchToDebugTab => IsConnected && CurrentPage != Page.Debug;
-
         public void Window_Loaded(EventArgs e)
         {
             // MAKE SURE THIS THREAD DOESN'T DIE!!!!!
@@ -167,11 +156,6 @@ namespace KeypadSoftware.Views
                         Keypad.TryNextPort();
                         NotifyOfPropertyChange(() => ConnectionStatusString);
                         NotifyOfPropertyChange(() => IsConnected);
-                        NotifyOfPropertyChange(() => CanSwitchToKeybindsTab);
-                        NotifyOfPropertyChange(() => CanSwitchToLightingTab);
-                        NotifyOfPropertyChange(() => CanSwitchToCountersTab);
-                        NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
-                        NotifyOfPropertyChange(() => CanSwitchToDebugTab);
                         PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
                         PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
 
@@ -187,11 +171,6 @@ namespace KeypadSoftware.Views
                         // Keypad.Heartbeat();
                         NotifyOfPropertyChange(() => ConnectionStatusString);
                         NotifyOfPropertyChange(() => IsConnected);
-                        NotifyOfPropertyChange(() => CanSwitchToKeybindsTab);
-                        NotifyOfPropertyChange(() => CanSwitchToLightingTab);
-                        NotifyOfPropertyChange(() => CanSwitchToCountersTab);
-                        NotifyOfPropertyChange(() => CanSwitchToDebounceTab);
-                        NotifyOfPropertyChange(() => CanSwitchToDebugTab);
                         PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
                         PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
                         Thread.Sleep(HEARTBEAT_LISTEN_INTERVAL);

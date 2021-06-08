@@ -6,9 +6,7 @@
              xmlns:local="clr-namespace:KeypadSoftware.Views"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:cal="http://www.caliburnproject.org"
-             mc:Ignorable="d" d:DesignWidth="800"
-             Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Height="500"
-             >
+             mc:Ignorable="d" d:DesignWidth="800">
     <Grid Margin="14">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
