@@ -24,15 +24,6 @@ namespace KeypadSoftware.Views
             InitializeComponent();
         }
 
-        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                DragMove();
-            }
-
-        }
-
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("minimizing");

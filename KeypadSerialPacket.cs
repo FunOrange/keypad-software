@@ -50,8 +50,8 @@ namespace KeypadSoftware
         public static byte KEYPAD_PACKET_ID_GET_DELAY_MULTIPLIER = 23;
         public static byte KEYPAD_PACKET_ID_SET_LINE_DELAY = 24;
         public static byte KEYPAD_PACKET_ID_GET_LINE_DELAY = 25;
-        //public static byte KEYPAD_PACKET_ID_SET_COMPONENT_ENABLE_MASK = 26;
-        //public static byte KEYPAD_PACKET_ID_GET_COMPONENT_ENABLE_MASK = 27;
+        public static byte KEYPAD_PACKET_ID_SET_COMPONENT_ENABLE_MASK = 26;
+        public static byte KEYPAD_PACKET_ID_GET_COMPONENT_ENABLE_MASK = 27;
         //public static byte KEYPAD_PACKET_ID_SET_GLOBAL_BRIGHTNESS = 28;
         //public static byte KEYPAD_PACKET_ID_GET_GLOBAL_BRIGHTNESS = 29;
         public static byte KEYPAD_PACKET_ID_SET_KEYBINDS = 30;
@@ -59,6 +59,7 @@ namespace KeypadSoftware
         public static byte KEYPAD_PACKET_ID_SET_DEBOUNCE = 32;
         public static byte KEYPAD_PACKET_ID_GET_DEBOUNCE = 33;
         public static byte KEYPAD_PACKET_ID_GET_COUNTERS = 34;
+        public static byte KEYPAD_PACKET_ID_SAVE_CONFIG_TO_EEPROM = 35;
         public static byte KEYPAD_PACKET_ID_READ_EEPROM = 38;
         public static byte KEYPAD_PACKET_ID_CALIBRATE_SERIAL_COMM = 39;
 

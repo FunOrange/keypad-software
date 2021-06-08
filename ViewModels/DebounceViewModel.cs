@@ -14,24 +14,6 @@ namespace KeypadSoftware.ViewModels
 {
     public class DebounceViewModel : Screen, IKeypadViewModel
     {
-        public enum SignalInput
-        {
-            LiveView,
-            Trigger,
-            Simulate
-        }
-        private SignalInput _selectedInput;
-        public SignalInput SelectedInput
-        {
-            get { return _selectedInput; }
-            set {
-                _selectedInput = value;
-                NotifyOfPropertyChange(() => CanSelectLiveView);
-                NotifyOfPropertyChange(() => CanSelectTrigger);
-                NotifyOfPropertyChange(() => CanSelectSimulate);
-            }
-        }
-
         Timer writeValuesTimer;
         void RestartWriteTimer()
         {
@@ -197,23 +179,11 @@ namespace KeypadSoftware.ViewModels
             // NotifyOfPropertyChange(() => LeftButtonStateValues);
         }
 
-        public void SelectLiveView()
+        public void Capture()
         {
-            SelectedInput = SignalInput.LiveView;
+            // TODO
+            Console.WriteLine("TODO: Capture");
         }
-        public void SelectTrigger()
-        {
-            SelectedInput = SignalInput.Trigger;
-        }
-        public void SelectSimulate()
-        {
-            SelectedInput = SignalInput.Simulate;
-        }
-
-        public bool CanSelectLiveView => SelectedInput != SignalInput.LiveView;
-        public bool CanSelectTrigger => SelectedInput != SignalInput.Trigger;
-        public bool CanSelectSimulate => SelectedInput != SignalInput.Simulate;
-
 
         public void PullAllValues()
         {

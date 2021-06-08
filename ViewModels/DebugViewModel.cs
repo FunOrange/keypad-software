@@ -146,9 +146,10 @@ namespace KeypadSoftware.ViewModels
         }
         #endregion
 
-        public void ClickButton()
+        public void SaveToEeprom()
         {
-            Console.WriteLine("Hello");
+            Console.WriteLine("Saving config to EEPROM...");
+            keypad.SaveConfigToEeprom();
         }
 
         public void ResetEeprom()

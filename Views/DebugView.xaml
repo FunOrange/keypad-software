@@ -203,7 +203,7 @@
             </GroupBox>
             <GroupBox Header="Flash" Height="auto">
             </GroupBox>
-            <Button x:Name="ClickButton" Content="Button"/>
+            <Button x:Name="SaveToEeprom" Content="Save config to EEPROM"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical">
             <GroupBox Header="EEPROM Contents">
