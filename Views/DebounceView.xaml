@@ -30,7 +30,6 @@
                                 Grid.Column="0"
                                 Margin="0, 0, 14, 0"
                                 VerticalAlignment="Center"
-                                Style="{StaticResource MaterialDesignDiscreteSlider}"
                                 Maximum="255" SmallChange="1" />
                         <TextBox Text="{Binding Path=LeftButtonPressDebounceTimeString, UpdateSourceTrigger=PropertyChanged}"
                                  ks:SelectTextOnFocus.Active="True" 

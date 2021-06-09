@@ -4,50 +4,279 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KeypadSoftware.Views"
-             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:cal="http://www.caliburnproject.org" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="1200">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-
-        <!-- Row 1 -->
-        <Grid Grid.Row="1" HorizontalAlignment="Left" Width="auto" Margin="20, 0, 0, 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto" MinWidth="83"/>
-            </Grid.ColumnDefinitions>
+        <!-- Left Button -->
+        <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
-            <!-- Left Button -->
-            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Margin="0,0,10,0">Left Button</TextBlock>
-            <Button x:Name="BeginEditLeftKeybind" Content="{Binding LeftKeybind}"
-                    Grid.Row="0" Grid.Column="2" Margin="5"/>
-            <Button x:Name="EditLeftKeybindCover" Content="..." IsEnabled="False" Visibility="{Binding EditLeftKeybindCoverVisible}"
-                    Grid.Row="0" Grid.Column="2" Margin="5" Panel.ZIndex="1"/>
-
-            <!-- Right Button -->
-            <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Margin="0,0,10,0">Right Button</TextBlock>
-            <Button x:Name="BeginEditRightKeybind" Content="{Binding RightKeybind}"
-                    Grid.Row="1" Grid.Column="2" Margin="5"/>
-            <Button x:Name="EditRightKeybindCover" Content="..." IsEnabled="False" Visibility="{Binding EditRightKeybindCoverVisible}"
-                    Grid.Row="1" Grid.Column="2" Margin="5" Panel.ZIndex="1"/>
-
-            <!-- Side Button -->
-            <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Margin="0,0,10,0">Side Button</TextBlock>
-            <Button x:Name="BeginEditSideKeybind" Content="{Binding SideKeybind}"
-                    Grid.Row="2" Grid.Column="2" Margin="5"/>
-            <Button x:Name="EditSideKeybindCover" Content="..." IsEnabled="False" Visibility="{Binding EditSideKeybindCoverVisible}"
-                    Grid.Row="2" Grid.Column="2" Margin="5" Panel.ZIndex="1"/>
-
+            <GroupBox
+                Header="Left Button"
+                Grid.Row="0"
+                Width="auto"
+                Height="auto"
+                Style="{DynamicResource MaterialDesignCardGroupBox}"
+                Margin="16">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <Grid Margin="8, 8, 8, 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:Card
+                        Grid.Column="0"
+                        MinWidth="140"
+                        Height="auto">
+                        <Grid Width="auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Padding="12, 12, 12, 0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                Text="Current Keybind:"/>
+                            <TextBlock
+                                Grid.Row="1"
+                                Padding="12, 0, 12, 12"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                Text="{Binding LeftKeybind}"/>
+                        </Grid>
+                    </materialDesign:Card>
+                    <TextBox
+                        Grid.Column="1"
+                        materialDesign:HintAssist.Hint="New Binding"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        FontSize="16"
+                        Margin="20, 0, 0, 7"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Text="{Binding EmptyString}"
+                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditLeftKeybind()]; [Event LostKeyboardFocus] = [Action StopEditLeftKeybind()]"
+                        />
+                    <Expander
+                        Margin="0, 12, 0, 6"
+                        Height="auto"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Stretch"
+                        Header="Special Keys">
+                        <WrapPanel Margin="24,8,24,16" >
+                            <Button Content="Hi" Margin="8"/>
+                            <Button Content="Hi"/>
+                        </WrapPanel>
+                    </Expander>
+                </Grid>
+            </GroupBox>
         </Grid>
+
+        <!-- Right Button -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <GroupBox
+                Header="Right Button"
+                Grid.Row="0"
+                Width="auto"
+                Height="auto"
+                Style="{DynamicResource MaterialDesignCardGroupBox}"
+                Margin="16">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <Grid Margin="8, 8, 8, 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:Card
+                        Grid.Column="0"
+                        MinWidth="140"
+                        Height="auto">
+                        <Grid Width="auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Padding="12, 12, 12, 0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                Text="Current Keybind:"/>
+                            <TextBlock
+                                Grid.Row="1"
+                                Padding="12, 0, 12, 12"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                Text="{Binding RightKeybind}"/>
+                        </Grid>
+                    </materialDesign:Card>
+                    <TextBox
+                        Grid.Column="1"
+                        materialDesign:HintAssist.Hint="New Binding"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        FontSize="16"
+                        Margin="20, 0, 0, 7"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Text="{Binding EmptyString}"
+                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditRightKeybind()]; [Event LostKeyboardFocus] = [Action StopEditRightKeybind()]"
+                        />
+                    <Expander
+                        Margin="0, 12, 0, 6"
+                        Height="auto"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Stretch"
+                        Header="Special Keys">
+                        <WrapPanel Margin="24,8,24,16" >
+                            <Button Content="Hi" Margin="8"/>
+                            <Button Content="Hi"/>
+                        </WrapPanel>
+                    </Expander>
+                </Grid>
+            </GroupBox>
+        </Grid>
+
+        <!-- Side Button -->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <GroupBox
+                Header="Side Button"
+                Grid.Row="0"
+                Width="auto"
+                Height="auto"
+                Style="{DynamicResource MaterialDesignCardGroupBox}"
+                Margin="16">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <Grid Margin="8, 8, 8, 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:Card
+                        Grid.Column="0"
+                        MinWidth="140"
+                        Height="auto">
+                        <Grid Width="auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Padding="12, 12, 12, 0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                Text="Current Keybind:"/>
+                            <TextBlock
+                                Grid.Row="1"
+                                Padding="12, 0, 12, 12"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                Text="{Binding SideKeybind}"/>
+                        </Grid>
+                    </materialDesign:Card>
+                    <TextBox
+                        Grid.Column="1"
+                        materialDesign:HintAssist.Hint="New Binding"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        FontSize="16"
+                        Margin="20, 0, 0, 7"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Text="{Binding EmptyString}"
+                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditSideKeybind()]; [Event LostKeyboardFocus] = [Action StopEditSideKeybind()]"
+                        />
+                    <Expander
+                        Margin="0, 12, 0, 6"
+                        Height="auto"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Stretch"
+                        Header="Special Keys">
+                        <StackPanel
+                            Margin="24,8,24,16" >
+                            <Button
+                                Content="Toggle Keybind Layer"
+                                Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                                Margin="8"/>
+                            <WrapPanel>
+                                <Button Content="Hi" Margin="8"/>
+                                <Button Content="Hi"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Expander>
+                </Grid>
+            </GroupBox>
+        </Grid>
+
+      
     </Grid>
 </UserControl>

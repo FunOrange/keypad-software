@@ -91,7 +91,7 @@ namespace KeypadSoftware.Views
         public TopViewModel()
         {
             Keypad = new KeypadSerial();
-            CurrentPage = Page.Debug;
+            CurrentPage = Page.Keybinds;
             keybindsVm = new KeybindsViewModel(Keypad);
             countersVm = new CountersViewModel(Keypad);
             debounceVm = new DebounceViewModel(Keypad);

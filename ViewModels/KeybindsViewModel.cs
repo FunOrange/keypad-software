@@ -24,9 +24,21 @@ namespace KeypadSoftware.ViewModels
 
         #region View Properties
 
+        public string EmptyString
+        {
+            get { return ""; }
+            set { return;  }
+        }
+
+
         // MODEL ////////////////////////////////
         public KeybindsModel Keybinds { get; set; }
         /////////////////////////////////////////
+
+        public void onKeyboardFocus(EventArgs e)
+        {
+            Console.WriteLine(e);
+        }
 
         public string LeftKeybind => KeyCodeConverter.FromKeyCode(Keybinds.LeftButtonScanCode).DisplayName;
         public string RightKeybind => KeyCodeConverter.FromKeyCode(Keybinds.RightButtonScanCode).DisplayName;
@@ -39,6 +51,7 @@ namespace KeypadSoftware.ViewModels
             NotifyOfPropertyChange(() => EditLeftKeybindCoverVisible);
             NotifyOfPropertyChange(() => EditRightKeybindCoverVisible);
             NotifyOfPropertyChange(() => EditSideKeybindCoverVisible);
+            NotifyOfPropertyChange(() => EmptyString);
         }
         private KeypadButton buttonBeingEdited = KeypadButton.None;
         public Visibility EditLeftKeybindCoverVisible => buttonBeingEdited == KeypadButton.Left ? Visibility.Visible : Visibility.Hidden;
@@ -66,23 +79,35 @@ namespace KeypadSoftware.ViewModels
                 if (!success)
                     Console.WriteLine("Readback failed");
             }
-            buttonBeingEdited = KeypadButton.None;
             NotifyAllProperties();
         }
 
         public void ClickAnywhere()
         {
-            buttonBeingEdited = KeypadButton.None;
-            NotifyAllProperties();
         }
 
+        public void StopEditLeftKeybind() {
+            if (buttonBeingEdited == KeypadButton.Left)
+                buttonBeingEdited = KeypadButton.None;
+            NotifyAllProperties();
+        }
         public void BeginEditLeftKeybind() {
             buttonBeingEdited = KeypadButton.Left;
+            NotifyAllProperties();
+        }
+        public void StopEditRightKeybind() {
+            if (buttonBeingEdited == KeypadButton.Right)
+                buttonBeingEdited = KeypadButton.None;
             NotifyAllProperties();
         }
         public void BeginEditRightKeybind()
         {
             buttonBeingEdited = KeypadButton.Right;
+            NotifyAllProperties();
+        }
+        public void StopEditSideKeybind() {
+            if (buttonBeingEdited == KeypadButton.Side)
+                buttonBeingEdited = KeypadButton.None;
             NotifyAllProperties();
         }
         public void BeginEditSideKeybind()

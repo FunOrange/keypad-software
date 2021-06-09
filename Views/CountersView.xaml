@@ -22,7 +22,7 @@
         <materialDesign:Card
             Background="{DynamicResource PrimaryHueDarkBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-            Margin="0, 30, 0, 8"
+            Margin="0, 22, 0, 8"
             Padding="16, 12, 16, 16"
             Width="270"
             UniformCornerRadius="6"
