@@ -22,7 +22,7 @@
             <GroupBox
                 Header="Left Button"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
-                Margin="16">
+                Margin="16, 16, 12, 16">
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel
@@ -93,7 +93,7 @@
                 Visibility="{Binding MacroGroupBoxesVisible}"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
                 materialDesign:ColorZoneAssist.Mode="SecondaryMid"
-                Margin="16">
+                Margin="16, 16, 12, 16">
                 <GroupBox.Header>
                     <StackPanel
                         Orientation="Horizontal">
@@ -166,7 +166,7 @@
             <GroupBox
                 Header="Right Button"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
-                Margin="16">
+                Margin="12, 16, 12, 16">
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel
@@ -237,7 +237,7 @@
                 Visibility="{Binding MacroGroupBoxesVisible}"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
                 materialDesign:ColorZoneAssist.Mode="SecondaryMid"
-                Margin="16">
+                Margin="12, 16, 12, 16">
                 <GroupBox.Header>
                     <StackPanel
                         Orientation="Horizontal">
@@ -311,7 +311,7 @@
                 Header="Side Button"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
                 materialDesign:ColorZoneAssist.Mode="PrimaryDark"
-                Margin="16">
+                Margin="12, 16, 16, 16">
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel

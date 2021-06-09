@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 
 namespace KeypadSoftware.Views
 {
@@ -19,7 +20,6 @@ namespace KeypadSoftware.Views
             get { return _keypad; }
             set { _keypad = value; }
         }
-        const int HEARTBEAT_LISTEN_INTERVAL = 2000;
 
         #region ViewModels
         KeybindsViewModel keybindsVm;
@@ -97,6 +97,7 @@ namespace KeypadSoftware.Views
             debounceVm = new DebounceViewModel(Keypad);
             lightingVm = new LightingViewModel(Keypad);
             debugVm = new DebugViewModel(Keypad);
+            TopView.DeviceChanged += CheckConnection;
         }
 
         private void LoadPage(Page page)
@@ -133,54 +134,40 @@ namespace KeypadSoftware.Views
         public void SwitchToCountersTab (object sender, RoutedEventArgs e) => LoadPage(Page.Counters);
         public void SwitchToDebounceTab (object sender, RoutedEventArgs e) => LoadPage(Page.Debounce);
         public void SwitchToDebugTab (object sender, RoutedEventArgs e) => LoadPage(Page.Debug);
-        public void Window_Loaded(EventArgs e)
-        {
-            // MAKE SURE THIS THREAD DOESN'T DIE!!!!!
-            var t = Task.Run(() => ConnectionLoop());
+        public void Window_Loaded(EventArgs e) {
+            Task.Run(() => CheckConnection(this, e));
         }
-
-        public void ConnectionLoop()
+        public void CheckConnection(object sender, EventArgs e)
         {
-            try
+            if (!Keypad.IsConnected)
             {
-                while (true)
+                Console.WriteLine("Looking for keypad");
+                // Look for ports
+                Keypad.UpdatePortList();
+                PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
+                PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
+
+                // Try next port
+                Keypad.TryNextPort();
+                NotifyOfPropertyChange(() => ConnectionStatusString);
+                NotifyOfPropertyChange(() => IsConnected);
+                PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
+                PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
+
+                if (Keypad.IsConnected)
                 {
-                    if (!Keypad.IsConnected)
-                    {
-                        // Look for ports
-                        Keypad.UpdatePortList();
-                        PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
-                        PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
-
-                        // Try next port
-                        Keypad.TryNextPort();
-                        NotifyOfPropertyChange(() => ConnectionStatusString);
-                        NotifyOfPropertyChange(() => IsConnected);
-                        PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
-                        PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
-
-                        if (Keypad.IsConnected)
-                        {
-                            // Reload last viewed page
-                            LoadPage(CurrentPage);
-                        }
-                        Thread.Sleep(HEARTBEAT_LISTEN_INTERVAL);
-                    }
-                    else
-                    {
-                        // Keypad.Heartbeat();
-                        NotifyOfPropertyChange(() => ConnectionStatusString);
-                        NotifyOfPropertyChange(() => IsConnected);
-                        PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
-                        PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
-                        Thread.Sleep(HEARTBEAT_LISTEN_INTERVAL);
-                    }
+                    // Reload last viewed page
+                    LoadPage(CurrentPage);
                 }
-
             }
-            catch (Exception)
+            else
             {
-                throw;
+                Console.WriteLine("Checking heartbeat on existing keypad");
+                Keypad.Heartbeat();
+                NotifyOfPropertyChange(() => ConnectionStatusString);
+                NotifyOfPropertyChange(() => IsConnected);
+                PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
+                PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
             }
         }
     }

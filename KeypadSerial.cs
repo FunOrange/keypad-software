@@ -227,7 +227,6 @@ namespace KeypadSoftware
             catch (Exception e)
             {
                 // eg. port does not exist
-                Thread.Sleep(2000);
                 Console.WriteLine(e);
                 return null;
             }

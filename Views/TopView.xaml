@@ -34,7 +34,14 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <RadioButton x:Name="SwitchToKeybindsTab" Padding="0" Grid.Column="1" IsChecked="True" Style="{StaticResource MaterialDesignTabRadioButton}" FontSize="17">
+                <RadioButton
+                    x:Name="SwitchToKeybindsTab"
+                    IsEnabled="{Binding IsConnected}"
+                    Padding="0"
+                    Grid.Column="1"
+                    IsChecked="True"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    FontSize="17">
                     <RadioButton.Content>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
@@ -45,7 +52,13 @@
                         </StackPanel>
                     </RadioButton.Content>
                 </RadioButton>
-                <RadioButton x:Name="SwitchToLightingTab" Padding="0" Grid.Column="2" Style="{StaticResource MaterialDesignTabRadioButton}" FontSize="17">
+                <RadioButton
+                    x:Name="SwitchToLightingTab"
+                    IsEnabled="{Binding IsConnected}"
+                    Padding="0"
+                    Grid.Column="2"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    FontSize="17">
                     <RadioButton.Content>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
@@ -56,7 +69,13 @@
                         </StackPanel>
                     </RadioButton.Content>
                 </RadioButton>
-                <RadioButton x:Name="SwitchToCountersTab" Padding="0" Grid.Column="3" Style="{StaticResource MaterialDesignTabRadioButton}" FontSize="17">
+                <RadioButton
+                    x:Name="SwitchToCountersTab"
+                    IsEnabled="{Binding IsConnected}"
+                    Padding="0"
+                    Grid.Column="3"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    FontSize="17">
                     <RadioButton.Content>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
@@ -67,7 +86,13 @@
                         </StackPanel>
                     </RadioButton.Content>
                 </RadioButton>
-                <RadioButton x:Name="SwitchToDebounceTab" Padding="0" Grid.Column="4" Style="{StaticResource MaterialDesignTabRadioButton}" FontSize="17">
+                <RadioButton
+                    x:Name="SwitchToDebounceTab"
+                    IsEnabled="{Binding IsConnected}"
+                    Padding="0"
+                    Grid.Column="4"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    FontSize="17">
                     <RadioButton.Content>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
@@ -78,7 +103,13 @@
                         </StackPanel>
                     </RadioButton.Content>
                 </RadioButton>
-                <RadioButton x:Name="SwitchToDebugTab" Padding="0" Grid.Column="5" Style="{StaticResource MaterialDesignTabRadioButton}" FontSize="17">
+                <RadioButton
+                    x:Name="SwitchToDebugTab"
+                    IsEnabled="{Binding IsConnected}"
+                    Padding="0"
+                    Grid.Column="5"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    FontSize="17">
                     <RadioButton.Content>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
