@@ -143,7 +143,15 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Margin="5, 0" Style="{DynamicResource MaterialDesignHeadline5TextBlock}">Signal Analyzer</TextBlock>
-                <Button Grid.Row="1" HorizontalAlignment="Left" x:Name="Capture" Width="136" Height="40" Margin="5, 10" FontSize="16">Capture</Button>
+                <Button
+                    x:Name="Capture"
+                    Grid.Row="1"
+                    HorizontalAlignment="Left"
+                    Width="136"
+                    Height="40"
+                    Margin="5, 10"
+                    FontSize="16"
+                    Content="Capture"/>
             </Grid>
         </materialDesign:Card>
     </Grid>

@@ -11,7 +11,7 @@
         <materialDesign:Card
             Padding="8"
             UniformCornerRadius="6"
-            HorizontalAlignment="Left">
+            HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon Kind="InformationCircleOutline"/>
                 <TextBlock TextWrapping="Wrap" Margin="6, 0" Text="These keep track of how many times each button has been pressed during the keypad's entire lifetime. Cannot be reset." />
@@ -20,13 +20,13 @@
 
         <!-- Left Button -->
         <materialDesign:Card
-            Background="{DynamicResource PrimaryHueDarkBrush}"
+            Background="{DynamicResource PrimaryHueMidBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
             Margin="0, 22, 0, 8"
             Padding="16, 12, 16, 16"
             Width="270"
             UniformCornerRadius="6"
-            HorizontalAlignment="Left">
+            HorizontalAlignment="Center">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -48,13 +48,13 @@
 
         <!-- Right Button -->
         <materialDesign:Card
-            Background="{DynamicResource PrimaryHueDarkBrush}"
+            Background="{DynamicResource PrimaryHueMidBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
             Margin="0, 8"
             Padding="16, 12, 16, 16"
             Width="270"
             UniformCornerRadius="6"
-            HorizontalAlignment="Left">
+            HorizontalAlignment="Center">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -82,7 +82,7 @@
             Padding="16, 12, 16, 16"
             Width="270"
             UniformCornerRadius="6"
-            HorizontalAlignment="Left">
+            HorizontalAlignment="Center">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>

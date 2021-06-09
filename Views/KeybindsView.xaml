@@ -310,6 +310,7 @@
             <GroupBox
                 Header="Side Button"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
+                materialDesign:ColorZoneAssist.Mode="PrimaryDark"
                 Margin="16">
                 <GroupBox.HeaderTemplate>
                     <DataTemplate>
