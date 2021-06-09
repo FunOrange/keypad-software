@@ -51,12 +51,14 @@ namespace KeypadSoftware.ViewModels
             NotifyOfPropertyChange(() => EditLeftKeybindCoverVisible);
             NotifyOfPropertyChange(() => EditRightKeybindCoverVisible);
             NotifyOfPropertyChange(() => EditSideKeybindCoverVisible);
+            NotifyOfPropertyChange(() => LeftButtonLayer2GroupBox);
             NotifyOfPropertyChange(() => EmptyString);
         }
         private KeypadButton buttonBeingEdited = KeypadButton.None;
-        public Visibility EditLeftKeybindCoverVisible => buttonBeingEdited == KeypadButton.Left ? Visibility.Visible : Visibility.Hidden;
+        public Visibility EditLeftKeybindCoverVisible => buttonBeingEdited == KeypadButton.Left ? Visibility.Visible : VisibilTty.Hidden;
         public Visibility EditRightKeybindCoverVisible => buttonBeingEdited == KeypadButton.Right ? Visibility.Visible : Visibility.Hidden;
         public Visibility EditSideKeybindCoverVisible => buttonBeingEdited == KeypadButton.Side ? Visibility.Visible : Visibility.Hidden;
+        public Visibility LeftButtonLayer2GroupBox => Visibility.Hidden;
         #endregion
 
         public KeybindsViewModel(KeypadSerial _keypad)

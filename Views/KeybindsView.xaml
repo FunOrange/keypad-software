@@ -18,14 +18,9 @@
         </Grid.ColumnDefinitions>
 
         <!-- Left Button -->
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0">
             <GroupBox
                 Header="Left Button"
-                Grid.Row="0"
                 Width="auto"
                 Height="auto"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
@@ -99,17 +94,86 @@
                     </Expander>
                 </Grid>
             </GroupBox>
-        </Grid>
+            <GroupBox
+                Width="auto"
+                Height="auto"
+                Style="{DynamicResource MaterialDesignCardGroupBox}"
+                materialDesign:ColorZoneAssist.Mode="SecondaryMid"
+                Margin="16">
+                <GroupBox.Header>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                            Foreground="White"
+                            Text="Left Button (Layer 2)" />
+                    </StackPanel>
+                </GroupBox.Header>
+                <Grid Margin="8, 8, 8, 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:Card
+                        Grid.Column="0"
+                        MinWidth="140"
+                        Height="auto">
+                        <Grid Width="auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Padding="12, 12, 12, 0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                Text="Current Keybind:"/>
+                            <TextBlock
+                                Grid.Row="1"
+                                Padding="12, 0, 12, 12"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                Text="{Binding LeftKeybind}"/>
+                        </Grid>
+                    </materialDesign:Card>
+                    <TextBox
+                        Grid.Column="1"
+                        materialDesign:HintAssist.Hint="New Binding"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        FontSize="16"
+                        Margin="20, 0, 0, 7"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Text="{Binding EmptyString}"
+                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditLeftKeybind()]; [Event LostKeyboardFocus] = [Action StopEditLeftKeybind()]"
+                        />
+                    <Expander
+                        Margin="0, 12, 0, 6"
+                        Height="auto"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Stretch"
+                        Header="Special Keys">
+                        <WrapPanel Margin="24,8,24,16" >
+                            <Button Content="Hi" Margin="8"/>
+                            <Button Content="Hi"/>
+                        </WrapPanel>
+                    </Expander>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
 
         <!-- Right Button -->
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <StackPanel Grid.Column="1">
             <GroupBox
                 Header="Right Button"
-                Grid.Row="0"
                 Width="auto"
                 Height="auto"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
@@ -183,17 +247,86 @@
                     </Expander>
                 </Grid>
             </GroupBox>
-        </Grid>
+            <GroupBox
+                Width="auto"
+                Height="auto"
+                Style="{DynamicResource MaterialDesignCardGroupBox}"
+                materialDesign:ColorZoneAssist.Mode="SecondaryMid"
+                Margin="16">
+                <GroupBox.Header>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                            Foreground="White"
+                            Text="Right Button (Layer 2)" />
+                    </StackPanel>
+                </GroupBox.Header>
+                <Grid Margin="8, 8, 8, 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:Card
+                        Grid.Column="0"
+                        MinWidth="140"
+                        Height="auto">
+                        <Grid Width="auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Padding="12, 12, 12, 0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                Text="Current Keybind:"/>
+                            <TextBlock
+                                Grid.Row="1"
+                                Padding="12, 0, 12, 12"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                Text="{Binding LeftKeybind}"/>
+                        </Grid>
+                    </materialDesign:Card>
+                    <TextBox
+                        Grid.Column="1"
+                        materialDesign:HintAssist.Hint="New Binding"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        FontSize="16"
+                        Margin="20, 0, 0, 7"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Text="{Binding EmptyString}"
+                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditLeftKeybind()]; [Event LostKeyboardFocus] = [Action StopEditLeftKeybind()]"
+                        />
+                    <Expander
+                        Margin="0, 12, 0, 6"
+                        Height="auto"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Stretch"
+                        Header="Special Keys">
+                        <WrapPanel Margin="24,8,24,16" >
+                            <Button Content="Hi" Margin="8"/>
+                            <Button Content="Hi"/>
+                        </WrapPanel>
+                    </Expander>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
 
         <!-- Side Button -->
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <StackPanel Grid.Column="2">
             <GroupBox
                 Header="Side Button"
-                Grid.Row="0"
                 Width="auto"
                 Height="auto"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
@@ -275,7 +408,7 @@
                     </Expander>
                 </Grid>
             </GroupBox>
-        </Grid>
+        </StackPanel>
 
       
     </Grid>
