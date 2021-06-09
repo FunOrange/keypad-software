@@ -52,5 +52,7 @@ namespace KeypadSoftware.Models
             debounceValues[3] = (byte)RightButtonReleaseDebounceTime;
             debounceValues[4] = (byte)SideButtonDebounceTime;
         }
+
+        public (List<bool>, List<bool>) ReadRawButtonStateBuffer() => keypad.ReadRawButtonStateBuffer();
     }
 }

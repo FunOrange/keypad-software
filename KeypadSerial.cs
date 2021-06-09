@@ -291,19 +291,20 @@ namespace KeypadSoftware
             if (!IsConnected)
                 throw new Exception("Can't read data when keypad is not connected");
 
-            int retry;
-            for (retry = 0; retry < 5; retry++)
+            int attempt = 0;
+            while (attempt < 5)
             {
-                // Send packet to request keybinds
+                // Send request packet
                 byte[] tx_packet = KeypadSerialPacket.CreateEmptyPacket(requestPacketId);
                 keypadPort.Write(tx_packet, 0, tx_packet.Length);
 
+                // Get response packet
                 KeypadSerialPacket rx_packet;
-                do
+                try
                 {
-                    // Try to receive the next byte
-                    try
+                    do
                     {
+                        // Try to receive the next byte
                         int rcv_int = keypadPort.ReadByte();
                         if (rcv_int == -1)
                         {
@@ -314,8 +315,13 @@ namespace KeypadSoftware
                         // Feed next byte to serial packet reader
                         PacketReader.protocol_read_byte(rcv);
                     }
-                    catch (TimeoutException) { continue; }
-                } while (!PacketReader.protocol_packet_ready(out rx_packet));
+                    while (!PacketReader.protocol_packet_ready(out rx_packet));
+                } 
+                catch (TimeoutException)
+                {
+                    attempt++;
+                    continue;
+                }
 
                 Console.WriteLine("Data received:");
                 for (int i = 0; i < rx_packet.length; i++)
@@ -324,7 +330,8 @@ namespace KeypadSoftware
                 }
                 return rx_packet.data;
             }
-            throw new Exception($"KeypadSerial::RequestDataGeneric: Read failed after {retry} retries.");
+            Console.WriteLine($"KeypadSerial::RequestDataGeneric: Read failed after {attempt} retries.");
+            throw new Exception($"KeypadSerial::RequestDataGeneric: Read failed after {attempt} retries.");
         }
 
         public void ReadComponentEnableMask()
@@ -389,6 +396,26 @@ namespace KeypadSoftware
         {
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_COUNTERS);
             return KeypadSerialPacket.DeserializeUint32List(rawData);
+        }
+        public (List<bool>, List<bool>) ReadRawButtonStateBuffer()
+        {
+            byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_READ_RAW_BUTTON_STATE_BUFFER);
+            var left = new List<bool>();
+            var right = new List<bool>();
+            foreach (byte x in rawData)
+            {
+                // https://docs.google.com/document/d/1mQmEWC6Alx705RaaXDCzk9nVUbvqgcYeD0BwqMgikEg/edit#heading=h.8z390549bnm1
+                // lower nibble: right button
+                left.Add((x & (1 << 0)) != 0);
+                left.Add((x & (1 << 1)) != 0);
+                left.Add((x & (1 << 2)) != 0);
+                left.Add((x & (1 << 3)) != 0);
+                right.Add((x & (1 << 4)) != 0);
+                right.Add((x & (1 << 5)) != 0);
+                right.Add((x & (1 << 6)) != 0);
+                right.Add((x & (1 << 7)) != 0);
+            }
+            return (left, right);
         }
         public byte[] ReadEeprom()
         {

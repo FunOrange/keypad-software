@@ -60,6 +60,7 @@ namespace KeypadSoftware
         public static byte KEYPAD_PACKET_ID_GET_DEBOUNCE = 33;
         public static byte KEYPAD_PACKET_ID_GET_COUNTERS = 34;
         public static byte KEYPAD_PACKET_ID_SAVE_CONFIG_TO_EEPROM = 35;
+        public static byte KEYPAD_PACKET_ID_READ_RAW_BUTTON_STATE_BUFFER = 36;
         public static byte KEYPAD_PACKET_ID_READ_EEPROM = 38;
         public static byte KEYPAD_PACKET_ID_CALIBRATE_SERIAL_COMM = 39;
 

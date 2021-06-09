@@ -182,7 +182,11 @@ namespace KeypadSoftware.ViewModels
         public void Capture()
         {
             // TODO
-            Console.WriteLine("TODO: Capture");
+            var (left, right) = Debounce.ReadRawButtonStateBuffer();
+            foreach (bool state in left)
+            {
+                Console.WriteLine(state);
+            }
         }
 
         public void PullAllValues()
