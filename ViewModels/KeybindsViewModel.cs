@@ -18,7 +18,9 @@ namespace KeypadSoftware.ViewModels
             None,
             Left,
             Right,
-            Side
+            Side,
+            LeftMacro,
+            RightMacro
         }
 
 
@@ -43,22 +45,26 @@ namespace KeypadSoftware.ViewModels
         public string LeftKeybind => KeyCodeConverter.FromKeyCode(Keybinds.LeftButtonScanCode).DisplayName;
         public string RightKeybind => KeyCodeConverter.FromKeyCode(Keybinds.RightButtonScanCode).DisplayName;
         public string SideKeybind => KeyCodeConverter.FromKeyCode(Keybinds.SideButtonScanCode).DisplayName;
+        public string LeftMacro => KeyCodeConverter.FromKeyCode(Keybinds.LeftMacroScanCode).DisplayName;
+        public string RightMacro => KeyCodeConverter.FromKeyCode(Keybinds.RightMacroScanCode).DisplayName;
         public void NotifyAllProperties()
         {
             NotifyOfPropertyChange(() => LeftKeybind);
             NotifyOfPropertyChange(() => RightKeybind);
             NotifyOfPropertyChange(() => SideKeybind);
+            NotifyOfPropertyChange(() => LeftMacro);
+            NotifyOfPropertyChange(() => RightMacro);
             NotifyOfPropertyChange(() => EditLeftKeybindCoverVisible);
             NotifyOfPropertyChange(() => EditRightKeybindCoverVisible);
             NotifyOfPropertyChange(() => EditSideKeybindCoverVisible);
-            NotifyOfPropertyChange(() => LeftButtonLayer2GroupBox);
+            NotifyOfPropertyChange(() => MacroGroupBoxesVisible);
             NotifyOfPropertyChange(() => EmptyString);
         }
         private KeypadButton buttonBeingEdited = KeypadButton.None;
-        public Visibility EditLeftKeybindCoverVisible => buttonBeingEdited == KeypadButton.Left ? Visibility.Visible : VisibilTty.Hidden;
+        public Visibility EditLeftKeybindCoverVisible => buttonBeingEdited == KeypadButton.Left ? Visibility.Visible : Visibility.Hidden;
         public Visibility EditRightKeybindCoverVisible => buttonBeingEdited == KeypadButton.Right ? Visibility.Visible : Visibility.Hidden;
         public Visibility EditSideKeybindCoverVisible => buttonBeingEdited == KeypadButton.Side ? Visibility.Visible : Visibility.Hidden;
-        public Visibility LeftButtonLayer2GroupBox => Visibility.Hidden;
+        public Visibility MacroGroupBoxesVisible => Keybinds.SideButtonScanCode == 0xff ? Visibility.Visible : Visibility.Hidden;
         #endregion
 
         public KeybindsViewModel(KeypadSerial _keypad)
@@ -70,9 +76,11 @@ namespace KeypadSoftware.ViewModels
             {
                 case KeypadButton.None:
                     return;
-                case KeypadButton.Left:  Keybinds.LeftButtonScanCode  = KeyCodeConverter.FromScanCode(e.Key).ScanCode; break;
-                case KeypadButton.Right: Keybinds.RightButtonScanCode = KeyCodeConverter.FromScanCode(e.Key).ScanCode; break;
-                case KeypadButton.Side:  Keybinds.SideButtonScanCode  = KeyCodeConverter.FromScanCode(e.Key).ScanCode; break;
+                case KeypadButton.Left:       Keybinds.LeftButtonScanCode  = KeyCodeConverter.FromScanCode(e.Key).ScanCode; break;
+                case KeypadButton.Right:      Keybinds.RightButtonScanCode = KeyCodeConverter.FromScanCode(e.Key).ScanCode; break;
+                case KeypadButton.Side:       Keybinds.SideButtonScanCode  = KeyCodeConverter.FromScanCode(e.Key).ScanCode; break;
+                case KeypadButton.LeftMacro:  Keybinds.LeftMacroScanCode   = KeyCodeConverter.FromScanCode(e.Key).ScanCode; break;
+                case KeypadButton.RightMacro: Keybinds.RightMacroScanCode  = KeyCodeConverter.FromScanCode(e.Key).ScanCode; break;
             }
             bool success = false;
             while (!success)
@@ -88,13 +96,21 @@ namespace KeypadSoftware.ViewModels
         {
         }
 
+        // left
+        public void BeginEditLeftKeybind() {
+            buttonBeingEdited = KeypadButton.Left;
+            NotifyAllProperties();
+        }
         public void StopEditLeftKeybind() {
             if (buttonBeingEdited == KeypadButton.Left)
                 buttonBeingEdited = KeypadButton.None;
             NotifyAllProperties();
         }
-        public void BeginEditLeftKeybind() {
-            buttonBeingEdited = KeypadButton.Left;
+
+        // right
+        public void BeginEditRightKeybind()
+        {
+            buttonBeingEdited = KeypadButton.Right;
             NotifyAllProperties();
         }
         public void StopEditRightKeybind() {
@@ -102,9 +118,11 @@ namespace KeypadSoftware.ViewModels
                 buttonBeingEdited = KeypadButton.None;
             NotifyAllProperties();
         }
-        public void BeginEditRightKeybind()
+
+        // side
+        public void BeginEditSideKeybind()
         {
-            buttonBeingEdited = KeypadButton.Right;
+            buttonBeingEdited = KeypadButton.Side;
             NotifyAllProperties();
         }
         public void StopEditSideKeybind() {
@@ -112,11 +130,36 @@ namespace KeypadSoftware.ViewModels
                 buttonBeingEdited = KeypadButton.None;
             NotifyAllProperties();
         }
-        public void BeginEditSideKeybind()
+        public void ToggleKeybindLayerButton()
         {
-            buttonBeingEdited = KeypadButton.Side;
+            Keybinds.SideButtonScanCode = 0xff;
             NotifyAllProperties();
         }
+
+        // left macro
+        public void BeginEditLeftMacro()
+        {
+            buttonBeingEdited = KeypadButton.LeftMacro;
+            NotifyAllProperties();
+        }
+        public void StopEditLeftMacro() {
+            if (buttonBeingEdited == KeypadButton.LeftMacro)
+                buttonBeingEdited = KeypadButton.None;
+            NotifyAllProperties();
+        }
+
+        // right macro
+        public void BeginEditRightMacro()
+        {
+            buttonBeingEdited = KeypadButton.RightMacro;
+            NotifyAllProperties();
+        }
+        public void StopEditRightMacro() {
+            if (buttonBeingEdited == KeypadButton.RightMacro)
+                buttonBeingEdited = KeypadButton.None;
+            NotifyAllProperties();
+        }
+
 
         public void PullAllValues()
         {

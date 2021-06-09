@@ -14,6 +14,8 @@ namespace KeypadSoftware.Models
         public byte LeftButtonScanCode;
         public byte RightButtonScanCode;
         public byte SideButtonScanCode;
+        public byte LeftMacroScanCode;
+        public byte RightMacroScanCode;
 
         public KeybindsModel(KeypadSerial _keypad)
         {
@@ -22,6 +24,8 @@ namespace KeypadSoftware.Models
             LeftButtonScanCode = KeyCodeConverter.FromScanCode(Key.Z).ScanCode;
             RightButtonScanCode = KeyCodeConverter.FromScanCode(Key.X).ScanCode;
             SideButtonScanCode = KeyCodeConverter.FromScanCode(Key.Escape).ScanCode;
+            LeftMacroScanCode = KeyCodeConverter.FromScanCode(Key.Z).ScanCode;
+            RightMacroScanCode = KeyCodeConverter.FromScanCode(Key.X).ScanCode;
         }
 
         // Reads current values from keypad
@@ -36,6 +40,8 @@ namespace KeypadSoftware.Models
             LeftButtonScanCode = keybindsRawData[0];
             RightButtonScanCode = keybindsRawData[1];
             SideButtonScanCode = keybindsRawData[2];
+            LeftMacroScanCode = keybindsRawData[3];
+            RightMacroScanCode = keybindsRawData[4];
         }
 
         // Writes values from this object into keypad
@@ -43,7 +49,7 @@ namespace KeypadSoftware.Models
         static extern int memcmp(byte[] b1, byte[] b2, long count);
         public bool PushAllValues()
         {
-            var scanCodes = new byte[] { LeftButtonScanCode, RightButtonScanCode, SideButtonScanCode, LeftButtonScanCode, RightButtonScanCode, SideButtonScanCode };
+            var scanCodes = new byte[] { LeftButtonScanCode, RightButtonScanCode, SideButtonScanCode, LeftMacroScanCode, RightMacroScanCode, SideButtonScanCode };
             Console.WriteLine($"KeybindsModel.PushAllValues: Write: {string.Join(" ", scanCodes.Select(b => $"0x{b:x}"))}");
             keypad.WriteKeybinds(scanCodes);
             // Readback

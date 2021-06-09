@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="1200">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -21,8 +21,6 @@
         <StackPanel Grid.Column="0">
             <GroupBox
                 Header="Left Button"
-                Width="auto"
-                Height="auto"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
                 Margin="16">
                 <GroupBox.HeaderTemplate>
@@ -39,20 +37,19 @@
                 </GroupBox.HeaderTemplate>
                 <Grid Margin="8, 8, 8, 0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition />
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <materialDesign:Card
                         Grid.Column="0"
-                        MinWidth="140"
-                        Height="auto">
-                        <Grid Width="auto">
+                        MinWidth="140">
+                        <Grid >
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
+                                <RowDefinition />
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock
@@ -78,11 +75,9 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
                         Text="{Binding EmptyString}"
-                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditLeftKeybind()]; [Event LostKeyboardFocus] = [Action StopEditLeftKeybind()]"
-                        />
+                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditLeftKeybind()]; [Event LostKeyboardFocus] = [Action StopEditLeftKeybind()]" />
                     <Expander
                         Margin="0, 12, 0, 6"
-                        Height="auto"
                         Grid.Row="1"
                         Grid.ColumnSpan="2"
                         HorizontalAlignment="Stretch"
@@ -95,8 +90,7 @@
                 </Grid>
             </GroupBox>
             <GroupBox
-                Width="auto"
-                Height="auto"
+                Visibility="{Binding MacroGroupBoxesVisible}"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
                 materialDesign:ColorZoneAssist.Mode="SecondaryMid"
                 Margin="16">
@@ -108,25 +102,24 @@
                             VerticalAlignment="Center"
                             Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
                             Foreground="White"
-                            Text="Left Button (Layer 2)" />
+                            Text="Left Button (Macro Layer)" />
                     </StackPanel>
                 </GroupBox.Header>
                 <Grid Margin="8, 8, 8, 0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition />
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <materialDesign:Card
                         Grid.Column="0"
-                        MinWidth="140"
-                        Height="auto">
-                        <Grid Width="auto">
+                        MinWidth="140" >
+                        <Grid >
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
+                                <RowDefinition />
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock
@@ -140,7 +133,7 @@
                                 Padding="12, 0, 12, 12"
                                 VerticalAlignment="Center"
                                 Style="{StaticResource MaterialDesignBody1TextBlock}"
-                                Text="{Binding LeftKeybind}"/>
+                                Text="{Binding LeftMacro}"/>
                         </Grid>
                     </materialDesign:Card>
                     <TextBox
@@ -152,11 +145,9 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
                         Text="{Binding EmptyString}"
-                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditLeftKeybind()]; [Event LostKeyboardFocus] = [Action StopEditLeftKeybind()]"
-                        />
+                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditLeftMacro()]; [Event LostKeyboardFocus] = [Action StopEditLeftMacro()]" />
                     <Expander
                         Margin="0, 12, 0, 6"
-                        Height="auto"
                         Grid.Row="1"
                         Grid.ColumnSpan="2"
                         HorizontalAlignment="Stretch"
@@ -174,8 +165,6 @@
         <StackPanel Grid.Column="1">
             <GroupBox
                 Header="Right Button"
-                Width="auto"
-                Height="auto"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
                 Margin="16">
                 <GroupBox.HeaderTemplate>
@@ -192,20 +181,19 @@
                 </GroupBox.HeaderTemplate>
                 <Grid Margin="8, 8, 8, 0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition />
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <materialDesign:Card
                         Grid.Column="0"
-                        MinWidth="140"
-                        Height="auto">
-                        <Grid Width="auto">
+                        MinWidth="140" >
+                        <Grid >
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
+                                <RowDefinition />
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock
@@ -231,11 +219,9 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
                         Text="{Binding EmptyString}"
-                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditRightKeybind()]; [Event LostKeyboardFocus] = [Action StopEditRightKeybind()]"
-                        />
+                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditRightKeybind()]; [Event LostKeyboardFocus] = [Action StopEditRightKeybind()]" />
                     <Expander
                         Margin="0, 12, 0, 6"
-                        Height="auto"
                         Grid.Row="1"
                         Grid.ColumnSpan="2"
                         HorizontalAlignment="Stretch"
@@ -248,8 +234,7 @@
                 </Grid>
             </GroupBox>
             <GroupBox
-                Width="auto"
-                Height="auto"
+                Visibility="{Binding MacroGroupBoxesVisible}"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
                 materialDesign:ColorZoneAssist.Mode="SecondaryMid"
                 Margin="16">
@@ -261,25 +246,24 @@
                             VerticalAlignment="Center"
                             Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
                             Foreground="White"
-                            Text="Right Button (Layer 2)" />
+                            Text="Right Button (Macro Layer)" />
                     </StackPanel>
                 </GroupBox.Header>
                 <Grid Margin="8, 8, 8, 0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition />
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <materialDesign:Card
                         Grid.Column="0"
-                        MinWidth="140"
-                        Height="auto">
-                        <Grid Width="auto">
+                        MinWidth="140" >
+                        <Grid >
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
+                                <RowDefinition />
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock
@@ -293,7 +277,7 @@
                                 Padding="12, 0, 12, 12"
                                 VerticalAlignment="Center"
                                 Style="{StaticResource MaterialDesignBody1TextBlock}"
-                                Text="{Binding LeftKeybind}"/>
+                                Text="{Binding RightMacro}"/>
                         </Grid>
                     </materialDesign:Card>
                     <TextBox
@@ -305,11 +289,9 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
                         Text="{Binding EmptyString}"
-                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditLeftKeybind()]; [Event LostKeyboardFocus] = [Action StopEditLeftKeybind()]"
-                        />
+                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditRightMacro()]; [Event LostKeyboardFocus] = [Action StopEditRightMacro()]" />
                     <Expander
                         Margin="0, 12, 0, 6"
-                        Height="auto"
                         Grid.Row="1"
                         Grid.ColumnSpan="2"
                         HorizontalAlignment="Stretch"
@@ -327,8 +309,6 @@
         <StackPanel Grid.Column="2">
             <GroupBox
                 Header="Side Button"
-                Width="auto"
-                Height="auto"
                 Style="{DynamicResource MaterialDesignCardGroupBox}"
                 Margin="16">
                 <GroupBox.HeaderTemplate>
@@ -345,20 +325,19 @@
                 </GroupBox.HeaderTemplate>
                 <Grid Margin="8, 8, 8, 0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <materialDesign:Card
                         Grid.Column="0"
-                        MinWidth="140"
-                        Height="auto">
-                        <Grid Width="auto">
+                        MinWidth="140" >
+                        <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
+                                <RowDefinition />
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock
@@ -368,6 +347,7 @@
                                 Style="{StaticResource MaterialDesignBody2TextBlock}"
                                 Text="Current Keybind:"/>
                             <TextBlock
+                                materialDesign:ColorZoneAssist.Mode="SecondaryDark"
                                 Grid.Row="1"
                                 Padding="12, 0, 12, 12"
                                 VerticalAlignment="Center"
@@ -384,11 +364,9 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
                         Text="{Binding EmptyString}"
-                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditSideKeybind()]; [Event LostKeyboardFocus] = [Action StopEditSideKeybind()]"
-                        />
+                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditSideKeybind()]; [Event LostKeyboardFocus] = [Action StopEditSideKeybind()]" />
                     <Expander
                         Margin="0, 12, 0, 6"
-                        Height="auto"
                         Grid.Row="1"
                         Grid.ColumnSpan="2"
                         HorizontalAlignment="Stretch"
@@ -396,8 +374,10 @@
                         <StackPanel
                             Margin="24,8,24,16" >
                             <Button
+                                x:Name="ToggleKeybindLayerButton"
                                 Content="Toggle Keybind Layer"
-                                Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                Foreground="White"
                                 ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
                                 Margin="8"/>
                             <WrapPanel>
@@ -410,6 +390,6 @@
             </GroupBox>
         </StackPanel>
 
-      
+
     </Grid>
 </UserControl>
