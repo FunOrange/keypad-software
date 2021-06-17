@@ -185,8 +185,9 @@ namespace KeypadSoftware.ViewModels
             var (left, right) = Debounce.ReadRawButtonStateBuffer();
             foreach (bool state in left)
             {
-                Console.WriteLine(state);
+                Console.Write(state ? "1" : "0");
             }
+            Console.Write("\n");
         }
 
         public void PullAllValues()

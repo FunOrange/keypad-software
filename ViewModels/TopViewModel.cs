@@ -137,8 +137,28 @@ namespace KeypadSoftware.Views
         public void Window_Loaded(EventArgs e) {
             Task.Run(() => CheckConnection(this, e));
         }
+        async Task DelayThenCheckConnection()
+        {
+            await Task.Delay(1000);
+            CheckConnection(this, EventArgs.Empty);
+        }
+        bool mutex = false;
+        long LastConnectionEventTime = 0;
         public void CheckConnection(object sender, EventArgs e)
         {
+            if (mutex)
+            {
+                Console.WriteLine("waiting 1 second for mutex...");
+                DelayThenCheckConnection();
+                return;
+            }
+            if ((DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - LastConnectionEventTime < 3000)
+            {
+                Console.WriteLine("Connection event happened recently, skipping heartbeat check");
+                return;
+            }
+            mutex = true;
+            Console.WriteLine("\n--- mutex true ---");
             if (!Keypad.IsConnected)
             {
                 Console.WriteLine("Looking for keypad");
@@ -156,19 +176,24 @@ namespace KeypadSoftware.Views
 
                 if (Keypad.IsConnected)
                 {
+                    LastConnectionEventTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                     // Reload last viewed page
                     LoadPage(CurrentPage);
+                    
                 }
             }
             else
             {
-                Console.WriteLine("Checking heartbeat on existing keypad");
-                Keypad.Heartbeat();
+                Console.Write("Checking heartbeat on existing keypad... ");
+                if (Keypad.Heartbeat())
+                  Console.WriteLine("keypad is alive!");
                 NotifyOfPropertyChange(() => ConnectionStatusString);
                 NotifyOfPropertyChange(() => IsConnected);
                 PortListHighPriority = Keypad.GetPresentablePrioritylist(1);
                 PortListLowPriority = Keypad.GetPresentablePrioritylist(0);
             }
+            Console.WriteLine("--- mutex false ---\n");
+            mutex = false;
         }
     }
 }

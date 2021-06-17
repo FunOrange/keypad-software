@@ -38,7 +38,10 @@ namespace KeypadSoftware.Views
         protected IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == 0x219)
+            {
+                Console.WriteLine($"Caught windows message {msg}");
                 DeviceChanged?.Invoke(this, EventArgs.Empty);
+            }
             return IntPtr.Zero;
         }
 

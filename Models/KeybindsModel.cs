@@ -20,21 +20,11 @@ namespace KeypadSoftware.Models
         public KeybindsModel(KeypadSerial _keypad)
         {
             keypad = _keypad;
-            Console.WriteLine("KeybindsModel constructor: initializing KeybindsModel with default values");
-            LeftButtonScanCode = KeyCodeConverter.FromScanCode(Key.Z).ScanCode;
-            RightButtonScanCode = KeyCodeConverter.FromScanCode(Key.X).ScanCode;
-            SideButtonScanCode = KeyCodeConverter.FromScanCode(Key.Escape).ScanCode;
-            LeftMacroScanCode = KeyCodeConverter.FromScanCode(Key.Z).ScanCode;
-            RightMacroScanCode = KeyCodeConverter.FromScanCode(Key.X).ScanCode;
         }
 
         // Reads current values from keypad
         public void PullAllValues()
         {
-#if NO_KEYPAD
-            Console.WriteLine("KeybindsModel.PullAllValues: no keypad; assume values in keypad already match");
-            return;
-#endif
             // Request keybinds from keypad
             var keybindsRawData = keypad.ReadKeybinds();
             LeftButtonScanCode = keybindsRawData[0];
@@ -54,8 +44,10 @@ namespace KeypadSoftware.Models
             keypad.WriteKeybinds(scanCodes);
             // Readback
             var readback = keypad.ReadKeybinds();
-            Console.WriteLine($"KeybindsModel.PushAllValues: Readback: {string.Join(" ", readback.Select(b => $"0x{b:x}"))}");
-            return readback.Length == scanCodes.Length && memcmp(readback, scanCodes, readback.Length) == 0;
+            var readbackSuccess = readback.Length == scanCodes.Length && memcmp(readback, scanCodes, readback.Length) == 0;
+            if (readbackSuccess)
+                Console.WriteLine($"KeybindsModel.PushAllValues: Readback success!");
+            return readbackSuccess;
         }
     }
 }

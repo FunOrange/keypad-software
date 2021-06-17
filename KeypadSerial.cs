@@ -81,11 +81,15 @@ namespace KeypadSoftware
             List<string> connectedPorts = SerialPort.GetPortNames().ToList();
 
             // Add new ports to list (eg. device connected)
-            foreach (string port in connectedPorts.Where((port) => !PortList.ContainsKey(port)))
-                PortList.Add(port, (0, PortStatus.Untested));
+            try
+            {
+                foreach (string port in connectedPorts.Where((port) => !PortList.ContainsKey(port)).ToList())
+                    PortList.Add(port, (0, PortStatus.Untested));
+            }
+            catch (Exception) {}
 
             // Remove ports from list (eg. device disconnected)
-            foreach (string disconnectedPort in PortList.Keys.Where((port) => !connectedPorts.Contains(port)))
+            foreach (string disconnectedPort in PortList.Keys.Where((port) => !connectedPorts.Contains(port)).ToList())
                 PortList.Remove(disconnectedPort);
  
             // Mark high priority ports
@@ -252,14 +256,10 @@ namespace KeypadSoftware
                 return false;
             }
 
-#if USING_KEYPAD_SERIAL_PACKET_PROTOCOL
             byte[] handShakePacket = KeypadSerialPacket.CreateEmptyPacket(KeypadSerialPacket.KEYPAD_PACKET_ID_HEARTBEAT);
             keypadPort.Write(handShakePacket, 0, handShakePacket.Length);
-#else
-            keypadPort.WriteLine("fun");
-#endif
-            try
-            {
+
+            try {
                 keypadPort.DiscardInBuffer();
                 string response = keypadPort.ReadLine();
                 if (response == "orange")
@@ -399,13 +399,33 @@ namespace KeypadSoftware
         }
         public (List<bool>, List<bool>) ReadRawButtonStateBuffer()
         {
-            byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_READ_RAW_BUTTON_STATE_BUFFER);
+            // https://docs.google.com/document/d/1mQmEWC6Alx705RaaXDCzk9nVUbvqgcYeD0BwqMgikEg/edit#heading=h.8z390549bnm1
+            // Send request packet
+            byte[] tx_packet = KeypadSerialPacket.CreateEmptyPacket(KeypadSerialPacket.KEYPAD_PACKET_ID_READ_RAW_BUTTON_STATE_BUFFER);
+            keypadPort.Write(tx_packet, 0, tx_packet.Length);
+
+            // Receive 1250 bytes of raw data (no packet)
+            var rawData = new List<byte>();
+            int i;
+            for (i = 0; i < 1250; i++) {
+                try
+                {
+                    rawData.Add((byte)keypadPort.ReadByte());
+                }
+                catch (TimeoutException)
+                {
+                    break;
+                }
+            }
+            Console.WriteLine($"Read {i} bytes of data.");
+
+            // Unpack data
             var left = new List<bool>();
             var right = new List<bool>();
             foreach (byte x in rawData)
             {
-                // https://docs.google.com/document/d/1mQmEWC6Alx705RaaXDCzk9nVUbvqgcYeD0BwqMgikEg/edit#heading=h.8z390549bnm1
-                // lower nibble: right button
+                Console.WriteLine("8'b" + Convert.ToString(x, 2).PadLeft(8, '0'));
+                //// lower nibble: right button
                 left.Add((x & (1 << 0)) != 0);
                 left.Add((x & (1 << 1)) != 0);
                 left.Add((x & (1 << 2)) != 0);

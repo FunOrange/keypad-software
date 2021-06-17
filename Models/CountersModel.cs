@@ -16,18 +16,10 @@ namespace KeypadSoftware.Models
         public CountersModel(KeypadSerial _keypad)
         {
             keypad = _keypad;
-            Console.WriteLine("CountersModel constructor: no keypad; setting random counter values");
-            var r = new Random();
-            LeftButtonClickCount = (uint)r.Next(0, 10000);
-            RightButtonClickCount = (uint)r.Next(0, 10000);
-            SideButtonClickCount = (uint)r.Next(0, 10000);
         }
 
         public void PullAllValues()
         {
-#if NO_KEYPAD
-            return;
-#endif
             // Request keybinds from keypad
             var counters = keypad.ReadCounters();
             LeftButtonClickCount = counters[0];
