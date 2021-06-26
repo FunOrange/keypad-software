@@ -104,6 +104,9 @@
     <Compile Include="Clamp.cs" />
     <Compile Include="KeypadSerialPacketReader.cs" />
     <Compile Include="SelectableItem.cs" />
+    <Compile Include="UserControls\KeybindCard.xaml.cs">
+      <DependentUpon>KeybindCard.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\DebugViewModel.cs" />
     <Compile Include="Views\DebugView.xaml.cs">
       <DependentUpon>DebugView.xaml</DependentUpon>
@@ -169,6 +172,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UserControls\KeybindCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CountersView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

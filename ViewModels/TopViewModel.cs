@@ -149,7 +149,7 @@ namespace KeypadSoftware.Views
             if (mutex)
             {
                 Console.WriteLine("waiting 1 second for mutex...");
-                DelayThenCheckConnection();
+                _ = DelayThenCheckConnection();
                 return;
             }
             if ((DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - LastConnectionEventTime < 3000)
