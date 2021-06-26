@@ -87,6 +87,10 @@ namespace KeypadSoftware.Views
         {
             keybindsVm?.KeyDownAnywhere(sender, e);
         }
+        public void KeyUpAnywhere(object sender, KeyEventArgs e)
+        {
+            keybindsVm?.KeyUpAnywhere(sender, e);
+        }
 
         public TopViewModel()
         {
