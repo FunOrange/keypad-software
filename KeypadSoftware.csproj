@@ -102,11 +102,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Clamp.cs" />
+    <Compile Include="HexadecimalRule.cs" />
     <Compile Include="KeypadSerialPacketReader.cs" />
     <Compile Include="SelectableItem.cs" />
     <Compile Include="UserControls\KeybindCard.xaml.cs">
       <DependentUpon>KeybindCard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\KeybindEventArgs.cs" />
     <Compile Include="ViewModels\DebugViewModel.cs" />
     <Compile Include="Views\DebugView.xaml.cs">
       <DependentUpon>DebugView.xaml</DependentUpon>

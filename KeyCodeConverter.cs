@@ -124,6 +124,28 @@ namespace KeypadSoftware
             keyLookupTable.Add(new KeyEntry("Num 9", "HID_KEYBOARD_SC_KEYPAD_9_AND_PAGE_UP", 0x61, Key.NumPad9));
             keyLookupTable.Add(new KeyEntry("Num 0", "HID_KEYBOARD_SC_KEYPAD_0_AND_INSERT", 0x62, Key.NumPad0));
             keyLookupTable.Add(new KeyEntry("Num .", "HID_KEYBOARD_SC_KEYPAD_DOT_AND_DELETE", 0x63, Key.Decimal));
+
+            keyLookupTable.Add(new KeyEntry("Play/Pause", "KEY_MEDIA_PLAYPAUSE", 0xe8, Key.MediaPlayPause));
+            keyLookupTable.Add(new KeyEntry("STOPCD", "KEY_MEDIA_STOPCD", 0xe9, Key.None));
+            keyLookupTable.Add(new KeyEntry("Next Track", "KEY_MEDIA_PREVIOUSSONG", 0xea, Key.MediaNextTrack));
+            keyLookupTable.Add(new KeyEntry("Prev Track", "KEY_MEDIA_NEXTSONG", 0xeb, Key.MediaPreviousTrack));
+            keyLookupTable.Add(new KeyEntry("EJECTCD", "KEY_MEDIA_EJECTCD", 0xec, Key.None));
+            keyLookupTable.Add(new KeyEntry("Volume Up", "KEY_MEDIA_VOLUMEUP", 0xed, Key.VolumeUp));
+            keyLookupTable.Add(new KeyEntry("Volume Down", "KEY_MEDIA_VOLUMEDOWN", 0xee, Key.VolumeDown));
+            keyLookupTable.Add(new KeyEntry("Mute", "KEY_MEDIA_MUTE", 0xef, Key.VolumeMute));
+            keyLookupTable.Add(new KeyEntry("WWW", "KEY_MEDIA_WWW", 0xf0, Key.None));
+            keyLookupTable.Add(new KeyEntry("Media Back", "KEY_MEDIA_BACK", 0xf1, Key.None));
+            keyLookupTable.Add(new KeyEntry("Media Forward", "KEY_MEDIA_FORWARD", 0xf2, Key.None));
+            keyLookupTable.Add(new KeyEntry("Media Stop", "KEY_MEDIA_STOP", 0xf3, Key.MediaStop));
+            keyLookupTable.Add(new KeyEntry("Media Find", "KEY_MEDIA_FIND", 0xf4, Key.None));
+            keyLookupTable.Add(new KeyEntry("Media Scroll Up", "KEY_MEDIA_SCROLLUP", 0xf5, Key.None));
+            keyLookupTable.Add(new KeyEntry("Media Scroll Down", "KEY_MEDIA_SCROLLDOWN", 0xf6, Key.None));
+            keyLookupTable.Add(new KeyEntry("Media Edit", "KEY_MEDIA_EDIT", 0xf7, Key.None));
+            keyLookupTable.Add(new KeyEntry("Media Sleep", "KEY_MEDIA_SLEEP", 0xf8, Key.None));
+            keyLookupTable.Add(new KeyEntry("Media Coffee", "KEY_MEDIA_COFFEE", 0xf9, Key.None));
+            keyLookupTable.Add(new KeyEntry("Media Refresh", "KEY_MEDIA_REFRESH", 0xfa, Key.None));
+            keyLookupTable.Add(new KeyEntry("Calculator", "KEY_MEDIA_CALC", 0xfb, Key.None));
+                                                       
             keyLookupTable.Add(new KeyEntry("Toggle Macro Layer", "HID_KEYBOARD_SC_KEYPAD_DOT_AND_DELETE", 0xFF, Key.None));
 
             // TODO: look these ones up
@@ -147,7 +169,7 @@ namespace KeypadSoftware
             if (result != null)
                 return result;
             Console.WriteLine($"Could not find entry for System.Windows.Input.Key: {keyCode}");
-            return new KeyEntry("", "", 0, Key.None);
+            return new KeyEntry("<unknown>", "", 0, keyCode);
         }
         // to .NET Framework key code
         public static KeyEntry FromKeyCode(byte scanCode)
@@ -156,7 +178,7 @@ namespace KeypadSoftware
             if (result != null)
                 return result;
             Console.WriteLine($"Could not find entry for HID scan code: {scanCode}");
-            return new KeyEntry("", "", 0, Key.None);
+            return new KeyEntry("<unknown>", "", scanCode, Key.None);
         }
     }
 }

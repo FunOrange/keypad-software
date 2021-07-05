@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -43,6 +45,7 @@ namespace KeypadSoftware.UserControls
         public static readonly DependencyProperty KeybindTextProperty =
             DependencyProperty.Register("KeybindText", typeof(string), typeof(KeybindCard), new PropertyMetadata(""));
 
+        public string CustomKeybindScanCode { get; set; }
         public string HeaderText
         {
             get { return (string)GetValue(HeaderTextProperty); }
@@ -53,6 +56,7 @@ namespace KeypadSoftware.UserControls
 
         public event EventHandler BeginEditKeybind;
         public event EventHandler StopEditKeybind;
+        public event EventHandler KeybindSet;
 
         private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
@@ -67,6 +71,49 @@ namespace KeypadSoftware.UserControls
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             InputTextbox.Text = "";
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+
+        private void VolumeMinus_Click(object sender, RoutedEventArgs e)
+        {
+            KeybindSet?.Invoke(this, new KeybindEventArgs(0xee));
+        }
+        private void VolumePlus_Click(object sender, RoutedEventArgs e)
+        {
+            KeybindSet?.Invoke(this, new KeybindEventArgs(0xed));
+        }
+        private void SkipPrevious_Click(object sender, RoutedEventArgs e)
+        {
+            KeybindSet?.Invoke(this, new KeybindEventArgs(0xf1));
+        }
+        private void SkipNext_Click(object sender, RoutedEventArgs e)
+        {
+            KeybindSet?.Invoke(this, new KeybindEventArgs(0xf2));
+        }
+        private void PlayPause_Click(object sender, RoutedEventArgs e)
+        {
+            KeybindSet?.Invoke(this, new KeybindEventArgs(0xe8));
+        }
+        private void SplitLeft_Click(object sender, RoutedEventArgs e)
+        {
+            KeybindSet?.Invoke(this, new KeybindEventArgs(0x50, leftWin: true));
+        }
+        private void SplitRight_Click(object sender, RoutedEventArgs e)
+        {
+            KeybindSet?.Invoke(this, new KeybindEventArgs(0x4f, leftWin: true));
+        }
+        private void Apply_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO:
+            KeybindSet?.Invoke(this, new KeybindEventArgs(
+                0x4f,
+                leftWin: true
+            ));
         }
     }
 }

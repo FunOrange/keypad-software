@@ -7,130 +7,132 @@
              xmlns:cal="http://www.caliburnproject.org" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:usercontrols="clr-namespace:KeypadSoftware.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1200">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-        <!-- Left Button -->
-        <StackPanel Grid.Column="0">
-            <usercontrols:KeybindCard
-                HeaderText="Left Button"
-                HeaderColour="PrimaryMid"
-                KeybindText="{Binding LeftKeybind}"
-                cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditLeftKeybind()]; [Event LostKeyboardFocus] = [Action StopEditLeftKeybind()]" />
-            <usercontrols:KeybindCard
-                HeaderText="Left Button (Macro Layer)"
-                HeaderColour="SecondaryMid"
-                KeybindText="{Binding LeftMacro}"
-                cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditLeftMacro()]; [Event LostKeyboardFocus] = [Action StopEditLeftMacro()]" />
-        </StackPanel>
+            <!-- Left Button -->
+            <StackPanel Grid.Column="0">
+                <usercontrols:KeybindCard
+                    HeaderText="Left Button"
+                    HeaderColour="PrimaryMid"
+                    KeybindText="{Binding LeftKeybind}"
+                    cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditLeftKeybind()]; [Event LostKeyboardFocus] = [Action StopEditLeftKeybind()]; [Event KeybindSet] = [Action SetLeftKeybind($eventArgs)]"/>
+                <usercontrols:KeybindCard
+                    Visibility="{Binding IsLeftKeybindVisible}"
+                    HeaderText="Left Button (Macro Layer)"
+                    HeaderColour="SecondaryMid"
+                    KeybindText="{Binding LeftMacro}"
+                    cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditLeftMacro()]; [Event LostKeyboardFocus] = [Action StopEditLeftMacro()]; [Event KeybindSet] = [Action SetLeftMacro($eventArgs)]" />
+            </StackPanel>
 
-        <!-- Right Button -->
-        <StackPanel Grid.Column="1">
-            <usercontrols:KeybindCard
-                HeaderText="Right Button"
-                HeaderColour="PrimaryMid"
-                KeybindText="{Binding RightKeybind}"
-                cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditRightKeybind()]; [Event LostKeyboardFocus] = [Action StopEditRightKeybind()]" />
-            <usercontrols:KeybindCard
-                HeaderText="Right Button (Macro Layer)"
-                HeaderColour="SecondaryMid"
-                KeybindText="{Binding RightMacro}"
-                cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditRightMacro()]; [Event LostKeyboardFocus] = [Action StopEditRightMacro()]" />
-        </StackPanel>
+            <!-- Right Button -->
+            <StackPanel Grid.Column="1">
+                <usercontrols:KeybindCard
+                    HeaderText="Right Button"
+                    HeaderColour="PrimaryMid"
+                    KeybindText="{Binding RightKeybind}"
+                    cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditRightKeybind()]; [Event LostKeyboardFocus] = [Action StopEditRightKeybind()]; [Event KeybindSet] = [Action SetRightKeybind($eventArgs)]" />
+                <usercontrols:KeybindCard
+                    Visibility="{Binding IsRightKeybindVisible}"
+                    HeaderText="Right Button (Macro Layer)"
+                    HeaderColour="SecondaryMid"
+                    KeybindText="{Binding RightMacro}"
+                    cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditRightMacro()]; [Event LostKeyboardFocus] = [Action StopEditRightMacro()]; [Event KeybindSet] = [Action SetRightMacro($eventArgs)]" />
+            </StackPanel>
 
-        <!-- Side Button -->
-        <StackPanel Grid.Column="2">
-            <GroupBox
-                Header="Side Button"
-                Style="{DynamicResource MaterialDesignCardGroupBox}"
-                materialDesign:ColorZoneAssist.Mode="PrimaryDark"
-                Margin="12, 16, 16, 16">
-                <GroupBox.HeaderTemplate>
-                    <DataTemplate>
-                        <StackPanel
-                            Orientation="Horizontal">
-                            <TextBlock
-                                Margin="8,0,0,0"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                                Text="{Binding}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </GroupBox.HeaderTemplate>
-                <Grid Margin="8, 8, 8, 0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <materialDesign:Card
-                        Grid.Column="0"
-                        MinWidth="140" >
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock
-                                Grid.Row="0"
-                                Padding="12, 12, 12, 0"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource MaterialDesignBody2TextBlock}"
-                                Text="Current Keybind:"/>
-                            <TextBlock
-                                materialDesign:ColorZoneAssist.Mode="SecondaryDark"
-                                Grid.Row="1"
-                                Padding="12, 0, 12, 12"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource MaterialDesignBody1TextBlock}"
-                                Text="{Binding SideKeybind}"/>
-                        </Grid>
-                    </materialDesign:Card>
-                    <TextBox
-                        Grid.Column="1"
-                        materialDesign:HintAssist.Hint="New Binding"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        FontSize="16"
-                        Margin="20, 0, 0, 7"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Top"
-                        Text="{Binding EmptyString}"
-                        cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditSideKeybind()]; [Event LostKeyboardFocus] = [Action StopEditSideKeybind()]" />
-                    <Expander
-                        Margin="0, 12, 0, 6"
-                        Grid.Row="1"
-                        Grid.ColumnSpan="2"
-                        HorizontalAlignment="Stretch"
-                        Header="Special Keys">
-                        <StackPanel
-                            Margin="24,8,24,16" >
-                            <Button
-                                x:Name="ToggleKeybindLayerButton"
-                                Content="Toggle Keybind Layer"
-                                Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                Foreground="White"
-                                ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
-                                Margin="8"/>
-                            <WrapPanel>
-                                <Button Content="Hi" Margin="8"/>
-                                <Button Content="Hi"/>
-                            </WrapPanel>
-                        </StackPanel>
-                    </Expander>
-                </Grid>
-            </GroupBox>
-        </StackPanel>
-
-
-    </Grid>
+            <!-- Side Button -->
+            <StackPanel Grid.Column="2">
+                <GroupBox
+                    Header="Side Button"
+                    Style="{DynamicResource MaterialDesignCardGroupBox}"
+                    materialDesign:ColorZoneAssist.Mode="PrimaryDark"
+                    Margin="12, 16, 16, 16">
+                    <GroupBox.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="8,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                    Text="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GroupBox.HeaderTemplate>
+                    <Grid Margin="8, 8, 8, 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:Card
+                            Grid.Column="0"
+                            MinWidth="140" >
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Padding="12, 12, 12, 0"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                    Text="Current Keybind:"/>
+                                <TextBlock
+                                    materialDesign:ColorZoneAssist.Mode="SecondaryDark"
+                                    Grid.Row="1"
+                                    Padding="12, 0, 12, 12"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                    Text="{Binding SideKeybind}"/>
+                            </Grid>
+                        </materialDesign:Card>
+                        <TextBox
+                            Grid.Column="1"
+                            materialDesign:HintAssist.Hint="New Binding"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            FontSize="16"
+                            Margin="20, 0, 0, 7"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top"
+                            Text="{Binding EmptyString}"
+                            cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditSideKeybind()]; [Event LostKeyboardFocus] = [Action StopEditSideKeybind()]" />
+                        <Expander
+                            Margin="0, 12, 0, 6"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            HorizontalAlignment="Stretch"
+                            Header="Special Keys">
+                            <StackPanel
+                                Margin="24,8,24,16" >
+                                <Button
+                                    x:Name="ToggleKeybindLayerButton"
+                                    Content="Toggle Keybind Layer"
+                                    Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                    Foreground="White"
+                                    ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                                    Margin="8"/>
+                                <WrapPanel>
+                                    <Button Content="Hi" Margin="8"/>
+                                    <Button Content="Hi"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Expander>
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </UserControl>
