@@ -37,9 +37,11 @@ namespace KeypadSoftware.Models
                 moddict[Key.LeftCtrl] = false;
                 moddict[Key.LeftShift] = false;
                 moddict[Key.LeftAlt] = false;
+                moddict[Key.LWin] = false;
                 moddict[Key.RightCtrl] = false;
                 moddict[Key.RightShift] = false;
                 moddict[Key.RightAlt] = false;
+                moddict[Key.RWin] = false;
             }
         }
 

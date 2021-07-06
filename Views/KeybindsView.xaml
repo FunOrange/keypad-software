@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KeypadSoftware.Views"
              xmlns:cal="http://www.caliburnproject.org" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:usercontrols="clr-namespace:KeypadSoftware.UserControls"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="1200">
     <ScrollViewer>
         <Grid>
@@ -24,13 +24,23 @@
                     HeaderText="Left Button"
                     HeaderColour="PrimaryMid"
                     KeybindText="{Binding LeftKeybind}"
-                    cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditLeftKeybind()]; [Event LostKeyboardFocus] = [Action StopEditLeftKeybind()]; [Event KeybindSet] = [Action SetLeftKeybind($eventArgs)]"/>
+                    HasKeybindLayerToggleButton="false"
+                    cal:Message.Attach="
+                        [Event GotKeyboardFocus] = [Action BeginEditKeybind('LEFT')];
+                        [Event LostKeyboardFocus] = [Action StopEditKeybind('LEFT')];
+                        [Event KeybindSet] = [Action SetKeybind('LEFT', $eventArgs)];
+                        [Event CheckboxChanged] = [Action ModifierCheckboxClicked('LEFT', $eventArgs)] "/>
                 <usercontrols:KeybindCard
                     Visibility="{Binding IsLeftKeybindVisible}"
                     HeaderText="Left Button (Macro Layer)"
                     HeaderColour="SecondaryMid"
                     KeybindText="{Binding LeftMacro}"
-                    cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditLeftMacro()]; [Event LostKeyboardFocus] = [Action StopEditLeftMacro()]; [Event KeybindSet] = [Action SetLeftMacro($eventArgs)]" />
+                    HasKeybindLayerToggleButton="false"
+                    cal:Message.Attach="
+                        [Event GotKeyboardFocus] = [Action BeginEditKeybind('LEFTMACRO')];
+                        [Event LostKeyboardFocus] = [Action StopEditKeybind('LEFTMACRO')];
+                        [Event KeybindSet] = [Action SetKeybind('LEFTMACRO', $eventArgs)];
+                        [Event CheckboxChanged] = [Action ModifierCheckboxClicked('LEFTMACRO', $eventArgs)] "/>
             </StackPanel>
 
             <!-- Right Button -->
@@ -39,99 +49,38 @@
                     HeaderText="Right Button"
                     HeaderColour="PrimaryMid"
                     KeybindText="{Binding RightKeybind}"
-                    cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditRightKeybind()]; [Event LostKeyboardFocus] = [Action StopEditRightKeybind()]; [Event KeybindSet] = [Action SetRightKeybind($eventArgs)]" />
+                    HasKeybindLayerToggleButton="false"
+                    cal:Message.Attach="
+                        [Event GotKeyboardFocus] = [Action BeginEditKeybind('RIGHT')];
+                        [Event LostKeyboardFocus] = [Action StopEditKeybind('RIGHT')];
+                        [Event KeybindSet] = [Action SetKeybind('RIGHT', $eventArgs)];
+                        [Event CheckboxChanged] = [Action ModifierCheckboxClicked('RIGHT', $eventArgs)] "/>
                 <usercontrols:KeybindCard
                     Visibility="{Binding IsRightKeybindVisible}"
                     HeaderText="Right Button (Macro Layer)"
                     HeaderColour="SecondaryMid"
                     KeybindText="{Binding RightMacro}"
-                    cal:Message.Attach="[Event BeginEditKeybind] = [Action BeginEditRightMacro()]; [Event LostKeyboardFocus] = [Action StopEditRightMacro()]; [Event KeybindSet] = [Action SetRightMacro($eventArgs)]" />
+                    HasKeybindLayerToggleButton="false"
+                    cal:Message.Attach="
+                        [Event GotKeyboardFocus] = [Action BeginEditKeybind('RIGHTMACRO')];
+                        [Event LostKeyboardFocus] = [Action StopEditKeybind('RIGHTMACRO')];
+                        [Event KeybindSet] = [Action SetKeybind('RIGHTMACRO', $eventArgs)];
+                        [Event CheckboxChanged] = [Action ModifierCheckboxClicked('RIGHTMACRO', $eventArgs)] "/>
             </StackPanel>
 
             <!-- Side Button -->
             <StackPanel Grid.Column="2">
-                <GroupBox
-                    Header="Side Button"
-                    Style="{DynamicResource MaterialDesignCardGroupBox}"
-                    materialDesign:ColorZoneAssist.Mode="PrimaryDark"
-                    Margin="12, 16, 16, 16">
-                    <GroupBox.HeaderTemplate>
-                        <DataTemplate>
-                            <StackPanel
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="8,0,0,0"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                                    Text="{Binding}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </GroupBox.HeaderTemplate>
-                    <Grid Margin="8, 8, 8, 0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <materialDesign:Card
-                            Grid.Column="0"
-                            MinWidth="140" >
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Padding="12, 12, 12, 0"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource MaterialDesignBody2TextBlock}"
-                                    Text="Current Keybind:"/>
-                                <TextBlock
-                                    materialDesign:ColorZoneAssist.Mode="SecondaryDark"
-                                    Grid.Row="1"
-                                    Padding="12, 0, 12, 12"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource MaterialDesignBody1TextBlock}"
-                                    Text="{Binding SideKeybind}"/>
-                            </Grid>
-                        </materialDesign:Card>
-                        <TextBox
-                            Grid.Column="1"
-                            materialDesign:HintAssist.Hint="New Binding"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            FontSize="16"
-                            Margin="20, 0, 0, 7"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Top"
-                            Text="{Binding EmptyString}"
-                            cal:Message.Attach="[Event GotKeyboardFocus] = [Action BeginEditSideKeybind()]; [Event LostKeyboardFocus] = [Action StopEditSideKeybind()]" />
-                        <Expander
-                            Margin="0, 12, 0, 6"
-                            Grid.Row="1"
-                            Grid.ColumnSpan="2"
-                            HorizontalAlignment="Stretch"
-                            Header="Special Keys">
-                            <StackPanel
-                                Margin="24,8,24,16" >
-                                <Button
-                                    x:Name="ToggleKeybindLayerButton"
-                                    Content="Toggle Keybind Layer"
-                                    Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                    Foreground="White"
-                                    ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
-                                    Margin="8"/>
-                                <WrapPanel>
-                                    <Button Content="Hi" Margin="8"/>
-                                    <Button Content="Hi"/>
-                                </WrapPanel>
-                            </StackPanel>
-                        </Expander>
-                    </Grid>
-                </GroupBox>
+               <usercontrols:KeybindCard
+                    HeaderText="Side Button"
+                    HeaderColour="PrimaryDark"
+                    KeybindText="{Binding SideKeybind}"
+                    HasKeybindLayerToggleButton="true"
+                    cal:Message.Attach="
+                        [Event GotKeyboardFocus] = [Action BeginEditKeybind('SIDE')];
+                        [Event LostKeyboardFocus] = [Action StopEditKeybind('SIDE')];
+                        [Event KeybindLayerToggleClick] = [Action ToggleKeybindLayer()];
+                        [Event KeybindSet] = [Action SetKeybind('SIDE', $eventArgs)];
+                        [Event CheckboxChanged] = [Action ModifierCheckboxClicked('SIDE', $eventArgs)] "/>
             </StackPanel>
         </Grid>
     </ScrollViewer>

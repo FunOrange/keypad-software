@@ -105,6 +105,7 @@
     <Compile Include="HexadecimalRule.cs" />
     <Compile Include="KeypadSerialPacketReader.cs" />
     <Compile Include="SelectableItem.cs" />
+    <Compile Include="UserControls\BoolArrayEventArgs.cs" />
     <Compile Include="UserControls\KeybindCard.xaml.cs">
       <DependentUpon>KeybindCard.xaml</DependentUpon>
     </Compile>

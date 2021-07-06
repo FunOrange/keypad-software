@@ -14,7 +14,7 @@ namespace KeypadSoftware.ViewModels
 {
     public class KeybindsViewModel : Screen, IKeypadViewModel
     {
-        enum KeypadButton
+        public enum KeypadButton
         {
             None,
             Left,
@@ -73,12 +73,16 @@ namespace KeypadSoftware.ViewModels
                     ret += "Shift + ";
                 if (ModifiersHeld[Key.LeftAlt])
                     ret += "Alt + ";
+                if (ModifiersHeld[Key.LWin])
+                    ret += "Win + ";
                 if (ModifiersHeld[Key.RightCtrl])
                     ret += "RCtrl + ";
                 if (ModifiersHeld[Key.RightShift])
                     ret += "RShift + ";
                 if (ModifiersHeld[Key.RightAlt])
                     ret += "RAlt + ";
+                if (ModifiersHeld[Key.RWin])
+                    ret += "RWin + ";
                 ret += "...";
             }
             else
@@ -90,12 +94,16 @@ namespace KeypadSoftware.ViewModels
                     ret += "Shift + ";
                 if (keybindModifiers[Key.LeftAlt])
                     ret += "Alt + ";
+                if (keybindModifiers[Key.LWin])
+                    ret += "Win + ";
                 if (keybindModifiers[Key.RightCtrl])
                     ret += "RCtrl + ";
                 if (keybindModifiers[Key.RightShift])
                     ret += "RShift + ";
                 if (keybindModifiers[Key.RightAlt])
                     ret += "RAlt + ";
+                if (keybindModifiers[Key.RWin])
+                    ret += "RWin + ";
                 ret += KeyCodeConverter.FromKeyCode(scanCode).DisplayName;
             }
             return ret;
@@ -128,9 +136,11 @@ namespace KeypadSoftware.ViewModels
             ModifiersHeld[Key.LeftCtrl] = false;
             ModifiersHeld[Key.LeftShift] = false;
             ModifiersHeld[Key.LeftAlt] = false;
+            ModifiersHeld[Key.LWin] = false;
             ModifiersHeld[Key.RightCtrl] = false;
             ModifiersHeld[Key.RightShift] = false;
             ModifiersHeld[Key.RightAlt] = false;
+            ModifiersHeld[Key.RWin] = false;
         }
         
         public void KeyDownAnywhere(object sender, KeyEventArgs e) {
@@ -198,92 +208,89 @@ namespace KeypadSoftware.ViewModels
 
         public void ClickAnywhere()
         {
+            // why is this here?
         }
 
-        void BeginEditKeybind(KeypadButton whichButton)
+        
+        // common
+        public void BeginEditKeybind(KeypadButton whichButton)
         {
             buttonBeingEdited = whichButton;
             NotifyAllProperties();
         }
-        void StopEditKeybind(KeypadButton whichButton)
+        public void StopEditKeybind(KeypadButton whichButton)
         {
             if (buttonBeingEdited == whichButton)
                 buttonBeingEdited = KeypadButton.None;
             NotifyAllProperties();
         }
-        void SetKeybind(KeypadButton whichButton, KeybindEventArgs e)
+        public void SetKeybind(KeypadButton whichButton, KeybindEventArgs e)
         {
-
-        }
-
-        // left
-        public void BeginEditLeftKeybind() => BeginEditKeybind(KeypadButton.Left);
-        public void StopEditLeftKeybind() => StopEditKeybind(KeypadButton.Left);
-        public void SetLeftKeybind(KeybindEventArgs e)
-        {
-            Keybinds.LeftButtonScanCode = e.ScanCode;
-            Keybinds.LeftButtonModifiers[Key.LeftCtrl] = e.LeftCtrl;
-            Keybinds.LeftButtonModifiers[Key.LeftShift] = e.LeftShift;
-            Keybinds.LeftButtonModifiers[Key.LeftAlt] = e.LeftAlt;
-            Keybinds.LeftButtonModifiers[Key.RightCtrl] = e.RightCtrl;
-            Keybinds.LeftButtonModifiers[Key.RightShift] = e.RightShift;
-            Keybinds.LeftButtonModifiers[Key.RightAlt] = e.RightAlt;
+            Dictionary<Key, bool> modifiers = null;
+            switch (whichButton)
+            {
+                case KeypadButton.Left:
+                    Keybinds.LeftButtonScanCode = e.ScanCode;
+                    modifiers = Keybinds.LeftButtonModifiers;
+                    break;
+                case KeypadButton.LeftMacro:
+                    Keybinds.LeftMacroScanCode = e.ScanCode;
+                    modifiers = Keybinds.LeftMacroModifiers;
+                    break;
+                case KeypadButton.Right:
+                    Keybinds.RightButtonScanCode = e.ScanCode;
+                    modifiers = Keybinds.RightButtonModifiers;
+                    break;
+                case KeypadButton.RightMacro:
+                    Keybinds.RightMacroScanCode = e.ScanCode;
+                    modifiers = Keybinds.RightMacroModifiers;
+                    break;
+                case KeypadButton.Side:
+                    Keybinds.SideButtonScanCode = e.ScanCode;
+                    modifiers = Keybinds.SideButtonModifiers;
+                    break;
+            }
+            modifiers[Key.LeftCtrl] = e.LeftCtrl;
+            modifiers[Key.LeftShift] = e.LeftShift;
+            modifiers[Key.LeftAlt] = e.LeftAlt;
+            modifiers[Key.LWin] = e.LeftWin;
+            modifiers[Key.RightCtrl] = e.RightCtrl;
+            modifiers[Key.RightShift] = e.RightShift;
+            modifiers[Key.RightAlt] = e.RightAlt;
+            modifiers[Key.RWin] = e.RightWin;
+            if (!Keybinds.PushAllValues())
+                Console.WriteLine("Readback failed");
             NotifyAllProperties();
         }
-
-        // right
-        public void BeginEditRightKeybind() => BeginEditKeybind(KeypadButton.Right);
-        public void StopEditRightKeybind() => StopEditKeybind(KeypadButton.Right);
-        public void SetRightKeybind(KeybindEventArgs e)
+        public void ModifierCheckboxClicked(KeypadButton whichButton, BoolArrayEventArgs e)
         {
-            Keybinds.RightButtonScanCode = e.ScanCode;
-            Keybinds.RightButtonModifiers[Key.LeftCtrl] = e.LeftCtrl;
-            Keybinds.RightButtonModifiers[Key.LeftShift] = e.LeftShift;
-            Keybinds.RightButtonModifiers[Key.LeftAlt] = e.LeftAlt;
-            Keybinds.RightButtonModifiers[Key.RightCtrl] = e.RightCtrl;
-            Keybinds.RightButtonModifiers[Key.RightShift] = e.RightShift;
-            Keybinds.RightButtonModifiers[Key.RightAlt] = e.RightAlt;
-            NotifyAllProperties();
+            // Assign checkbox values to currently held modifiers array
+            ModifiersHeld[Key.LeftCtrl] = e.Value[0];
+            ModifiersHeld[Key.LeftShift] = e.Value[1];
+            ModifiersHeld[Key.LeftAlt] = e.Value[2];
+            ModifiersHeld[Key.LWin] = e.Value[3];
+            ModifiersHeld[Key.RightCtrl] = e.Value[4];
+            ModifiersHeld[Key.RightShift] = e.Value[5];
+            ModifiersHeld[Key.RightAlt] = e.Value[6];
+            ModifiersHeld[Key.RWin] = e.Value[7];
+            // Check if any boxes are checked, then set modifiers being edited to true
+            if (e.Value.All(v => v == false))
+                isEditingModifiers = false;
+            else
+                isEditingModifiers = true;
+            // Start editing this key if not already
+            BeginEditKeybind(whichButton);
         }
-
-        // side
-        public void BeginEditSideKeybind() => BeginEditKeybind(KeypadButton.Side);
-        public void StopEditSideKeybind() => StopEditKeybind(KeypadButton.Side);
-        public void ToggleKeybindLayerButton()
+        
+        // Side button
+        public void ToggleKeybindLayer()
         {
             Keybinds.SideButtonScanCode = 0xff;
+            if (!Keybinds.PushAllValues())
+                Console.WriteLine("Readback failed");
             NotifyAllProperties();
         }
 
-        // left macro
-        public void BeginEditLeftMacro() => BeginEditKeybind(KeypadButton.LeftMacro);
-        public void StopEditLeftMacro() => StopEditKeybind(KeypadButton.LeftMacro);
-        public void SetLeftMacro(KeybindEventArgs e)
-        {
-            Keybinds.LeftMacroScanCode = e.ScanCode;
-            Keybinds.LeftMacroModifiers[Key.LeftCtrl] = e.LeftCtrl;
-            Keybinds.LeftMacroModifiers[Key.LeftShift] = e.LeftShift;
-            Keybinds.LeftMacroModifiers[Key.LeftAlt] = e.LeftAlt;
-            Keybinds.LeftMacroModifiers[Key.RightCtrl] = e.RightCtrl;
-            Keybinds.LeftMacroModifiers[Key.RightShift] = e.RightShift;
-            Keybinds.LeftMacroModifiers[Key.RightAlt] = e.RightAlt;
-            NotifyAllProperties();
-        }
-
-        // right macro
-        public void BeginEditRightMacro() => BeginEditKeybind(KeypadButton.RightMacro);
-        public void StopEditRightMacro() => StopEditKeybind(KeypadButton.RightMacro);
-        public void SetRightMacro(KeybindEventArgs e)
-        {
-            Keybinds.RightMacroScanCode = e.ScanCode;
-            Keybinds.RightMacroModifiers[Key.LeftCtrl] = e.LeftCtrl;
-            Keybinds.RightMacroModifiers[Key.LeftShift] = e.LeftShift;
-            Keybinds.RightMacroModifiers[Key.LeftAlt] = e.LeftAlt;
-            Keybinds.RightMacroModifiers[Key.RightCtrl] = e.RightCtrl;
-            Keybinds.RightMacroModifiers[Key.RightShift] = e.RightShift;
-            Keybinds.RightMacroModifiers[Key.RightAlt] = e.RightAlt;
-            NotifyAllProperties();
-        }
 
 
         public void PullAllValues()

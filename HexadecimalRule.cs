@@ -15,12 +15,14 @@ namespace KeypadSoftware
             string stringValue = (string)value;
             if (stringValue.StartsWith("0x"))
                 stringValue = stringValue.Remove(0, 2);
-            int hexValue = 0;
 
+            if (stringValue.Length == 0)
+                return new ValidationResult(false, "Invalid hex number");
+
+            int hexValue;
             try
             {
-                if (stringValue.Length > 0)
-                    hexValue = int.Parse(stringValue, NumberStyles.HexNumber);
+                hexValue = int.Parse(stringValue, NumberStyles.HexNumber);
             }
             catch (Exception)
             {
