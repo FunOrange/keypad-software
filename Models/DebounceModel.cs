@@ -14,6 +14,8 @@ namespace KeypadSoftware.Models
         public int RightButtonPressDebounceTime { get; set; }
         public int RightButtonReleaseDebounceTime { get; set; }
         public int SideButtonDebounceTime { get; set; }
+        public List<bool> LeftRawInput = new bool[5000].ToList();
+        public List<bool> RightRawInput = new bool[5000].ToList();
 
         KeypadSerial keypad;
 
@@ -53,6 +55,10 @@ namespace KeypadSoftware.Models
             debounceValues[4] = (byte)SideButtonDebounceTime;
         }
 
-        public (List<bool>, List<bool>) ReadRawButtonStateBuffer() => keypad.ReadRawButtonStateBuffer();
+        public (List<bool>, List<bool>) ReadRawButtonStateBuffer()
+        {
+            (LeftRawInput, RightRawInput) = keypad.ReadRawButtonStateBuffer();
+            return (LeftRawInput, RightRawInput);
+        }
     }
 }

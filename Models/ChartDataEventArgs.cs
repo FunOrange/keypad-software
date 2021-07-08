@@ -9,14 +9,16 @@ namespace KeypadSoftware.Models
 {
     public class ChartDataEventArgs : EventArgs
     {
-        public double[] LeftRawInput;
-        public double[] RightRawInput;
-        //public double[] LeftDebouncedInput;
-        //public double[] RightDebouncedInput;
-        public ChartDataEventArgs(double[] leftRawInput, double[] rightRawInput)
+        public double[] LeftRawInputYs;
+        public double[] RightRawInputYs;
+        public double[] LeftDebouncedInputYs;
+        public double[] RightDebouncedInputYs;
+        public ChartDataEventArgs(double[] leftRawInputYs, double[] rightRawInputYs, double[] leftDebouncedInputYs, double[] rightDebouncedInputYs)
         {
-            LeftRawInput = leftRawInput;
-            RightRawInput = rightRawInput;
+            LeftRawInputYs = leftRawInputYs;
+            RightRawInputYs = rightRawInputYs;
+            LeftDebouncedInputYs = leftDebouncedInputYs;
+            RightDebouncedInputYs = rightDebouncedInputYs;
         }
     }
 }

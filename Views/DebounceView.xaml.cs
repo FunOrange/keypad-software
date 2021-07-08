@@ -33,27 +33,38 @@ namespace KeypadSoftware.Views
             SignalView.Configuration.Quality = ScottPlot.Control.QualityMode.High;
             SignalView.Plot.Frame(false);
             SignalView.Plot.SetViewLimits(0, 5000);
+            SignalView.Plot.Layout(padding: 0);
 
             double[] xs = DataGen.Range(0, 5000, 1);
 
-            // left button
+            // left button (raw) line
             double[] leftButtonData = DataGen.Random( new Random(), pointCount: 5000, multiplier: 0, offset: 1.25 );
             var leftSignalPlot = SignalView.Plot.AddSignal(leftButtonData);
-            SignalView.Plot.PlotFill(xs, leftButtonData, baseline: 1.25, fillColor: System.Drawing.Color.FromArgb(70, 20, 20, 200));
             leftSignalPlot.MarkerSize = 1;
+            leftSignalPlot.Color = System.Drawing.Color.FromArgb(140, 103, 58, 183);
+            // left button (debounced)
+            var leftDebouncedSignalPlot = SignalView.Plot.AddSignal(leftButtonData);
+            leftDebouncedSignalPlot.MarkerSize = 1;
+            leftDebouncedSignalPlot.LineWidth = 3;
+            leftDebouncedSignalPlot.Color = System.Drawing.Color.FromArgb(103, 58, 183);
 
-            // right button
+
+            // right button (raw) line
             double[] rightButtonData = DataGen.Random( new Random(), pointCount: 5000, multiplier: 0, offset: 0 );
             var rightSignalPlot = SignalView.Plot.AddSignal(rightButtonData);
-            SignalView.Plot.PlotFill(xs, rightButtonData, baseline: 0, fillColor: System.Drawing.Color.FromArgb(70, 200, 20, 20));
             rightSignalPlot.MarkerSize = 1;
+            rightSignalPlot.Color = System.Drawing.Color.FromArgb(140, 255, 109, 0);
+            // right button (debounced)
+            var rightDebouncedSignalPlot = SignalView.Plot.AddSignal(rightButtonData);
+            rightDebouncedSignalPlot.MarkerSize = 1;
+            rightDebouncedSignalPlot.LineWidth = 3;
+            rightDebouncedSignalPlot.Color = System.Drawing.Color.FromArgb(255, 109, 0);
 
             // X Axis
             SignalView.Plot.XAxis.MinimumTickSpacing(1);
             SignalView.Plot.XAxis.Label("Milliseconds");
 
             // Y Axis
-            //SignalView.Plot.YAxis.Ticks(false);
             SignalView.Plot.YAxis.Grid(false);
             double[] ys = new double[] { 0, 1, 1.25, 2.25 };
             string[] ylabels = new string[] { "released", "pressed", "released", "pressed" };
@@ -64,15 +75,27 @@ namespace KeypadSoftware.Views
 
         private void UpdateChart(object sender, ChartDataEventArgs e)
         {
-            var leftRawInputPlot = (SignalPlot)SignalView.Plot.GetPlottables()[0];
-            leftRawInputPlot.Ys = e.LeftRawInput;
-            var leftRawInputFill = (ScottPlot.Plottable.Polygon)SignalView.Plot.GetPlottables()[1];
-            leftRawInputPlot.Ys.CopyTo(leftRawInputFill.Ys, 1);
+            if (e.LeftRawInputYs != null)
+            {
+                var leftRawInputPlot = (SignalPlot)SignalView.Plot.GetPlottables()[0];
+                leftRawInputPlot.Ys = e.LeftRawInputYs;
+            }
+            if (e.LeftDebouncedInputYs != null)
+            {
+                var leftDebouncedInputPlot = (SignalPlot)SignalView.Plot.GetPlottables()[1];
+                leftDebouncedInputPlot.Ys = e.LeftDebouncedInputYs;
+            }
 
-            var rightRawInputPlot = (SignalPlot)SignalView.Plot.GetPlottables()[2];
-            rightRawInputPlot.Ys = e.RightRawInput;
-            var rightRawInputFill = (ScottPlot.Plottable.Polygon)SignalView.Plot.GetPlottables()[1];
-            rightRawInputPlot.Ys.CopyTo(rightRawInputFill.Ys, 1);
+            if (e.RightRawInputYs != null)
+            {
+                var rightRawInputPlot = (SignalPlot)SignalView.Plot.GetPlottables()[2];
+                rightRawInputPlot.Ys = e.RightRawInputYs;
+            }
+            if (e.RightDebouncedInputYs != null)
+            {
+                var rightDebouncedInputPlot = (SignalPlot)SignalView.Plot.GetPlottables()[3];
+                rightDebouncedInputPlot.Ys = e.RightDebouncedInputYs;
+            }
 
             SignalView.Render();
         }

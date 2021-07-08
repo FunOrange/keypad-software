@@ -23,8 +23,9 @@ namespace KeypadSoftware.ViewModels
             PushAllValues();
         }
 
-        #region View Properties
         public DebounceModel Debounce;
+
+        #region View Properties
         public int LeftButtonPressDebounceTime
         {
             get { return Debounce.LeftButtonPressDebounceTime; }
@@ -32,6 +33,7 @@ namespace KeypadSoftware.ViewModels
                 Debounce.LeftButtonPressDebounceTime = value.Clamp(0, 255);
                 NotifyOfPropertyChange(() => LeftButtonPressDebounceTimeString);
                 RestartWriteTimer();
+                UpdateChartDebounceOnly();
             }
         }
         public string LeftButtonPressDebounceTimeString
@@ -44,6 +46,7 @@ namespace KeypadSoftware.ViewModels
                     Debounce.LeftButtonPressDebounceTime = parsedValue.Clamp(0, 255);
                     NotifyOfPropertyChange(() => LeftButtonPressDebounceTime);
                     RestartWriteTimer();
+                    UpdateChartDebounceOnly();
                 }
             }
         }
@@ -55,6 +58,7 @@ namespace KeypadSoftware.ViewModels
                 Debounce.LeftButtonReleaseDebounceTime = value.Clamp(0, 255);
                 NotifyOfPropertyChange(() => LeftButtonReleaseDebounceTimeString);
                 RestartWriteTimer();
+                UpdateChartDebounceOnly();
             }
         }
         public string LeftButtonReleaseDebounceTimeString
@@ -67,6 +71,7 @@ namespace KeypadSoftware.ViewModels
                     Debounce.LeftButtonReleaseDebounceTime = parsedValue.Clamp(0, 255);
                     NotifyOfPropertyChange(() => LeftButtonReleaseDebounceTime);
                     RestartWriteTimer();
+                    UpdateChartDebounceOnly();
                 }
             }
         }
@@ -78,6 +83,7 @@ namespace KeypadSoftware.ViewModels
                 Debounce.RightButtonPressDebounceTime = value.Clamp(0, 255);
                 NotifyOfPropertyChange(() => RightButtonPressDebounceTimeString);
                 RestartWriteTimer();
+                UpdateChartDebounceOnly();
             }
         }
         public string RightButtonPressDebounceTimeString
@@ -90,6 +96,7 @@ namespace KeypadSoftware.ViewModels
                     Debounce.RightButtonPressDebounceTime = parsedValue.Clamp(0, 255);
                     NotifyOfPropertyChange(() => RightButtonPressDebounceTime);
                     RestartWriteTimer();
+                    UpdateChartDebounceOnly();
                 }
             }
         }
@@ -101,6 +108,7 @@ namespace KeypadSoftware.ViewModels
                 Debounce.RightButtonReleaseDebounceTime = value.Clamp(0, 255);
                 NotifyOfPropertyChange(() => RightButtonReleaseDebounceTimeString);
                 RestartWriteTimer();
+                UpdateChartDebounceOnly();
             }
         }
         public string RightButtonReleaseDebounceTimeString
@@ -113,6 +121,7 @@ namespace KeypadSoftware.ViewModels
                     Debounce.RightButtonReleaseDebounceTime = parsedValue.Clamp(0, 255);
                     NotifyOfPropertyChange(() => RightButtonReleaseDebounceTime);
                     RestartWriteTimer();
+                    UpdateChartDebounceOnly();
                 }
             }
         }
@@ -124,6 +133,7 @@ namespace KeypadSoftware.ViewModels
                 Debounce.SideButtonDebounceTime = value.Clamp(0, 255);
                 NotifyOfPropertyChange(() => SideButtonDebounceTimeString);
                 RestartWriteTimer();
+                UpdateChartDebounceOnly();
             }
         }
         public string SideButtonDebounceTimeString
@@ -136,10 +146,24 @@ namespace KeypadSoftware.ViewModels
                     Debounce.SideButtonDebounceTime = parsedValue.Clamp(0, 255);
                     NotifyOfPropertyChange(() => SideButtonDebounceTime);
                     RestartWriteTimer();
+                    UpdateChartDebounceOnly();
                 }
             }
         }
         #endregion
+        void NotifyAllProperties()
+        {
+            NotifyOfPropertyChange(() => LeftButtonPressDebounceTime);
+            NotifyOfPropertyChange(() => LeftButtonPressDebounceTimeString);
+            NotifyOfPropertyChange(() => LeftButtonReleaseDebounceTime);
+            NotifyOfPropertyChange(() => LeftButtonReleaseDebounceTimeString);
+            NotifyOfPropertyChange(() => RightButtonPressDebounceTime);
+            NotifyOfPropertyChange(() => RightButtonPressDebounceTimeString);
+            NotifyOfPropertyChange(() => RightButtonReleaseDebounceTime);
+            NotifyOfPropertyChange(() => RightButtonReleaseDebounceTimeString);
+            NotifyOfPropertyChange(() => SideButtonDebounceTime);
+            NotifyOfPropertyChange(() => SideButtonDebounceTimeString);
+        }
 
         public DebounceViewModel(KeypadSerial keypad)
         {
@@ -152,23 +176,110 @@ namespace KeypadSoftware.ViewModels
 
         public void Capture()
         {
-            // Update chart with new values
+            // Read raw input state buffer from keypad
             var (left, right) = Debounce.ReadRawButtonStateBuffer();
-            var leftRawInputData = left.Select(x => x ? 1 : 0).Select(x => x + 1.25).ToArray();
-            var rightRawInputData = right.Select(x => x ? 1 : 0).Select(x => (double)x).ToArray();
-            PlotEventPasserThing.RaiseChartDataUpdatedEvent(this, new ChartDataEventArgs( leftRawInputData, rightRawInputData ));
+            // Update chart with new values
+            UpdateChart(left, right);
+        }
+        public void Random()
+        {
+            // Update chart with new values
+            var rand = new Random();
+            var left = new bool[5000].Select(_ => rand.Next(20) == 0).ToList();
+            var right = new bool[5000].Select(_ => rand.Next(20) == 0).ToList();
+            Debounce.LeftRawInput = left;
+            Debounce.RightRawInput = right;
+            UpdateChart(left, right);
+        }
+        void UpdateChartDebounceOnly()
+        {
+            // Use last read data
+            var left = Debounce.LeftRawInput;
+            var right = Debounce.RightRawInput;
+            UpdateChart(left, right);
         }
 
-        private double[] CreateDebouncedInputPlot(IEnumerable<bool> data, int pressDebounceMs, int releaseDebounceMs)
+        void UpdateChart(IEnumerable<bool> left, IEnumerable<bool> right)
         {
-            return new double[0];
+            // left
+            double[] leftRawInputYs = left.Select(x => x ? 2.25 : 1.25).ToArray();
+            double[] leftDebouncedInputYs =
+                CreateDebouncedInput(left, Debounce.LeftButtonPressDebounceTime, Debounce.LeftButtonReleaseDebounceTime)
+                .Select(x => x ? 2.25 : 1.25)
+                .ToArray();
+
+            // right
+            double[] rightRawInputYs = right.Select(x => x ? 1.0 : 0.0).ToArray();
+            double[] rightDebouncedInputYs =
+                CreateDebouncedInput(right, Debounce.RightButtonPressDebounceTime, Debounce.RightButtonReleaseDebounceTime)
+                .Select(x => x ? 1.0 : 0.0)
+                .ToArray();
+
+            // chart update event
+            var eventArgs = new ChartDataEventArgs(leftRawInputYs, rightRawInputYs, leftDebouncedInputYs, rightDebouncedInputYs);
+            PlotEventPasserThing.RaiseChartDataUpdatedEvent(this, eventArgs);
+        }
+
+
+
+        private bool[] CreateDebouncedInput(IEnumerable<bool> data, int pressDebounceMs, int releaseDebounceMs)
+        {
+            var debouncedData = new List<bool>();
+
+            // state variables
+            bool currentDebouncedState = false;
+            int transitionStability = 0;
+
+
+            foreach (bool state in data)
+            {
+                // if transition detected
+                if (state != currentDebouncedState)
+                {
+                    // if false -> true (press transition)
+                    if (currentDebouncedState == false)
+                    {
+                        if (transitionStability++ == pressDebounceMs)
+                        {
+                            // key pressed event
+                            currentDebouncedState = true;
+                            transitionStability = 0;
+                        }
+                    }
+                    // if true -> false (release transition)
+                    else if (currentDebouncedState == true)
+                    {
+                        // debounced status is true (pressed), looking at release transition
+                        if (transitionStability++ == releaseDebounceMs)
+                        {
+                            // key released event
+                            currentDebouncedState = false;
+                            transitionStability = 0;
+                        }
+                    }
+                }
+                // no button state change, or bounce occurred while transitioning between states
+                else
+                {
+                    if (transitionStability > 0)
+                    {
+                        // bounce event
+                    }
+                    transitionStability = 0;
+                }
+                debouncedData.Add(currentDebouncedState);
+            }
+            return debouncedData.ToArray();
         }
 
         public void PullAllValues()
         {
+            Debounce.PullAllValues();
+            NotifyAllProperties();
         }
         public void PushAllValues()
         {
+            Debounce.PushAllValues();
         }
     }
 }

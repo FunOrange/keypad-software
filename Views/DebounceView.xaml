@@ -132,7 +132,7 @@
             </materialDesign:Card>
         </StackPanel>
 
-        <materialDesign:Card Grid.Column="1" Padding="20, 14, 20, 20" Margin="0, 16, 16, 16">
+        <materialDesign:Card Grid.Column="1" Padding="00, 14, 20, 8" Margin="0, 16, 16, 16">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -142,18 +142,26 @@
 
                 <TextBlock
                     Grid.Row="0"
-                    Margin="5, 0"
+                    Margin="25, 0"
                     Style="{DynamicResource MaterialDesignHeadline5TextBlock}"
                     Text="Signal Analyzer"/>
-                <Button
-                    x:Name="Capture"
-                    Grid.Row="1"
-                    HorizontalAlignment="Left"
-                    Width="136"
-                    Height="40"
-                    Margin="5, 10"
-                    FontSize="16"
-                    Content="Capture"/>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Button
+                        x:Name="Capture"
+                        Content="Capture"
+                        Width="136"
+                        Height="40"
+                        Margin="25, 10, 15, 10"
+                        FontSize="16"/>
+                    <Button
+                        x:Name="Random"
+                        Content="Random"
+                        Grid.Row="1"
+                        Width="136"
+                        Height="40"
+                        Margin="0, 10"
+                        FontSize="16" />
+                </StackPanel>
                 <WpfPlot
                   x:Name="SignalView"
                   Grid.Row="2"/>
