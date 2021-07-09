@@ -23,6 +23,7 @@ namespace KeypadSoftware.Views
     /// </summary>
     public partial class DebounceView : UserControl
     {
+        private const double COUNTER_VISIBLE_THRESHOLD = 45;
         public DebounceView()
         {
             InitializeComponent();
@@ -40,11 +41,11 @@ namespace KeypadSoftware.Views
             // left button (raw) line
             double[] leftButtonData = DataGen.Random( new Random(), pointCount: 5000, multiplier: 0, offset: 1.25 );
             var leftSignalPlot = SignalView.Plot.AddSignal(leftButtonData);
-            leftSignalPlot.MarkerSize = 1;
+            leftSignalPlot.MarkerSize = 4;
             leftSignalPlot.Color = System.Drawing.Color.FromArgb(140, 103, 58, 183);
             // left button (debounced)
             var leftDebouncedSignalPlot = SignalView.Plot.AddSignal(leftButtonData);
-            leftDebouncedSignalPlot.MarkerSize = 1;
+            leftDebouncedSignalPlot.MarkerSize = 4;
             leftDebouncedSignalPlot.LineWidth = 3;
             leftDebouncedSignalPlot.Color = System.Drawing.Color.FromArgb(103, 58, 183);
 
@@ -52,11 +53,11 @@ namespace KeypadSoftware.Views
             // right button (raw) line
             double[] rightButtonData = DataGen.Random( new Random(), pointCount: 5000, multiplier: 0, offset: 0 );
             var rightSignalPlot = SignalView.Plot.AddSignal(rightButtonData);
-            rightSignalPlot.MarkerSize = 1;
+            rightSignalPlot.MarkerSize = 4;
             rightSignalPlot.Color = System.Drawing.Color.FromArgb(140, 255, 109, 0);
             // right button (debounced)
             var rightDebouncedSignalPlot = SignalView.Plot.AddSignal(rightButtonData);
-            rightDebouncedSignalPlot.MarkerSize = 1;
+            rightDebouncedSignalPlot.MarkerSize = 4;
             rightDebouncedSignalPlot.LineWidth = 3;
             rightDebouncedSignalPlot.Color = System.Drawing.Color.FromArgb(255, 109, 0);
 
@@ -97,7 +98,106 @@ namespace KeypadSoftware.Views
                 rightDebouncedInputPlot.Ys = e.RightDebouncedInputYs;
             }
 
+            countersPlotted = new bool[5000];
+            // clear all text
+            var allText = SignalView.Plot.GetPlottables().Where((plot) => plot.GetType() == typeof(Text));
+            foreach (IPlottable text in allText)
+                SignalView.Plot.Remove(text);
+            countersPlotted = new bool[5000];
+            if (SignalView.Plot.GetAxisLimits().XSpan < COUNTER_VISIBLE_THRESHOLD)
+                PlotCounters();
+
             SignalView.Render();
+        }
+
+        bool[] countersPlotted = new bool[5000];
+        private void PlotCounters()
+        {
+            IPlottable[] plots = SignalView.Plot.GetPlottables();
+            double[] leftRawInputPlot = ((SignalPlot)plots[0]).Ys;
+            double[] leftDebouncedInputPlot = ((SignalPlot)plots[1]).Ys;
+            double[] rightRawInputPlot = ((SignalPlot)plots[2]).Ys;
+            double[] rightDebouncedInputPlot = ((SignalPlot)plots[3]).Ys;
+            int pointCount = leftRawInputPlot.Length;
+
+            double xmin = SignalView.Plot.GetAxisLimits().XMin;
+            double xmax = SignalView.Plot.GetAxisLimits().XMax;
+            // Work out transition stability counters
+            int transitionStabilityCounter = 0;
+            double previousRawY = 0;
+            for (int x = 0; x < pointCount; x++) {
+                double rawy = leftRawInputPlot[x];
+                double deby = leftDebouncedInputPlot[x];
+                if (rawy != deby)
+                {
+                    if (x > xmin && x < xmax && !countersPlotted[x])
+                    {
+                        countersPlotted[x] = true;
+                        Text text = SignalView.Plot.AddText(transitionStabilityCounter.ToString(), x, rawy);
+                        text.Alignment = (rawy > (1.25 + 2.25) / 2) ? Alignment.LowerCenter : Alignment.UpperCenter;
+                        text.Color = System.Drawing.Color.FromArgb(103, 58, 183);
+                    }
+                    transitionStabilityCounter++;
+                }
+                else if (transitionStabilityCounter > 0 && previousRawY == rawy)
+                {
+                    if (x > xmin && x < xmax && !countersPlotted[x])
+                    {
+                        countersPlotted[x] = true;
+                        Text text = SignalView.Plot.AddText(transitionStabilityCounter.ToString() + "!", x, rawy);
+                        text.Alignment = (rawy > (1.25 + 2.25) / 2) ? Alignment.LowerCenter : Alignment.UpperCenter;
+                        text.Color = System.Drawing.Color.FromArgb(103, 58, 183);
+                    }
+                    transitionStabilityCounter = 0;
+                }
+                else
+                    transitionStabilityCounter = 0;
+                previousRawY = rawy;
+            }
+            for (int x = 0; x < pointCount; x++) {
+                double rawy = rightRawInputPlot[x];
+                double deby = rightDebouncedInputPlot[x];
+                if (rawy != deby)
+                {
+                    if (x > xmin && x < xmax && !countersPlotted[x])
+                    {
+                        countersPlotted[x] = true;
+                        Text text = SignalView.Plot.AddText(transitionStabilityCounter.ToString(), x, rawy);
+                        text.Alignment = (rawy > 0.5) ? Alignment.LowerCenter : Alignment.UpperCenter;
+                        text.Color = System.Drawing.Color.FromArgb(255, 109, 0);
+                    }
+                    transitionStabilityCounter++;
+                }
+                else if (transitionStabilityCounter > 0 && previousRawY == rawy)
+                {
+                    if (x > xmin && x < xmax && !countersPlotted[x])
+                    {
+                        countersPlotted[x] = true;
+                        Text text = SignalView.Plot.AddText(transitionStabilityCounter.ToString() + "!", x, rawy);
+                        text.Alignment = (rawy > 0.5) ? Alignment.LowerCenter : Alignment.UpperCenter;
+                        text.Color = System.Drawing.Color.FromArgb(255, 109, 0);
+                    }
+                    transitionStabilityCounter = 0;
+                }
+                else
+                    transitionStabilityCounter = 0;
+                previousRawY = rawy;
+            }
+        }
+
+        private void SignalView_AxesChanged(object sender, EventArgs e)
+        {
+            // Check if zoom level is at the level where counters are visible
+            if (SignalView.Plot.GetAxisLimits().XSpan < COUNTER_VISIBLE_THRESHOLD)
+                PlotCounters();
+            else
+            {
+                // clear all text
+                var allText = SignalView.Plot.GetPlottables().Where((plot) => plot.GetType() == typeof(Text));
+                foreach (IPlottable text in allText)
+                    SignalView.Plot.Remove(text);
+                countersPlotted = new bool[5000];
+            }
         }
     }
 }

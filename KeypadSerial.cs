@@ -190,12 +190,8 @@ namespace KeypadSoftware
                 SerialPort testPort = new SerialPort(portName, 9600);
                 testPort.ReadTimeout = 500;
                 testPort.Open();
-#if USING_KEYPAD_SERIAL_PACKET_PROTOCOL
                 byte[] handShakePacket = KeypadSerialPacket.CreateEmptyPacket(KeypadSerialPacket.KEYPAD_PACKET_ID_HEARTBEAT);
                 testPort.Write(handShakePacket, 0, handShakePacket.Length);
-#else
-                testPort.WriteLine("fun");
-#endif
                 try
                 {
                     string response = testPort.ReadLine();
