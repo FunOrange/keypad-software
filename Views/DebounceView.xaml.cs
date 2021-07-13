@@ -3,6 +3,7 @@ using ScottPlot;
 using ScottPlot.Plottable;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -198,6 +199,12 @@ namespace KeypadSoftware.Views
                     SignalView.Plot.Remove(text);
                 countersPlotted = new bool[5000];
             }
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

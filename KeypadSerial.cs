@@ -19,11 +19,7 @@ namespace KeypadSoftware
     public class KeypadSerial
     {
         // state variables
-#if NO_KEYPAD
-        private VirtualSerialPort keypadPort;
-#else
         private SerialPort keypadPort;
-#endif
 
         KeypadSerialPacketReader PacketReader = new KeypadSerialPacketReader();
 
@@ -157,11 +153,7 @@ namespace KeypadSoftware
                 return;
             }
             Console.Write($"Trying port {port}... ");
-#if NO_KEYPAD
-            VirtualSerialPort result = TryHandShake(port);
-#else
             SerialPort result = TryHandShake(port);
-#endif
             if (result != null)
             {
                 keypadPort = result;
@@ -179,11 +171,7 @@ namespace KeypadSoftware
 
         // Tries to send a handshake packet to the COM Port. If the keypad responds, then return the SerialPort object.
         // Otherwise, return null on failure;
-#if NO_KEYPAD
-        private VirtualSerialPort TryHandShake(string portName)
-#else
         private SerialPort TryHandShake(string portName)
-#endif
         {
             try
             {
@@ -198,11 +186,7 @@ namespace KeypadSoftware
                     if (response == "orange")
                     {
                         Console.WriteLine("handshake success!");
-#if NO_KEYPAD
-                        return new VirtualSerialPort(testPort);
-#else
                         return testPort;
-#endif
                     }
                     else
                     {

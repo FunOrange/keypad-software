@@ -29,7 +29,7 @@
                                 Grid.Column="0"
                                 Margin="0, 0, 14, 0"
                                 VerticalAlignment="Center"
-                                Maximum="50" SmallChange="1" />
+                                Maximum="20" SmallChange="1" />
                         <TextBox Text="{Binding Path=LeftButtonPressDebounceTimeString, UpdateSourceTrigger=PropertyChanged}"
                                  ks:SelectTextOnFocus.Active="True" 
                                  Grid.Column="1"
@@ -48,7 +48,7 @@
                         VerticalAlignment="Center"
                         Grid.Column="0"
                         Margin="0, 0, 14, 0"
-                        Maximum="50" />
+                        Maximum="20" />
                         <TextBox Text="{Binding Path=LeftButtonReleaseDebounceTimeString, UpdateSourceTrigger=PropertyChanged}"
                          ks:SelectTextOnFocus.Active="True" 
                          Grid.Column="1"
@@ -75,7 +75,7 @@
                                 VerticalAlignment="Center"
                                 Grid.Column="0"
                                 Margin="0, 0, 14, 0"
-                                Maximum="50" SmallChange="1" />
+                                Maximum="20" SmallChange="1" />
                         <TextBox Text="{Binding Path=RightButtonPressDebounceTimeString, UpdateSourceTrigger=PropertyChanged}"
                                  ks:SelectTextOnFocus.Active="True" 
                                  CaretBrush="{DynamicResource SecondaryHueMidBrush}"
@@ -97,7 +97,7 @@
                             Foreground="{DynamicResource SecondaryHueMidBrush}"
                             Grid.Column="0"
                             Margin="0, 0, 14, 0"
-                            Maximum="50" />
+                            Maximum="20" />
                         <TextBox Text="{Binding Path=RightButtonReleaseDebounceTimeString, UpdateSourceTrigger=PropertyChanged}"
                             ks:SelectTextOnFocus.Active="True"
                             CaretBrush="{DynamicResource SecondaryHueMidBrush}"
@@ -146,11 +146,30 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock
-                    Grid.Row="0"
-                    Margin="25, 0"
-                    Style="{DynamicResource MaterialDesignHeadline5TextBlock}"
-                    Text="Signal Analyzer"/>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <TextBlock
+                        Margin="25, 0, 18, 0"
+                        Style="{DynamicResource MaterialDesignHeadline5TextBlock}"
+                        VerticalAlignment="Center"
+                        Text="Signal Analyzer"/>
+                    <!-- Info -->
+                    <materialDesign:Card
+                        Margin="4"
+                        Padding="8"
+                        UniformCornerRadius="6"
+                        HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="InformationCircleOutline"/>
+                            <TextBlock Margin="6, 0">           
+                                <Hyperlink
+                                    NavigateUri="https://gist.github.com/MightyPork/6da26e382a7ad91b5496ee55fdc73db2"
+                                    RequestNavigate="Hyperlink_RequestNavigate">
+                                    <TextBlock Text="What is this?" />
+                                </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </StackPanel>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

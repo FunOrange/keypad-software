@@ -168,7 +168,7 @@ namespace KeypadSoftware.ViewModels
         public DebounceViewModel(KeypadSerial keypad)
         {
             Debounce = new DebounceModel(keypad);
-            writeValuesTimer = new Timer(1000);
+            writeValuesTimer = new Timer(500);
             writeValuesTimer.Elapsed += WriteValuesTimerElapsed;
             writeValuesTimer.AutoReset = false;
             writeValuesTimer.Enabled = false;
@@ -181,16 +181,54 @@ namespace KeypadSoftware.ViewModels
             // Update chart with new values
             UpdateChart(left, right);
         }
+
+        static int pulseWidthMin = 115;
+        static int pulseWidthMax = 125;
+        static int bounceDurationMin = 2;
+        static int bounceDurationMax = 10;
+        static double bounceProbability = 0.5;
+        bool leftTrueState = true;
+        bool rightTrueState = true;
         public void Random()
         {
             // Update chart with new values
-            var rand = new Random();
-            var left = new bool[5000].Select(_ => rand.Next(20) == 0).ToList();
-            var right = new bool[5000].Select(_ => rand.Next(20) == 0).ToList();
-            Debounce.LeftRawInput = left;
-            Debounce.RightRawInput = right;
-            UpdateChart(left, right);
+            Debounce.LeftRawInput = GenerateRandomInput().ToList();
+            Debounce.RightRawInput = GenerateRandomInput(false).ToList();
+            UpdateChart(Debounce.LeftRawInput, Debounce.RightRawInput);
         }
+
+        bool[] GenerateRandomInput(bool initialState = true)
+        {
+            bool[] rawInput = new bool[5000];
+            var rand = new Random();
+            bool trueInput = initialState;
+            int pulseProgress = 0;
+            int currentBounceDuration = 0;
+            for (int t = 0; t < 5000; t++)
+            {
+                if (pulseProgress == 0)
+                {
+                    trueInput = !trueInput;
+                    pulseProgress = rand.Next(pulseWidthMin, pulseWidthMax);
+                    currentBounceDuration = rand.Next(bounceDurationMin, bounceDurationMax);
+                }
+                else if (pulseProgress < currentBounceDuration)
+                {
+                    if (rand.NextDouble() < bounceProbability)
+                        rawInput[t] = !trueInput;
+                    else
+                        rawInput[t] = trueInput;
+                }
+                else
+                {
+                    rawInput[t] = trueInput;
+                }
+
+                pulseProgress--;
+            }
+            return rawInput;
+        }
+
         void UpdateChartDebounceOnly()
         {
             // Use last read data
