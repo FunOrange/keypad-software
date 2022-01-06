@@ -217,11 +217,11 @@
                             </StackPanel>
                             <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="10, 2, 0, 10">
                                 <materialDesign:PackIcon Kind="Circle" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
-                                <TextBlock Margin="6, 0, 0, 0">Debounced Input (Left)</TextBlock>
+                                <TextBlock Margin="6, 0, 0, 0">Registered Input (Left)</TextBlock>
                             </StackPanel>
                             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="8, 2, 8, 10">
                                 <materialDesign:PackIcon Kind="Circle" Foreground="{DynamicResource SecondaryHueMidBrush}"/>
-                                <TextBlock Margin="6, 0, 0, 0">Debounced Input (Right)</TextBlock>
+                                <TextBlock Margin="6, 0, 0, 0">Registered Input (Right)</TextBlock>
                             </StackPanel>
                         </Grid>
                     </materialDesign:Card>

@@ -9,7 +9,6 @@
         Title="FunOrange Keypad Software" Width="1280" Height="720"
         cal:Message.Attach="
             [Event Loaded] = [Action Window_Loaded($eventArgs)];
-            [Event PreviewMouseDown] = [Action ClickAnywhere()];
             [Event PreviewKeyDown] = [Action KeyDownAnywhere($this,$eventArgs)];
             [Event PreviewKeyUp] = [Action KeyUpAnywhere($this,$eventArgs)]">
     <Grid>

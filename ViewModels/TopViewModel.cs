@@ -79,10 +79,6 @@ namespace KeypadSoftware.Views
         }
         #endregion
 
-        public void ClickAnywhere()
-        {
-            keybindsVm?.ClickAnywhere();
-        }
         public void KeyDownAnywhere(object sender, KeyEventArgs e)
         {
             keybindsVm?.KeyDownAnywhere(sender, e);
@@ -95,7 +91,7 @@ namespace KeypadSoftware.Views
         public TopViewModel()
         {
             Keypad = new KeypadSerial();
-            CurrentPage = Page.Debounce;
+            CurrentPage = Page.Keybinds;
             keybindsVm = new KeybindsViewModel(Keypad);
             countersVm = new CountersViewModel(Keypad);
             debounceVm = new DebounceViewModel(Keypad);

@@ -29,6 +29,7 @@ namespace KeypadSoftware.UserControls
             InitializeComponent();
         }
 
+
         #region Properties
         public string HeaderColour
         {
@@ -38,13 +39,13 @@ namespace KeypadSoftware.UserControls
         public static readonly DependencyProperty HeaderColourProperty =
             DependencyProperty.Register("HeaderColour", typeof(string), typeof(KeybindCard), new PropertyMetadata("PrimaryMid"));
 
-        public string HasKeybindLayerToggleButton
+        public string HasLedToggleButton
         {
-            get { return (string)GetValue(HasKeybindLayerToggleButtonProperty); }
-            set { SetValue(HasKeybindLayerToggleButtonProperty, value); }
+            get { return (string)GetValue(HasLedToggleButtonProperty); }
+            set { SetValue(HasLedToggleButtonProperty, value); }
         }
-        public static readonly DependencyProperty HasKeybindLayerToggleButtonProperty =
-            DependencyProperty.Register("HasKeybindLayerToggleButton", typeof(bool), typeof(KeybindCard), new PropertyMetadata(false));
+        public static readonly DependencyProperty HasLedToggleButtonProperty =
+            DependencyProperty.Register("HasLedToggleButton", typeof(bool), typeof(KeybindCard), new PropertyMetadata(false));
 
         public string KeybindText
         {
@@ -64,8 +65,10 @@ namespace KeypadSoftware.UserControls
             DependencyProperty.Register("HeaderText", typeof(string), typeof(KeybindCard), new PropertyMetadata(""));
         #endregion
 
+
+        public event EventHandler BeginEditKeybind;
         public event EventHandler KeybindSet;
-        public event EventHandler KeybindLayerToggleClick;
+        public event EventHandler LedToggleClick;
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -78,16 +81,6 @@ namespace KeypadSoftware.UserControls
                 return;
 
             InputTextbox.Text = "";
-            // Clear checkboxes
-            Checkbox0.IsChecked = false;
-            Checkbox1.IsChecked = false;
-            Checkbox2.IsChecked = false;
-            Checkbox3.IsChecked = false;
-            Checkbox4.IsChecked = false;
-            Checkbox5.IsChecked = false;
-            Checkbox6.IsChecked = false;
-            Checkbox7.IsChecked = false;
-            NotifyCheckboxChanged();
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -98,34 +91,6 @@ namespace KeypadSoftware.UserControls
 
         #region Click Event Handlers
 
-        private void VolumeMinus_Click(object sender, EventArgs e)
-        {
-            KeybindSet?.Invoke(this, new KeybindEventArgs(0xee));
-        }
-        private void VolumePlus_Click(object sender, EventArgs e)
-        {
-            KeybindSet?.Invoke(this, new KeybindEventArgs(0xed));
-        }
-        private void SkipPrevious_Click(object sender, EventArgs e)
-        {
-            KeybindSet?.Invoke(this, new KeybindEventArgs(0xf1));
-        }
-        private void SkipNext_Click(object sender, EventArgs e)
-        {
-            KeybindSet?.Invoke(this, new KeybindEventArgs(0xf2));
-        }
-        private void PlayPause_Click(object sender, EventArgs e)
-        {
-            KeybindSet?.Invoke(this, new KeybindEventArgs(0xe8));
-        }
-        private void SplitLeft_Click(object sender, EventArgs e)
-        {
-            KeybindSet?.Invoke(this, new KeybindEventArgs(0x50, leftWin: true));
-        }
-        private void SplitRight_Click(object sender, EventArgs e)
-        {
-            KeybindSet?.Invoke(this, new KeybindEventArgs(0x4f, leftWin: true));
-        }
         private void Apply_Click(object sender, EventArgs e)
         {
             string hexString = CustomScancode.Text;
@@ -136,53 +101,9 @@ namespace KeypadSoftware.UserControls
 
             byte hexValue = (byte)int.Parse(hexString, NumberStyles.HexNumber);
             
-            KeybindSet?.Invoke(this, new KeybindEventArgs(
-                hexValue,
-                leftCtrl: (bool)Checkbox0.IsChecked,
-                leftShift: (bool)Checkbox1.IsChecked,
-                leftAlt: (bool)Checkbox2.IsChecked,
-                leftWin: (bool)Checkbox3.IsChecked,
-                rightCtrl: (bool)Checkbox4.IsChecked,
-                rightShift: (bool)Checkbox5.IsChecked,
-                rightAlt: (bool)Checkbox6.IsChecked,
-                rightWin: (bool)Checkbox7.IsChecked
-            ));
-
-            // Clear checkboxes
-            Checkbox0.IsChecked = false;
-            Checkbox1.IsChecked = false;
-            Checkbox2.IsChecked = false;
-            Checkbox3.IsChecked = false;
-            Checkbox4.IsChecked = false;
-            Checkbox5.IsChecked = false;
-            Checkbox6.IsChecked = false;
-            Checkbox7.IsChecked = false;
-            NotifyCheckboxChanged();
+            KeybindSet?.Invoke(this, new KeybindEventArgs(hexValue));
         }
         #endregion
-
-        public event EventHandler CheckboxChanged;
-        public void CheckboxClicked(object sender, EventArgs e)
-        {
-            NotifyCheckboxChanged();
-            InputTextbox.Focus();
-        }
-        private void NotifyCheckboxChanged()
-        {
-            CheckboxChanged?.Invoke(this, new BoolArrayEventArgs(
-                new bool[]
-                {
-                    (bool)Checkbox0.IsChecked,
-                    (bool)Checkbox1.IsChecked,
-                    (bool)Checkbox2.IsChecked,
-                    (bool)Checkbox3.IsChecked,
-                    (bool)Checkbox4.IsChecked,
-                    (bool)Checkbox5.IsChecked,
-                    (bool)Checkbox6.IsChecked,
-                    (bool)Checkbox7.IsChecked
-                }
-            ));
-        }
 
         private void CustomScancode_TextChanged(object sender, EventArgs e)
         {
@@ -190,24 +111,18 @@ namespace KeypadSoftware.UserControls
             Apply.IsEnabled = new HexadecimalRule().Validate(CustomScancode.Text, CultureInfo.InvariantCulture).IsValid;
         }
 
-        private void ToggleKeybindLayerButton_Click(object sender, RoutedEventArgs e)
+        private void ToggleLedButton_Click(object sender, RoutedEventArgs e)
         {
-            // Clear checkboxes
-            Checkbox0.IsChecked = false;
-            Checkbox1.IsChecked = false;
-            Checkbox2.IsChecked = false;
-            Checkbox3.IsChecked = false;
-            Checkbox4.IsChecked = false;
-            Checkbox5.IsChecked = false;
-            Checkbox6.IsChecked = false;
-            Checkbox7.IsChecked = false;
-            NotifyCheckboxChanged();
-            KeybindLayerToggleClick?.Invoke(this, EventArgs.Empty);
+            LedToggleClick?.Invoke(this, EventArgs.Empty);
         }
-
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             KeybindSet?.Invoke(this, new KeybindEventArgs(0x0));
+        }
+
+        private void InputTextbox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            BeginEditKeybind?.Invoke(this, EventArgs.Empty);
         }
     }
 }

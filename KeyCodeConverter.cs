@@ -31,7 +31,7 @@ namespace KeypadSoftware
         {
             keyLookupTable = new List<KeyEntry>();
             // key entries are added here
-            keyLookupTable.Add(new KeyEntry("null", "KEY_NONE ", 0x00, Key.None));
+            keyLookupTable.Add(new KeyEntry("Unbound", "KEY_NONE ", 0x00, Key.None));
             keyLookupTable.Add(new KeyEntry("A", "HID_KEYBOARD_SC_A", 0x04, Key.A));
             keyLookupTable.Add(new KeyEntry("B", "HID_KEYBOARD_SC_B", 0x05, Key.B));
             keyLookupTable.Add(new KeyEntry("C", "HID_KEYBOARD_SC_C", 0x06, Key.C));
@@ -146,7 +146,7 @@ namespace KeypadSoftware
             keyLookupTable.Add(new KeyEntry("Media Refresh", "KEY_MEDIA_REFRESH", 0xfa, Key.None));
             keyLookupTable.Add(new KeyEntry("Calculator", "KEY_MEDIA_CALC", 0xfb, Key.None));
                                                        
-            keyLookupTable.Add(new KeyEntry("Toggle Macro Layer", "HID_KEYBOARD_SC_KEYPAD_DOT_AND_DELETE", 0xFF, Key.None));
+            keyLookupTable.Add(new KeyEntry("LEDs on/off", "HID_KEYBOARD_SC_KEYPAD_DOT_AND_DELETE", 0xFF, Key.None));
 
             // TODO: look these ones up
             //keyLookupTable.Add(new KeyEntry("Kp Enter", "HID_KEYBOARD_SC_KEYPAD_ENTER", 0x58, Key.)); 

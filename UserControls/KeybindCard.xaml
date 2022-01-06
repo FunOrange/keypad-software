@@ -31,8 +31,9 @@
         </GroupBox.HeaderTemplate>
         <Grid Margin="8, 8, 8, 0">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -74,7 +75,10 @@
                     FontSize="16"
                     Margin="20, 0, 0, 7"
                     HorizontalAlignment="Stretch"
-                    KeyDown="TextBox_KeyDown" PreviewKeyDown="TextBox_KeyDown"/>
+                    KeyDown="TextBox_KeyDown"
+                    PreviewKeyDown="TextBox_KeyDown"
+                    GotKeyboardFocus="InputTextbox_GotKeyboardFocus"
+                />
                 <Button
                     x:Name="ClearButton"
                     Width="24"
@@ -86,12 +90,24 @@
                     <materialDesign:PackIcon Kind="Close" Width="14"/>
                 </Button>
             </Grid>
-            <Expander
-                Margin="0, 12, 0, 6"
+            <Button
+                x:Name="ToggleLedButton"
+                Visibility="{Binding HasLedToggleButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Grid.Row="1"
                 Grid.ColumnSpan="2"
+                Content="Toggle LEDs"
+                Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                Foreground="White"
+                ToolTip="Enables an additional macro layer that is accessible by pressing the side button"
+                Margin="0, 16, 0, 8"
+                Click="ToggleLedButton_Click"
+            />
+            <Expander
+                Margin="0, 12, 0, 6"
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
                 HorizontalAlignment="Stretch"
-                Header="Extra keybinds">
+                Header="Custom scan code">
                 <Grid Margin="24,0,24,8" >
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -104,127 +120,44 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <Button
-                        x:Name="ToggleKeybindLayerButton"
-                        Visibility="{Binding HasKeybindLayerToggleButton, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        Grid.Row="0"
-                        Grid.ColumnSpan="3"
-                        Content="Toggle Keybind Layer"
-                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                        Foreground="White"
-                        ToolTip="Enables an additional macro layer that is accessible by pressing the side button"
-                        Margin="8" Click="ToggleKeybindLayerButton_Click"/>
-                    <WrapPanel Grid.Row="1" Grid.ColumnSpan="3" Margin="0, 0, 0, 8">
-                        <Button x:Name="VolumeMinus" ToolTip="Volume Down" FontSize="11" Margin="4, 4" Click="VolumeMinus_Click">
-                            <materialDesign:PackIcon Kind="VolumeMinus" />
-                        </Button>
-                        <Button x:Name="VolumePlus" ToolTip="Volume Up" FontSize="11" Margin="4, 4" Click="VolumePlus_Click">
-                            <materialDesign:PackIcon Kind="VolumePlus" />
-                        </Button>
-                        <Button x:Name="SkipPrevious" ToolTip="Previous Track" FontSize="11" Margin="4, 4" Click="SkipPrevious_Click">
-                            <materialDesign:PackIcon Kind="SkipPrevious" />
-                        </Button>
-                        <Button x:Name="PlayPause" ToolTip="Play/Pause" FontSize="11" Margin="4, 4" Click="PlayPause_Click">
-                            <materialDesign:PackIcon Kind="PlayPause" />
-                        </Button>
-                        <Button x:Name="SkipNext" ToolTip="Next Track" FontSize="11" Margin="4, 4" Click="SkipNext_Click">
-                            <materialDesign:PackIcon Kind="SkipNext" />
-                        </Button>
-                        <Button FontSize="11" Content="Split Window Left" ToolTip="Win+Left" Margin="4, 4" Click="SplitLeft_Click"/>
-                        <Button FontSize="11" Content="Split Window Right" ToolTip="Win+Right" Margin="4, 4" Click="SplitRight_Click"/>
-                    </WrapPanel>
-                    <StackPanel Grid.Row="2" Grid.Column="0">
-                        <CheckBox
-                            x:Name="Checkbox0"
-                            Margin="0, 1, 20, 1"
-                            IsThreeState="False"
-                            Content="Left Ctrl"
-                            Click="CheckboxClicked"/>
-                        <CheckBox
-                            x:Name="Checkbox1"
-                            Margin="0, 1, 20, 1"
-                            IsThreeState="False"
-                            Content="Left Shift"
-                            Click="CheckboxClicked"/>
-                        <CheckBox
-                            x:Name="Checkbox2"
-                            Margin="0, 1, 20, 1"
-                            IsThreeState="False"
-                            Content="Left Alt"
-                            Click="CheckboxClicked"/>
-                        <CheckBox
-                            x:Name="Checkbox3"
-                            Margin="0, 1, 20, 1"
-                            IsThreeState="False"
-                            Content="Left Win"
-                            Click="CheckboxClicked"/>
-                    </StackPanel>
-                    <StackPanel Grid.Row="2" Grid.Column="1">
-                        <CheckBox
-                            x:Name="Checkbox4"
-                            Margin="0, 1, 20, 1"
-                            IsThreeState="False"
-                            Content="Right Ctrl"
-                            Click="CheckboxClicked"/>
-                        <CheckBox
-                            x:Name="Checkbox5"
-                            Margin="0, 1, 20, 1"
-                            IsThreeState="False"
-                            Content="Right Shift"
-                            Click="CheckboxClicked"/>
-                        <CheckBox
-                            x:Name="Checkbox6"
-                            Margin="0, 1, 20, 1"
-                            IsThreeState="False"
-                            Content="Right Alt"
-                            Click="CheckboxClicked"/>
-                        <CheckBox
-                            x:Name="Checkbox7"
-                            Margin="0, 1, 20, 1"
-                            IsThreeState="False"
-                            Content="Right Win"
-                            Click="CheckboxClicked"/>
-                    </StackPanel>
-                    <StackPanel Grid.Row="2" Grid.Column="2">
-                        <TextBox
-                            x:Name="CustomScancode"
-                            Width="106"
-                            Height="auto"
-                            Margin="0, -2, 0, 0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            materialDesign:HintAssist.Hint="HID Scan Code"
-                            TextChanged="CustomScancode_TextChanged">
-                            <TextBox.Text>
-                                <Binding
-                                    Path="CustomKeybindScanCode"
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <!--
-                                    <Binding.ValidationRules>
-                                        <keypadsoftware:HexadecimalRule ValidatesOnTargetUpdated="True"/>
-                                    </Binding.ValidationRules>
-                                    -->
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
-                        <TextBlock>           
-                            <Hyperlink
-                                NavigateUri="https://gist.github.com/MightyPork/6da26e382a7ad91b5496ee55fdc73db2"
-                                RequestNavigate="Hyperlink_RequestNavigate">
-                                <TextBlock FontSize="11">
-                                    List of HID scan codes
-                                </TextBlock>
-                            </Hyperlink>
-                        </TextBlock>
-                        <Button
-                            x:Name="Apply"
-                            ToolTip="Apply HID scan code"
-                            Height="auto"
-                            HorizontalAlignment="Left"
-                            Margin="0, 10, 0, 10"
-                            Click="Apply_Click">
-                            Apply
-                        </Button>
+                    <StackPanel Grid.Row="2" Grid.Column="2" Margin="0, 0, 0, 6">
+                        <StackPanel Orientation="Horizontal" Margin="0, 0, 0, 13">
+                            <TextBox
+                                x:Name="CustomScancode"
+                                Width="57"
+                                Height="auto"
+                                Margin="0, 0, 18, 0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="bottom"
+                                materialDesign:HintAssist.Hint="0x1d "
+                                TextChanged="CustomScancode_TextChanged"
+                            >
+                                <TextBox.Text>
+                                    <Binding
+                                        Path="CustomKeybindScanCode"
+                                        UpdateSourceTrigger="PropertyChanged"
+                                    />
+                                </TextBox.Text>
+                            </TextBox>
+                            <Button
+                                x:Name="Apply"
+                                ToolTip="Apply HID scan code"
+                                Height="auto"
+                                HorizontalAlignment="Left"
+                                Margin="0"
+                                Click="Apply_Click">
+                                Apply
+                            </Button>
+                        </StackPanel>
+                        <TextBlock VerticalAlignment="Bottom">
+                                <Hyperlink
+                                    NavigateUri="https://gist.github.com/MightyPork/6da26e382a7ad91b5496ee55fdc73db2"
+                                    RequestNavigate="Hyperlink_RequestNavigate">
+                                    <TextBlock FontSize="14">
+                                        List of HID scan codes
+                                    </TextBlock>
+                                </Hyperlink>
+                            </TextBlock>
                     </StackPanel>
                 </Grid>
             </Expander>

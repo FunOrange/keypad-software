@@ -24,23 +24,12 @@
                     HeaderText="Left Button"
                     HeaderColour="PrimaryMid"
                     KeybindText="{Binding LeftKeybind}"
-                    HasKeybindLayerToggleButton="false"
+                    HasLedToggleButton="false"
                     cal:Message.Attach="
-                        [Event GotKeyboardFocus] = [Action BeginEditKeybind('LEFT')];
+                        [Event BeginEditKeybind] = [Action BeginEditKeybind('LEFT')];
                         [Event LostKeyboardFocus] = [Action StopEditKeybind('LEFT')];
                         [Event KeybindSet] = [Action SetKeybind('LEFT', $eventArgs)];
                         [Event CheckboxChanged] = [Action ModifierCheckboxClicked('LEFT', $eventArgs)] "/>
-                <usercontrols:KeybindCard
-                    Visibility="{Binding IsLeftKeybindVisible}"
-                    HeaderText="Left Button (Macro Layer)"
-                    HeaderColour="SecondaryMid"
-                    KeybindText="{Binding LeftMacro}"
-                    HasKeybindLayerToggleButton="false"
-                    cal:Message.Attach="
-                        [Event GotKeyboardFocus] = [Action BeginEditKeybind('LEFTMACRO')];
-                        [Event LostKeyboardFocus] = [Action StopEditKeybind('LEFTMACRO')];
-                        [Event KeybindSet] = [Action SetKeybind('LEFTMACRO', $eventArgs)];
-                        [Event CheckboxChanged] = [Action ModifierCheckboxClicked('LEFTMACRO', $eventArgs)] "/>
             </StackPanel>
 
             <!-- Right Button -->
@@ -49,23 +38,12 @@
                     HeaderText="Right Button"
                     HeaderColour="PrimaryMid"
                     KeybindText="{Binding RightKeybind}"
-                    HasKeybindLayerToggleButton="false"
+                    HasLedToggleButton="false"
                     cal:Message.Attach="
-                        [Event GotKeyboardFocus] = [Action BeginEditKeybind('RIGHT')];
+                        [Event BeginEditKeybind] = [Action BeginEditKeybind('RIGHT')];
                         [Event LostKeyboardFocus] = [Action StopEditKeybind('RIGHT')];
                         [Event KeybindSet] = [Action SetKeybind('RIGHT', $eventArgs)];
                         [Event CheckboxChanged] = [Action ModifierCheckboxClicked('RIGHT', $eventArgs)] "/>
-                <usercontrols:KeybindCard
-                    Visibility="{Binding IsRightKeybindVisible}"
-                    HeaderText="Right Button (Macro Layer)"
-                    HeaderColour="SecondaryMid"
-                    KeybindText="{Binding RightMacro}"
-                    HasKeybindLayerToggleButton="false"
-                    cal:Message.Attach="
-                        [Event GotKeyboardFocus] = [Action BeginEditKeybind('RIGHTMACRO')];
-                        [Event LostKeyboardFocus] = [Action StopEditKeybind('RIGHTMACRO')];
-                        [Event KeybindSet] = [Action SetKeybind('RIGHTMACRO', $eventArgs)];
-                        [Event CheckboxChanged] = [Action ModifierCheckboxClicked('RIGHTMACRO', $eventArgs)] "/>
             </StackPanel>
 
             <!-- Side Button -->
@@ -74,11 +52,11 @@
                     HeaderText="Side Button"
                     HeaderColour="PrimaryDark"
                     KeybindText="{Binding SideKeybind}"
-                    HasKeybindLayerToggleButton="true"
+                    HasLedToggleButton="true"
                     cal:Message.Attach="
-                        [Event GotKeyboardFocus] = [Action BeginEditKeybind('SIDE')];
+                        [Event BeginEditKeybind] = [Action BeginEditKeybind('SIDE')];
                         [Event LostKeyboardFocus] = [Action StopEditKeybind('SIDE')];
-                        [Event KeybindLayerToggleClick] = [Action ToggleKeybindLayer()];
+                        [Event LedToggleClick] = [Action ToggleLed()];
                         [Event KeybindSet] = [Action SetKeybind('SIDE', $eventArgs)];
                         [Event CheckboxChanged] = [Action ModifierCheckboxClicked('SIDE', $eventArgs)] "/>
             </StackPanel>
