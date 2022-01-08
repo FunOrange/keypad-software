@@ -4,9 +4,309 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KeypadSoftware.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ks="clr-namespace:KeypadSoftware"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock FontSize="26" Margin="20, 20">Lighting</TextBlock>
+        <materialDesign:Card>
+            <TabControl
+                        materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+                        SnapsToDevicePixels="True"
+                        Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+                        TabStripPlacement="Left">
+
+                <!-- Fade Tab -->
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Width="auto" Height="auto">
+                            <TextBlock HorizontalAlignment="Center" Text="Fade" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <StackPanel Margin="16, 40">
+                        <TextBlock
+                            Margin="0,0,0,22"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                            Text="Fade Options" HorizontalAlignment="Center" />
+                        <StackPanel Margin="0, 0, 63, 20"  Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Center">
+                            <!-- Color 1 -->
+                            <TextBlock
+                                Margin="0, 0, 15, 0"
+                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                VerticalAlignment="Center">
+                                Color 1
+                            </TextBlock>
+                            <materialDesign:PopupBox StaysOpen="True" >
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:Card
+                                        Width="30"
+                                        Height="30"
+                                        Margin="0, 0, 42, 0"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                        Background="Aqua"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:ColorPicker
+                                    Margin="8, 0, 8, -8"
+                                    Width="200"
+                                    Height="200">
+                                    <materialDesign:ColorPicker.Style>
+                                        <Style TargetType="materialDesign:ColorPicker" BasedOn="{StaticResource {x:Type materialDesign:ColorPicker}}"/>
+                                    </materialDesign:ColorPicker.Style>
+                                </materialDesign:ColorPicker>
+                            </materialDesign:PopupBox>
+
+                            <!-- Color 2 -->
+                            <TextBlock
+                                Margin="0, 0, 15, 0"
+                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                VerticalAlignment="Center">
+                                Color 2
+                            </TextBlock>
+                            <materialDesign:PopupBox StaysOpen="True" >
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:Card
+                                        Width="30"
+                                        Height="30"
+                                        Margin="0"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                        Background="#FF0084FF"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:ColorPicker
+                                    Margin="8, 0, 8, -8"
+                                    Width="200"
+                                    Height="200">
+                                    <materialDesign:ColorPicker.Style>
+                                        <Style TargetType="materialDesign:ColorPicker" BasedOn="{StaticResource {x:Type materialDesign:ColorPicker}}"/>
+                                    </materialDesign:ColorPicker.Style>
+                                </materialDesign:ColorPicker>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                        <StackPanel Margin="0, 0, 66, 18" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock
+                                Width="90"
+                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                VerticalAlignment="Center"
+                                TextAlignment="Right"
+                                HorizontalAlignment="Right">
+                                Speed
+                            </TextBlock>
+                            <Slider
+                                Width="255"
+                                Grid.Column="0"
+                                Margin="20, 0"
+                                VerticalAlignment="Center"
+                                Maximum="20" SmallChange="1" />
+                            <TextBox
+                                Text="240"
+                                ks:SelectTextOnFocus.Active="True" 
+                                Grid.Column="1"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                TextAlignment="Center"
+                                FontSize="15"/>
+                        </StackPanel>
+                        <StackPanel Margin="0, 0, 66, 4" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock
+                                Width="90"
+                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                VerticalAlignment="Center"
+                                TextAlignment="Right"
+                                HorizontalAlignment="Right">
+                                Brightness
+                            </TextBlock>
+                            <Slider
+                                Width="255"
+                                Grid.Column="0"
+                                Margin="20, 0"
+                                VerticalAlignment="Center"
+                                Maximum="20" SmallChange="1" />
+                            <TextBox
+                                Text="240"
+                                ks:SelectTextOnFocus.Active="True" 
+                                Grid.Column="1"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                TextAlignment="Center"
+                                FontSize="15"/>
+                        </StackPanel>
+                        <Button Margin="0, 22, 0, 0" MaxWidth="200">
+                            Apply
+                        </Button>
+                    </StackPanel>
+                </TabItem>
+
+                <!-- Rainbow Tab -->
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Width="auto" Height="auto">
+                            <TextBlock HorizontalAlignment="Center">Rainbow</TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Margin="16">
+                        <StackPanel Margin="16, 40">
+                            <TextBlock
+                            Margin="0,0,0,18"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                            Text="Rainbow Options" HorizontalAlignment="Center" />
+
+                            <StackPanel Margin="0, 0, 66, 18" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock
+                                Width="90"
+                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                VerticalAlignment="Center"
+                                TextAlignment="Right"
+                                HorizontalAlignment="Right">
+                                Speed
+                                </TextBlock>
+                                <Slider
+                                Width="255"
+                                Grid.Column="0"
+                                Margin="20, 0"
+                                VerticalAlignment="Center"
+                                Maximum="20" SmallChange="1" />
+                                <TextBox
+                                Text="240"
+                                ks:SelectTextOnFocus.Active="True" 
+                                Grid.Column="1"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                TextAlignment="Center"
+                                FontSize="15"/>
+                            </StackPanel>
+                            <StackPanel Margin="0, 0, 66, 4" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock
+                                Width="90"
+                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                VerticalAlignment="Center"
+                                TextAlignment="Right"
+                                HorizontalAlignment="Right">
+                                Brightness
+                                </TextBlock>
+                                <Slider
+                                Width="255"
+                                Grid.Column="0"
+                                Margin="20, 0"
+                                VerticalAlignment="Center"
+                                Maximum="20" SmallChange="1" />
+                                <TextBox
+                                Text="240"
+                                ks:SelectTextOnFocus.Active="True" 
+                                Grid.Column="1"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                TextAlignment="Center"
+                                FontSize="15"/>
+                            </StackPanel>
+                            <Button Margin="0, 22, 0, 0" MaxWidth="200">
+                                Apply
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+                <!-- Solid Tab -->
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Width="auto" Height="auto">
+                            <TextBlock HorizontalAlignment="Center" ><Run Language="en-ca" Text="Solid"/></TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <StackPanel Margin="16, 40">
+                        <TextBlock
+                            Margin="0,0,0,18"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                            Text="Solid Color Options" HorizontalAlignment="Center" />
+
+                        <StackPanel Margin="0, 0, 9, 22"  Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Center">
+                            <TextBlock
+                                Margin="0, 0, 15, 0"
+                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                VerticalAlignment="Center">
+                                Color
+                            </TextBlock>
+                            <materialDesign:PopupBox StaysOpen="True" >
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:Card
+                                        Width="30"
+                                        Height="30"
+                                        Margin="0, 0, 42, 0"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                        Background="Aqua"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:ColorPicker
+                                    Margin="8, 0, 8, -8"
+                                    Width="200"
+                                    Height="200">
+                                    <materialDesign:ColorPicker.Style>
+                                        <Style TargetType="materialDesign:ColorPicker" BasedOn="{StaticResource {x:Type materialDesign:ColorPicker}}"/>
+                                    </materialDesign:ColorPicker.Style>
+                                </materialDesign:ColorPicker>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+
+                        <StackPanel Margin="0, 0, 66, 4" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock
+                                Width="90"
+                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                VerticalAlignment="Center"
+                                TextAlignment="Right"
+                                HorizontalAlignment="Right">
+                                Brightness
+                            </TextBlock>
+                            <Slider
+                                Width="255"
+                                Grid.Column="0"
+                                Margin="20, 0"
+                                VerticalAlignment="Center"
+                                Maximum="20" SmallChange="1" />
+                            <TextBox
+                                Text="240"
+                                ks:SelectTextOnFocus.Active="True" 
+                                Grid.Column="1"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                TextAlignment="Center"
+                                FontSize="15"/>
+                        </StackPanel>
+                        <Button Margin="0, 22, 0, 0" MaxWidth="200">
+                            Apply
+                        </Button>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Width="auto" Height="auto">
+                            <TextBlock HorizontalAlignment="Center" ><Run Language="en-ca" Text="Flash"/></TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Margin="16">
+                        <TextBlock
+                            Margin="0,0,0,8"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                            Text="Flash on Press Options" />
+
+                        <TextBlock>
+                            <Run Text="tab 4 content. Default look and behaviors." />
+                            <LineBreak />
+                            <LineBreak />
+                            <Run FontStyle="Italic">
+                                Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
+                            </Run>
+                        </TextBlock>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Width="auto" Height="auto">
+                            <TextBlock HorizontalAlignment="Center" ><Run Language="en-ca" Text="Off"/></TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+                </TabItem>
+            </TabControl>
+        </materialDesign:Card>
     </Grid>
 </UserControl>
