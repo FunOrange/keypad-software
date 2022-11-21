@@ -23,7 +23,7 @@ namespace KeypadSoftware
 
         KeypadSerialPacketReader PacketReader = new KeypadSerialPacketReader();
 
-        public static int NUM_LEDS = 12;
+        public static int NUM_LEDS = 4;
 
         private bool _isConnected;
         public bool IsConnected
@@ -314,55 +314,62 @@ namespace KeypadSoftware
             throw new Exception($"KeypadSerial::RequestDataGeneric: Read failed after {attempt} retries.");
         }
 
-        public void ReadComponentEnableMask()
+        public List<UInt16> ReadComponentEnableMask()
         {
+            // *((uint16_t*)(buf + 0)) = get_hue_sweep_enabled_mask();
+            // *((uint16_t*)(buf + 2)) = get_value_sweep_enabled_mask();
+            // *((uint16_t*)(buf + 4)) = get_flash_enabled_mask();
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_COMPONENT_ENABLE_MASK);
-            for (int i = 0; i < rawData.Length; i++)
-            {
-                Console.WriteLine($"{i}: 0x{rawData[i]:x}");
-            }
+            return KeypadSerialPacket.DeserializeUint16List(rawData);
         }
         public List<Color> ReadBaseColour()
         {
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_BASE_COLOUR);
             return KeypadSerialPacket.DeserializeRgbList(rawData);
         }
-        public List<UInt16> ReadHueDelta(byte[] data) {
+        public List<UInt16> ReadHueDelta() {
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_HUE_DELTA);
             return KeypadSerialPacket.DeserializeUint16List(rawData);
         }
-        public List<UInt32> ReadHuePeriod(byte[] data) {
+        public List<UInt32> ReadHuePeriod() {
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_HUE_PERIOD);
             return KeypadSerialPacket.DeserializeUint32List(rawData);
         }
-        public List<float> ReadValueDim(byte[] data) {
+        public List<float> ReadValueDim() {
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_VALUE_DIM);
             return KeypadSerialPacket.DeserializeFloatList(rawData);
         }
-        public List<UInt32> ReadValuePeriod(byte[] data) {
+        public List<UInt32> ReadValuePeriod() {
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_VALUE_PERIOD);
             return KeypadSerialPacket.DeserializeUint32List(rawData);
         }
-        public List<Color> ReadFlashLeftColour(byte[] data) {
+        public List<Color> ReadFlashLeftColour() {
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_FLASH_LEFT_COLOUR);
             return KeypadSerialPacket.DeserializeRgbList(rawData);
         }
-        public List<Color> ReadFlashRightColour(byte[] data) {
+        public List<Color> ReadFlashRightColour() {
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_FLASH_RIGHT_COLOUR);
             return KeypadSerialPacket.DeserializeRgbList(rawData);
         }
-        //public List<byte> ReadFlashBlendingMethod(byte[] data) {}
-        //public List<byte> ReadFlashHoldMethod(byte[] data) {}
-        public List<float> ReadFlashDecayRate(byte[] data) {
+        public byte[] ReadFlashBlendingMethod() {
+            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_FLASH_BLENDING_METHOD);
+        }
+        public byte[] ReadFlashHoldMethod() {
+            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_FLASH_HOLD_METHOD);
+        }
+        public List<float> ReadFlashDecayRate() {
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_FLASH_DECAY_RATE);
             return KeypadSerialPacket.DeserializeFloatList(rawData);
         }
-        public byte ReadDelayMultiplier(byte[] data) {
-            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_DELAY_MULTIPLIER)[0];
+        public bool ReadLedsDisabled() {
+            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_LEDS_DISABLED)[0] != 0;
         }
-        public byte[] ReadLineDelay(byte[] data) {
-            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_LINE_DELAY);
-        }
+        //public byte ReadDelayMultiplier() {
+        //    return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_DELAY_MULTIPLIER)[0];
+        //}
+        //public byte[] ReadLineDelay() {
+        //    return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_LINE_DELAY);
+        //}
 
         public byte[] ReadKeybinds()
         {
@@ -438,7 +445,7 @@ namespace KeypadSoftware
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_COMPONENT_ENABLE_MASK, data);
             keypadPort.Write(packet, 0, packet.Length);
         }
-        public void WriteBaseColor(List<Color> c)
+        public void WriteBaseColour(List<Color> c)
         {
             byte[] data = KeypadSerialPacket.SerializeRgbList(c);
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_BASE_COLOUR, data);
@@ -480,10 +487,26 @@ namespace KeypadSoftware
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_FLASH_RIGHT_COLOUR, data);
             keypadPort.Write(packet, 0, packet.Length);
         }
+        public void WriteFlashBlendingMethod(byte[] flashBlendingMethod)
+        {
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_FLASH_BLENDING_METHOD, flashBlendingMethod);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteFlashHoldMethod(byte[] flashHoldMethod)
+        {
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_FLASH_HOLD_METHOD, flashHoldMethod);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
         public void WriteFlashDecayRate(List<float> r)
         {
             byte[] data = KeypadSerialPacket.SerializeFloatList(r);
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_FLASH_DECAY_RATE, data);
+            keypadPort.Write(packet, 0, packet.Length);
+        }
+        public void WriteLedsDisabled(bool disabled)
+        {
+            byte[] data = { (byte)(disabled ? 0 : 1) };
+            byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_LEDS_DISABLED, data);
             keypadPort.Write(packet, 0, packet.Length);
         }
         public void WriteKeybinds(byte[] scanCodes)
