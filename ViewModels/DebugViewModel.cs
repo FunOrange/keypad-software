@@ -117,7 +117,7 @@ namespace KeypadSoftware.ViewModels
                 else
                     baseColours.Add(Color.FromRgb(0, 0, 0));
             }
-            keypad.WriteBaseColor(baseColours);
+            keypad.WriteBaseColour(baseColours);
         }
 
         public void SelectedLedsChanged()
@@ -167,22 +167,6 @@ namespace KeypadSoftware.ViewModels
             }
 
             EepromContents = new ObservableCollection<EepromByte>(eepromTupleList);
-        }
-        public void ByteAlignmentTest()
-        {
-            var crap = keypad.SerialCommCalibrationTest();
-            var correct = new byte[512];
-            for (int i = 0; i < 256; i++)
-                correct[i] = (byte)i;
-            for (int i = 0; i < 256; i++)
-                correct[i+256] = (byte)(255 - i);
-            bool success = true;
-            for (int i = 0; i < crap.Length; i++)
-            {
-                if (crap[i] != correct[i])
-                    success = false;
-            }
-            Console.WriteLine(success ? "GOOD!" : "BAD!");
         }
     }
 }

@@ -176,9 +176,10 @@ namespace KeypadSoftware
             try
             {
                 SerialPort testPort = new SerialPort(portName, 9600);
-                testPort.ReadTimeout = 500;
+                testPort.ReadTimeout = 1000;
                 testPort.Open();
                 byte[] handShakePacket = KeypadSerialPacket.CreateEmptyPacket(KeypadSerialPacket.KEYPAD_PACKET_ID_HEARTBEAT);
+                testPort.DiscardInBuffer();
                 testPort.Write(handShakePacket, 0, handShakePacket.Length);
                 try
                 {
@@ -237,10 +238,10 @@ namespace KeypadSoftware
             }
 
             byte[] handShakePacket = KeypadSerialPacket.CreateEmptyPacket(KeypadSerialPacket.KEYPAD_PACKET_ID_HEARTBEAT);
+            keypadPort.DiscardInBuffer();
             keypadPort.Write(handShakePacket, 0, handShakePacket.Length);
 
             try {
-                keypadPort.DiscardInBuffer();
                 string response = keypadPort.ReadLine();
                 if (response == "orange")
                 {
@@ -324,22 +325,27 @@ namespace KeypadSoftware
         }
         public List<Color> ReadBaseColour()
         {
+            Console.WriteLine("KEYPAD_PACKET_ID_GET_BASE_COLOUR");
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_BASE_COLOUR);
             return KeypadSerialPacket.DeserializeRgbList(rawData);
         }
         public List<UInt16> ReadHueDelta() {
+            Console.WriteLine("KEYPAD_PACKET_ID_GET_HUE_DELTA");
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_HUE_DELTA);
             return KeypadSerialPacket.DeserializeUint16List(rawData);
         }
         public List<UInt32> ReadHuePeriod() {
+            Console.WriteLine("KEYPAD_PACKET_ID_GET_HUE_PERIOD");
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_HUE_PERIOD);
             return KeypadSerialPacket.DeserializeUint32List(rawData);
         }
         public List<float> ReadValueDim() {
+            Console.WriteLine("KEYPAD_PACKET_ID_GET_VALUE_DIM");
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_VALUE_DIM);
             return KeypadSerialPacket.DeserializeFloatList(rawData);
         }
         public List<UInt32> ReadValuePeriod() {
+            Console.WriteLine("KEYPAD_PACKET_ID_GET_VALUE_PERIOD");
             byte[] rawData = RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_GET_VALUE_PERIOD);
             return KeypadSerialPacket.DeserializeUint32List(rawData);
         }
@@ -411,7 +417,7 @@ namespace KeypadSoftware
             var right = new List<bool>();
             foreach (byte x in rawData)
             {
-                Console.WriteLine("8'b" + Convert.ToString(x, 2).PadLeft(8, '0'));
+                // Console.WriteLine("8'b" + Convert.ToString(x, 2).PadLeft(8, '0'));
                 //// lower nibble: right button
                 left.Add((x & (1 << 0)) != 0);
                 left.Add((x & (1 << 1)) != 0);
@@ -427,10 +433,6 @@ namespace KeypadSoftware
         public byte[] ReadEeprom()
         {
             return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_READ_EEPROM);
-        }
-        public byte[] SerialCommCalibrationTest()
-        {
-            return RequestDataGeneric(KeypadSerialPacket.KEYPAD_PACKET_ID_CALIBRATE_SERIAL_COMM);
         }
 #endregion
 
@@ -448,6 +450,7 @@ namespace KeypadSoftware
         public void WriteBaseColour(List<Color> c)
         {
             byte[] data = KeypadSerialPacket.SerializeRgbList(c);
+            Console.WriteLine($"WriteBaseColour: {string.Join(" ", data.Select(b => $"0x{b:x}"))}");
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_BASE_COLOUR, data);
             keypadPort.Write(packet, 0, packet.Length);
         }
@@ -466,12 +469,14 @@ namespace KeypadSoftware
         public void WriteValueDim(List<float> d)
         {
             byte[] data = KeypadSerialPacket.SerializeFloatList(d);
+            Console.WriteLine($"WriteValueDim: {string.Join(" ", data.Select(b => $"0x{b:x}"))}");
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_VALUE_DIM, data);
             keypadPort.Write(packet, 0, packet.Length);
         }
         public void WriteValuePeriod(List<UInt32> p)
         {
             byte[] data = KeypadSerialPacket.SerializeUint32List(p);
+            Console.WriteLine($"WriteValuePeriod: {string.Join(" ", data.Select(b => $"0x{b:x}"))}");
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_VALUE_PERIOD, data);
             keypadPort.Write(packet, 0, packet.Length);
         }
@@ -505,7 +510,7 @@ namespace KeypadSoftware
         }
         public void WriteLedsDisabled(bool disabled)
         {
-            byte[] data = { (byte)(disabled ? 0 : 1) };
+            byte[] data = { (byte)(disabled ? 1 : 0) };
             byte[] packet = KeypadSerialPacket.CreatePacket(KeypadSerialPacket.KEYPAD_PACKET_ID_SET_LEDS_DISABLED, data);
             keypadPort.Write(packet, 0, packet.Length);
         }

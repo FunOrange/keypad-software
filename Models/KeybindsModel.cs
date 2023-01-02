@@ -46,7 +46,10 @@ namespace KeypadSoftware.Models
             var readback = keypad.ReadKeybinds();
             var readbackSuccess = readback.Length == scanCodes.Length && memcmp(readback, scanCodes, readback.Length) == 0;
             if (readbackSuccess)
+            {
                 Console.WriteLine($"KeybindsModel.PushAllValues: Readback success!");
+                keypad.SaveConfigToEeprom();
+            }
             return readbackSuccess;
         }
     }

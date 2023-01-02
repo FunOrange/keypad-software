@@ -206,7 +206,6 @@
         <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical">
             <GroupBox Header="EEPROM Contents">
                 <StackPanel>
-                    <Button x:Name="ByteAlignmentTest">Serial byte alignment shit</Button>
                     <Button x:Name="ResetEeprom">Reset EEPROM</Button>
                     <Button x:Name="ReadEeprom">Read EEPROM</Button>
                     <ScrollViewer Height="380">

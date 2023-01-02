@@ -24,5 +24,10 @@ namespace KeypadSoftware.Views
         {
             InitializeComponent();
         }
+
+        private void ColorPicker_ColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
+        {
+            Console.WriteLine(e.NewValue);
+        }
     }
 }

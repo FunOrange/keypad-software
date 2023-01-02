@@ -33,7 +33,6 @@
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
@@ -106,6 +105,7 @@
                         </StackPanel>
                     </RadioButton.Content>
                 </RadioButton>
+                <!--
                 <RadioButton
                     x:Name="SwitchToDebugTab"
                     IsEnabled="{Binding IsConnected}"
@@ -123,6 +123,7 @@
                         </StackPanel>
                     </RadioButton.Content>
                 </RadioButton>
+                -->
             </Grid>
         </materialDesign:ColorZone>
 

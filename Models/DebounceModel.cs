@@ -77,6 +77,7 @@ namespace KeypadSoftware.Models
             for (int i = 0; i < debounceValues.Length; i++)
                 Console.WriteLine($"{i}: 0x{debounceValues[i]:x}");
             keypad.WriteDebounce(debounceValues);
+            keypad.SaveConfigToEeprom();
         }
 
         public (List<bool>, List<bool>) ReadRawButtonStateBuffer()

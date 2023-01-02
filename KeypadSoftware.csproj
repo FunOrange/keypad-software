@@ -114,6 +114,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Clamp.cs" />
+    <Compile Include="HSVConverter.cs" />
     <Compile Include="HexadecimalRule.cs" />
     <Compile Include="KeypadSerialPacketReader.cs" />
     <Compile Include="Models\ChartDataEventArgs.cs" />

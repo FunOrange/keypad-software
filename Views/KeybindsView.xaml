@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KeypadSoftware.Views"
-             xmlns:cal="http://www.caliburnproject.org" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:usercontrols="clr-namespace:KeypadSoftware.UserControls"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:usercontrols="clr-namespace:KeypadSoftware.UserControls"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="1200">
     <ScrollViewer>
@@ -52,7 +54,7 @@
                     HeaderText="Side Button"
                     HeaderColour="PrimaryDark"
                     KeybindText="{Binding SideKeybind}"
-                    HasLedToggleButton="true"
+                    HasLedToggleButton="false"
                     cal:Message.Attach="
                         [Event BeginEditKeybind] = [Action BeginEditKeybind('SIDE')];
                         [Event LostKeyboardFocus] = [Action StopEditKeybind('SIDE')];

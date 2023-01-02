@@ -22,7 +22,7 @@ namespace KeypadSoftware
 
 
         #region STATIC SHIT
-        static int NUM_LEDS = 12;
+        static int NUM_LEDS = 4;
         // Packet IDs
         public static byte KEYPAD_PACKET_ID_HEARTBEAT = 0;
         public static byte KEYPAD_PACKET_ID_RESET_EEPROM = 1;
@@ -62,7 +62,6 @@ namespace KeypadSoftware
         public static byte KEYPAD_PACKET_ID_SAVE_CONFIG_TO_EEPROM = 35;
         public static byte KEYPAD_PACKET_ID_READ_RAW_BUTTON_STATE_BUFFER = 36;
         public static byte KEYPAD_PACKET_ID_READ_EEPROM = 38;
-        public static byte KEYPAD_PACKET_ID_CALIBRATE_SERIAL_COMM = 39;
 
         public static byte[] CreateEmptyPacket(byte packetId)
         {

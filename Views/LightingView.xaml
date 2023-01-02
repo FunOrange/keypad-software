@@ -4,8 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KeypadSoftware.Views"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:ks="clr-namespace:KeypadSoftware"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:viewmodels="clr-namespace:KeypadSoftware.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:LightingViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -37,26 +41,18 @@
                                 VerticalAlignment="Center">
                                 Color
                             </TextBlock>
-                            <materialDesign:PopupBox StaysOpen="True" >
-                                <materialDesign:PopupBox.ToggleContent>
-                                    <materialDesign:Card
-                                        Width="30"
-                                        Height="30"
-                                        Margin="0, 0, 42, 0"
-                                        materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                        Background="Aqua"/>
-                                </materialDesign:PopupBox.ToggleContent>
-                                <materialDesign:ColorPicker
-                                    Margin="8, 0, 8, -8"
-                                    Width="200"
-                                    Height="200">
-                                    <materialDesign:ColorPicker.Style>
-                                        <Style TargetType="materialDesign:ColorPicker" BasedOn="{StaticResource {x:Type materialDesign:ColorPicker}}"/>
-                                    </materialDesign:ColorPicker.Style>
-                                </materialDesign:ColorPicker>
-                            </materialDesign:PopupBox>
+                            <xctk:ColorPicker x:Name="SolidColorCp" Grid.Row="0" Grid.Column="1"
+                                Width="90"
+                                ColorMode="ColorCanvas"
+                                ShowAvailableColors="False"
+                                ShowStandardColors="False"
+                                ShowRecentColors="True"
+                                StandardTabHeader="Recent Colors"
+                                AdvancedTabHeader="Color Picker"
+                                UsingAlphaChannel="False"
+                                SelectedColor="{Binding BaseColourAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
-                        <Button Margin="0, 4, 0, 0" MaxWidth="200">
+                        <Button Margin="0, 4, 0, 0" MaxWidth="200" x:Name="ApplySolid">
                             Apply
                         </Button>
                     </StackPanel>
@@ -80,6 +76,7 @@
                             <StackPanel Margin="0,0,40,18" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock
                                 Width="90"
+                                Margin="0, 0, 15, 0"
                                 Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
                                 VerticalAlignment="Center"
                                 TextAlignment="Right"
@@ -87,24 +84,16 @@
                                     >
                                 Start color
                                 </TextBlock>
-                                <materialDesign:PopupBox StaysOpen="True" >
-                                    <materialDesign:PopupBox.ToggleContent>
-                                        <materialDesign:Card
-                                            Width="30"
-                                            Height="30"
-                                            Margin="15, 0, 0, 0"
-                                            materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                            Background="Aqua"/>
-                                    </materialDesign:PopupBox.ToggleContent>
-                                    <materialDesign:ColorPicker
-                                        Margin="8, 0, 8, -8"
-                                        Width="200"
-                                        Height="200">
-                                        <materialDesign:ColorPicker.Style>
-                                            <Style TargetType="materialDesign:ColorPicker" BasedOn="{StaticResource {x:Type materialDesign:ColorPicker}}"/>
-                                        </materialDesign:ColorPicker.Style>
-                                    </materialDesign:ColorPicker>
-                                </materialDesign:PopupBox>
+                                <xctk:ColorPicker x:Name="StartColorCp" Grid.Row="0" Grid.Column="1"
+                                    Width="90"
+                                    ColorMode="ColorCanvas"
+                                    ShowAvailableColors="False"
+                                    ShowStandardColors="False"
+                                    ShowRecentColors="True"
+                                    StandardTabHeader="Recent Colors"
+                                    AdvancedTabHeader="Color Picker"
+                                    UsingAlphaChannel="False"
+                                    SelectedColor="{Binding BaseColourAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBlock
                                 Width="90"
                                 Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
@@ -114,24 +103,12 @@
                                     >
                                 End color
                                 </TextBlock>
-                                <materialDesign:PopupBox StaysOpen="True" >
-                                    <materialDesign:PopupBox.ToggleContent>
-                                        <materialDesign:Card
-                                            Width="30"
-                                            Height="30"
-                                            Margin="15, 0, 0, 0"
-                                            materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                            Background="Aqua"/>
-                                    </materialDesign:PopupBox.ToggleContent>
-                                    <materialDesign:ColorPicker
-                                        Margin="8, 0, 8, -8"
-                                        Width="200"
-                                        Height="200">
-                                        <materialDesign:ColorPicker.Style>
-                                            <Style TargetType="materialDesign:ColorPicker" BasedOn="{StaticResource {x:Type materialDesign:ColorPicker}}"/>
-                                        </materialDesign:ColorPicker.Style>
-                                    </materialDesign:ColorPicker>
-                                </materialDesign:PopupBox>
+                                <materialDesign:Card
+                                    Width="30"
+                                    Height="30"
+                                    Margin="15, 0, 0, 0"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                    Background="{Binding EndColourBrush}"/>
                             </StackPanel>
                             <StackPanel Margin="0, 0, 66, 18" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock
@@ -140,16 +117,17 @@
                                 VerticalAlignment="Center"
                                 TextAlignment="Right"
                                 HorizontalAlignment="Right">
-                                Color shift
+                                Color range
                                 </TextBlock>
                                 <Slider
                                 Width="255"
                                 Grid.Column="0"
                                 Margin="20, 0"
                                 VerticalAlignment="Center"
+                                Value="{Binding HueDeltaAll}"
                                 Maximum="360" SmallChange="1" />
                                 <TextBox
-                                Text="240"
+                                Text="{Binding HueDeltaAll}"
                                 ks:SelectTextOnFocus.Active="True" 
                                 Grid.Column="1"
                                 HorizontalAlignment="Stretch"
@@ -171,9 +149,10 @@
                                 Grid.Column="0"
                                 Margin="20, 0"
                                 VerticalAlignment="Center"
-                                Maximum="20" SmallChange="1" />
+                                Value="{Binding HueSpeedAll}"
+                                Minimum="5" Maximum="200" SmallChange="1" />
                                 <TextBox
-                                Text="240"
+                                Text="{Binding HueSpeedAll}"
                                 ks:SelectTextOnFocus.Active="True" 
                                 Grid.Column="1"
                                 HorizontalAlignment="Stretch"
@@ -181,7 +160,7 @@
                                 TextAlignment="Center"
                                 FontSize="15"/>
                             </StackPanel>
-                            <Button Margin="0, 22, 0, 0" MaxWidth="200">
+                            <Button Margin="0, 22, 0, 0" MaxWidth="200" x:Name="ApplyRainbow">
                                 Apply
                             </Button>
                         </StackPanel>
@@ -209,24 +188,16 @@
                                 VerticalAlignment="Center">
                                 Color
                             </TextBlock>
-                            <materialDesign:PopupBox StaysOpen="True" >
-                                <materialDesign:PopupBox.ToggleContent>
-                                    <materialDesign:Card
-                                        Width="30"
-                                        Height="30"
-                                        Margin="0, 0, 0, 0"
-                                        materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                        Background="Aqua"/>
-                                </materialDesign:PopupBox.ToggleContent>
-                                <materialDesign:ColorPicker
-                                    Margin="8, 0, 8, -8"
-                                    Width="200"
-                                    Height="200">
-                                    <materialDesign:ColorPicker.Style>
-                                        <Style TargetType="materialDesign:ColorPicker" BasedOn="{StaticResource {x:Type materialDesign:ColorPicker}}"/>
-                                    </materialDesign:ColorPicker.Style>
-                                </materialDesign:ColorPicker>
-                            </materialDesign:PopupBox>
+                            <xctk:ColorPicker x:Name="FadeColorCp" Grid.Row="0" Grid.Column="1"
+                                Width="90"
+                                ColorMode="ColorCanvas"
+                                ShowAvailableColors="False"
+                                ShowStandardColors="False"
+                                ShowRecentColors="True"
+                                StandardTabHeader="Recent Colors"
+                                AdvancedTabHeader="Color Picker"
+                                UsingAlphaChannel="False"
+                                SelectedColor="{Binding BaseColourAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel Margin="0, 0, 66, 18" Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock
@@ -242,9 +213,10 @@
                                 Grid.Column="0"
                                 Margin="20, 0"
                                 VerticalAlignment="Center"
-                                Maximum="20" SmallChange="1" />
+                                Value="{Binding ValueSpeedAll}"
+                                Minimum="5" Maximum="200" SmallChange="1" />
                             <TextBox
-                                Text="240"
+                                Text="{Binding ValueSpeedAll}"
                                 ks:SelectTextOnFocus.Active="True" 
                                 Grid.Column="1"
                                 HorizontalAlignment="Stretch"
@@ -264,19 +236,12 @@
                             <Slider
                                 Width="255"
                                 Grid.Column="0"
-                                Margin="20, 0"
+                                Margin="20,0,31,0"
                                 VerticalAlignment="Center"
-                                Maximum="20" SmallChange="1" />
-                            <TextBox
-                                Text="240"
-                                ks:SelectTextOnFocus.Active="True" 
-                                Grid.Column="1"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                TextAlignment="Center"
-                                FontSize="15"/>
+                                Value="{Binding ValueDimAll}"
+                                Minimum="0" Maximum="1" SmallChange="0.01" />
                         </StackPanel>
-                        <Button Margin="0, 22, 0, 0" MaxWidth="200">
+                        <Button Margin="0, 22, 0, 0" MaxWidth="200" x:Name="ApplyFade">;
                             Apply
                         </Button>
                     </StackPanel>
@@ -301,81 +266,58 @@
                                 Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
                                 VerticalAlignment="Center"
                                 TextAlignment="Right"
-                                HorizontalAlignment="Right"
+                                HorizontalAlignment="Right" Margin="0,0,15,0"
                                     >
                                 Left color
                                 </TextBlock>
-                                <materialDesign:PopupBox StaysOpen="True" >
-                                    <materialDesign:PopupBox.ToggleContent>
-                                        <materialDesign:Card
-                                            Width="30"
-                                            Height="30"
-                                            Margin="15, 0, 0, 0"
-                                            materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                            Background="Aqua"/>
-                                    </materialDesign:PopupBox.ToggleContent>
-                                    <materialDesign:ColorPicker
-                                        Margin="8, 0, 8, -8"
-                                        Width="200"
-                                        Height="200">
-                                        <materialDesign:ColorPicker.Style>
-                                            <Style TargetType="materialDesign:ColorPicker" BasedOn="{StaticResource {x:Type materialDesign:ColorPicker}}"/>
-                                        </materialDesign:ColorPicker.Style>
-                                    </materialDesign:ColorPicker>
-                                </materialDesign:PopupBox>
+                                <xctk:ColorPicker x:Name="FlashLeftColorCp" Grid.Row="0" Grid.Column="1"
+                                    Width="90"
+                                    ColorMode="ColorCanvas"
+                                    ShowAvailableColors="False"
+                                    ShowStandardColors="False"
+                                    ShowRecentColors="True"
+                                    StandardTabHeader="Recent Colors"
+                                    AdvancedTabHeader="Color Picker"
+                                    UsingAlphaChannel="False"
+                                    SelectedColor="{Binding FlashLeftColour, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBlock
                                 Width="90"
                                 Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
                                 VerticalAlignment="Center"
                                 TextAlignment="Right"
-                                HorizontalAlignment="Right" Margin="34,0,0,0"
+                                HorizontalAlignment="Right" Margin="34,0,15,0"
                                     >
                                 Right color
                                 </TextBlock>
-                                <materialDesign:PopupBox StaysOpen="True" >
-                                    <materialDesign:PopupBox.ToggleContent>
-                                        <materialDesign:Card
-                                            Width="30"
-                                            Height="30"
-                                            Margin="15, 0, 0, 0"
-                                            materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                            Background="Aqua"/>
-                                    </materialDesign:PopupBox.ToggleContent>
-                                    <materialDesign:ColorPicker
-                                        Margin="8, 0, 8, -8"
-                                        Width="200"
-                                        Height="200">
-                                        <materialDesign:ColorPicker.Style>
-                                            <Style TargetType="materialDesign:ColorPicker" BasedOn="{StaticResource {x:Type materialDesign:ColorPicker}}"/>
-                                        </materialDesign:ColorPicker.Style>
-                                    </materialDesign:ColorPicker>
-                                </materialDesign:PopupBox>
+                                <xctk:ColorPicker x:Name="FlashRightColorCp" Grid.Row="0" Grid.Column="1"
+                                    Width="90"
+                                    ColorMode="ColorCanvas"
+                                    ShowAvailableColors="False"
+                                    ShowStandardColors="False"
+                                    ShowRecentColors="True"
+                                    StandardTabHeader="Recent Colors"
+                                    AdvancedTabHeader="Color Picker"
+                                    UsingAlphaChannel="False"
+                                    SelectedColor="{Binding FlashRightColour, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                             <StackPanel Margin="0, 0, 66, 4" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock
-                                Width="104"
-                                Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
-                                VerticalAlignment="Center"
-                                TextAlignment="Right"
-                                HorizontalAlignment="Right">
+                                    Width="104"
+                                    Style="{DynamicResource MaterialDesignSubtitle1TextBlock}"
+                                    VerticalAlignment="Center"
+                                    TextAlignment="Right"
+                                    HorizontalAlignment="Right">
                                 Flash duration
                                 </TextBlock>
                                 <Slider
-                                Width="255"
-                                Grid.Column="0"
-                                Margin="20, 0"
-                                VerticalAlignment="Center"
-                                Maximum="20" SmallChange="1" />
-                                <TextBox
-                                Text="240"
-                                ks:SelectTextOnFocus.Active="True" 
-                                Grid.Column="1"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                TextAlignment="Center"
-                                FontSize="15"/>
+                                    Width="255"
+                                    Grid.Column="0"
+                                    Margin="20, 0"
+                                    VerticalAlignment="Center"
+                                    Value="{Binding FlashDecayRateAll}"
+                                    Minimum="0.6" Maximum="0.99" SmallChange="0.01" />
                             </StackPanel>
-                            <Button Margin="0, 22, 0, 0" MaxWidth="200">
+                            <Button Margin="0, 22, 0, 0" MaxWidth="200" x:Name="ApplyFlash">
                                 Apply
                             </Button>
                         </StackPanel>
@@ -385,7 +327,7 @@
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Width="auto" Height="auto">
-                            <TextBlock HorizontalAlignment="Center" ></TextBlock>
+                            <TextBlock HorizontalAlignment="Center">Off</TextBlock>
                         </StackPanel>
                     </TabItem.Header>
                     <StackPanel Margin="16">
@@ -394,7 +336,7 @@
                             Margin="0,0,0,18"
                             Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                             Text="Turn off LEDs" HorizontalAlignment="Center" />
-                            <Button Margin="0" MaxWidth="200">
+                            <Button Margin="0" MaxWidth="200" x:Name="TurnOff">
                                 Apply
                             </Button>
                         </StackPanel>

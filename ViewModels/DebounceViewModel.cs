@@ -174,7 +174,7 @@ namespace KeypadSoftware.ViewModels
             writeValuesTimer.Enabled = false;
         }
 
-        public void Capture()
+        public void Capture(Object source, EventArgs e)
         {
             // Read raw input state buffer from keypad
             var (left, right) = Debounce.ReadRawButtonStateBuffer();
@@ -187,8 +187,6 @@ namespace KeypadSoftware.ViewModels
         static int bounceDurationMin = 2;
         static int bounceDurationMax = 10;
         static double bounceProbability = 0.5;
-        bool leftTrueState = true;
-        bool rightTrueState = true;
         public void Random()
         {
             // Update chart with new values
